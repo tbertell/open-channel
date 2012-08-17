@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,9 +31,6 @@ public class TestChannelModel extends ChannelVariabilityModel {
 	 */
 	private static final long serialVersionUID = -6542809587871419249L;
 
-	@XmlTransient
-	private final String CHANNEL_DIR = "/home/tomppa/temp/";
-
 	@XmlElement
 	private Long timerPeriodInMillis;
 
@@ -43,43 +41,25 @@ public class TestChannelModel extends ChannelVariabilityModel {
 		super();
 	}
 
-	public TestChannelModel(String id) {
-		String channel = convertXMLFileToString(CHANNEL_DIR + id + ".xml");
+	public TestChannelModel(String channel) {
+
 		if (channel != null) {
-			setValuesFromChannel(channel);
+			transformFromChannel(channel);
 		}
 	}
 
 	@Override
 	public String transformToChannel() {
-		StringBuilder sb = new StringBuilder();
 
-		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+ "<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\""
-				+ "       xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
-				+ "       xmlns:camel=\"http://camel.apache.org/schema/blueprint\""
-				+ "       xsi:schemaLocation=\""
-				+ "       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
-				+ "       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("timerPeriodInMillis", timerPeriodInMillis.toString());
+		params.put("message", message);
 
-		sb.append("  <bean id=\"helloBean\" class=\"com.github.tbertell.openchannel.camel.channel.HelloBean\">")
-				.append("<property name=\"say\" value=\"")
-				.append(message)
-				.append("\"/>")
-				.append("</bean>")
-				.append("")
-				.append(""
-						+ "<camelContext id=\"blueprintContext\" trace=\"false\" xmlns=\"http://camel.apache.org/schema/blueprint\">"
-						+ "  <route id=\"timerToLog\">" + "    <from uri=\"timer:foo?period=" + timerPeriodInMillis
-						+ "\"/>" + "    <setBody>" + "        <method ref=\"helloBean\" method=\"hello\"/> "
-						+ "    </setBody>" + "    <log message=\"The message contains ${body}\"/>" + "  </route> "
-						+ "</camelContext>" + "" + "</blueprint>");
-
-		return format(sb.toString());
+		return (new ModelTransformer()).transform(params, this.getId());
 	}
 
 	@Override
-	public void setValuesFromChannel(String channel) {
+	public void transformFromChannel(String channel) {
 		int beginning = channel.indexOf("value=\"");
 		int end = channel.indexOf("\"/>", beginning);
 		String message = channel.substring(beginning + 7, end);
@@ -141,6 +121,12 @@ public class TestChannelModel extends ChannelVariabilityModel {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	@Override
+	public void validate() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -19,15 +19,18 @@ import com.github.tbertell.openchannel.channelmodel.TestChannelModel;
 
 public class ChannelManager {
 
+	private final String CHANNEL_DIR;
 
-	private final String CHANNEL_DIR = "/home/tomppa/temp/";
-	
+	public ChannelManager(String channelDir) {
+		CHANNEL_DIR = channelDir;
+	}
+
 	public void updateChannel(String channelId, ChannelVariabilityModel model) {
 		String channel = model.transformToChannel();
 
 		BufferedWriter out = null;
 		try {
-			out = new BufferedWriter(new FileWriter(CHANNEL_DIR +channelId +".xml"));
+			out = new BufferedWriter(new FileWriter(CHANNEL_DIR + channelId + ".xml"));
 			out.write(channel);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -45,25 +48,12 @@ public class ChannelManager {
 	}
 
 	public ChannelVariabilityModel getChannel(String channelId) {
-		ChannelVariabilityModel m = new TestChannelModel(channelId);
+		String channel = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
+		ChannelVariabilityModel m = new TestChannelModel(channel);
 		return m;
 	}
-	
-	public static void main (String... strings) {
-		ChannelManager cm = new ChannelManager();
-		TestChannelModel m = new TestChannelModel();
-		m.setMessage("testing");
-		m.setTimerPeriodInMillis(Long.valueOf(10000));
-		cm.updateChannel("channelId", m);
 
-		String xml = cm.convertXMLFileToString(cm.CHANNEL_DIR +"channelId" +".xml");
-
-		TestChannelModel tcm = new TestChannelModel();
-		tcm.setValuesFromChannel(xml);
-		System.out.println(xml);
-	}
-
-	public String convertXMLFileToString(String fileName) {
+	private String convertXMLFileToString(String fileName) {
 		try {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			InputStream inputStream = new FileInputStream(new File(fileName));
@@ -72,8 +62,7 @@ public class ChannelManager {
 			Transformer serializer = TransformerFactory.newInstance().newTransformer();
 			serializer.transform(new DOMSource(doc), new StreamResult(stw));
 			return stw.toString();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

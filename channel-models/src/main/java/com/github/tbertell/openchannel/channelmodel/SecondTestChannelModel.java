@@ -27,8 +27,14 @@ public class SecondTestChannelModel extends ChannelVariabilityModel {
 	}
 
 	@Override
-	public void setValuesFromChannel(String channel) {
+	public void transformFromChannel(String channel) {
 		// TODO Auto-generated method stub
 	}
-	
+
+	@Override
+	public void validate() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

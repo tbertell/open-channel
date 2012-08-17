@@ -41,19 +41,6 @@ public class ChannelResource {
 	@Path("/{channelId}")
 	public Response updateChannel(@PathParam("channelId") String channelId, ChannelVariabilityModel model) {
 
-		// try {
-		// JAXBContext context =
-		// JAXBContext.newInstance(ChannelVariabilityModel.class);
-		// // unmarshal from foo.xml
-		// Unmarshaller unmarshaller = context.createUnmarshaller();
-		// ChannelVariabilityModel channelModel = (ChannelVariabilityModel)
-		// unmarshaller.unmarshal(input);
-		// System.out.println(channelModel.getId());
-		// } catch (JAXBException e) {
-		// e.printStackTrace();
-		// return Response.status(Status.BAD_REQUEST).build();
-		// }
-
 		channelManager.updateChannel(channelId, model);
 
 		return Response.ok().build();
