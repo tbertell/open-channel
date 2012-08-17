@@ -22,7 +22,7 @@ public class ChannelJaxbTest {
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
 		TestChannelModel tc = new TestChannelModel();
-		tc.setLogging(Boolean.TRUE);
+		tc.setMessage("msg");
 		tc.setId("id1");
 		m.marshal(tc, System.out);
 	}

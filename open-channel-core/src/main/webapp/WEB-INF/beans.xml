@@ -25,5 +25,7 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
         <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
     </jaxrs:providers>
     </jaxrs:server>
+    
 
+	<bean id="channelManager" class="com.github.tbertell.openchannel.ChannelManager" />
 </beans>

@@ -21,9 +21,14 @@ public class SecondTestChannelModel extends ChannelVariabilityModel {
 	}
 
 	@Override
-	public String transformToCamelRoute() {
+	public String transformToChannel() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setValuesFromChannel(String channel) {
+		// TODO Auto-generated method stub
 	}
 	
 }
