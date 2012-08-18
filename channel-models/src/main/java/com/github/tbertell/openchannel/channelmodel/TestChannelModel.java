@@ -55,7 +55,7 @@ public class TestChannelModel extends ChannelVariabilityModel {
 		params.put("timerPeriodInMillis", timerPeriodInMillis.toString());
 		params.put("message", message);
 
-		return (new ModelTransformer()).transform(params, this.getId());
+		return (new ModelTransformer()).transform(this, this.getId());
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.github.tbertell.openchannel.channelmodel;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -16,7 +17,10 @@ public class ModelTransformer {
 
 	private static final Map<String, Templates> CACHE = null;
 
-	public String transform(Map<String, String> params, String channelId) {
+	public String transform(ChannelVariabilityModel model, String channelId) {
+
+		// TODO parametrit modelilta
+		Map<String, String> params = new HashMap<String, String>();
 
 		SAXTransformerFactory stf = (SAXTransformerFactory) TransformerFactory.newInstance();
 		Templates templates;
@@ -45,5 +49,9 @@ public class ModelTransformer {
 
 		return "";
 
+	}
+
+	public ChannelVariabilityModel transform(String blueprint, String channelId) {
+		return null;
 	}
 }
