@@ -1,5 +1,6 @@
 package com.github.tbertell.openchannel.channelmodel;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class ModelTransformer {
 
 	}
 
-	public ChannelVariabilityModel transform(String blueprint, String channelId) {
+	public ChannelVariabilityModel transform(File blueprint, String channelId) {
 		return null;
 	}
 }
