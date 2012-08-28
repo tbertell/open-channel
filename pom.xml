@@ -8,7 +8,6 @@
     <name>OpenChannel</name>
 
     <modules>      
-        <module>camel-channel-types</module>
         <module>channel-models</module>
 	<module>open-channel-core</module>
     </modules>

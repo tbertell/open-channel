@@ -1,7 +1,10 @@
 package com.github.tbertell.openchannel.channelmodel;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -20,7 +23,6 @@ public class XsltTest {
 		SAXTransformerFactory stf = (SAXTransformerFactory) TransformerFactory.newInstance();
 		Templates templates;
 
-		// TODO add cache
 		templates = stf.newTemplates(new StreamSource((new XsltTest()).getClass().getResourceAsStream(
 				"TestChannel2Model.xsl")));
 
@@ -28,7 +30,21 @@ public class XsltTest {
 		transformer.setOutputProperty("indent", "yes");
 
 		transformer.transform(xmlSource, new StreamResult(System.out));
-		// trans.transform(null, new StreamResult(new
-		// FileOutputStream("test.html")));
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		StreamResult rs = new StreamResult(os);
+		transformer.transform(xmlSource, rs);
+
+		templates = stf.newTemplates(new StreamSource((new XsltTest()).getClass().getResourceAsStream(
+				"TestChannelModel2Channel.xsl")));
+		transformer = templates.newTransformer();
+		transformer.setOutputProperty("indent", "yes");
+
+		System.out.println("********************************");
+		Source s = new StreamSource(new ByteArrayInputStream(os.toByteArray()));
+		// transformer.setOutputProperty("b;http://xml.apache.org/xsltd;indent-amount",
+		// "4");
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		transformer.transform(s, new StreamResult(System.out));
 	}
 }

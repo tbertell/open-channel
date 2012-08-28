@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/blueprint/camelContext/route/setBody/method[method]">
-		<xsl:value-of select="."/>
-	</xsl:template>
-	<xsl:template match="/">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:osgi="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+<xsl:template match="/">
 <testChannelModel>
-	<timerPeriodInMillis>
-	<xsl:apply-templates/>
-	</timerPeriodInMillis>
-	<message>
-	</message>
+	<timerPeriodInMillis>10000</timerPeriodInMillis>
+	<message><xsl:value-of select="osgi:blueprint/osgi:bean[@id='helloBean']/osgi:property/@value"/></message>
 </testChannelModel>
-	</xsl:template>
+</xsl:template>
 </xsl:stylesheet>
