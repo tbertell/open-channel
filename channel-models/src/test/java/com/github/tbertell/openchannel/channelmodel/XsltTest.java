@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.util.JAXBResult;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -31,6 +33,11 @@ public class XsltTest {
 
 		transformer.transform(xmlSource, new StreamResult(System.out));
 
+		JAXBResult result = new JAXBResult(
+				JAXBContext.newInstance(ChannelVariabilityModel.class) );
+		transformer.transform(xmlSource, result);
+		Object o = result.getResult();
+		
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		StreamResult rs = new StreamResult(os);
 		transformer.transform(xmlSource, rs);
