@@ -1,11 +1,13 @@
 package com.github.tbertell.openchannel.channelmodel;
 
-import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.util.JAXBResult;
+import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -18,7 +20,7 @@ public class ModelTransformer {
 
 	private static final Map<String, Templates> CACHE = null;
 
-	public String transform(ChannelVariabilityModel model, String channelId) {
+	public String transformFromModel(ChannelVariabilityModel model, String channelId) {
 
 		// TODO parametrit modelilta
 		Map<String, String> params = new HashMap<String, String>();
@@ -52,7 +54,31 @@ public class ModelTransformer {
 
 	}
 
-	public ChannelVariabilityModel transform(File blueprint, String channelId) {
-		return null;
+	public ChannelVariabilityModel transformToModel(String blueprint, String channelId) {
+		Source xmlSource = new StreamSource();
+
+		SAXTransformerFactory stf = (SAXTransformerFactory) TransformerFactory.newInstance();
+		Templates templates;
+
+		ChannelVariabilityModel model = null;
+		try {
+			templates = stf.newTemplates(new StreamSource((new XsltTest()).getClass().getResourceAsStream(
+					channelId +"2Model.xsl")));
+
+			Transformer transformer = templates.newTransformer();
+			transformer.setOutputProperty("indent", "yes");
+
+			transformer.transform(xmlSource, new StreamResult(System.out));
+
+			JAXBResult result = new JAXBResult(
+					JAXBContext.newInstance(ChannelVariabilityModel.class));
+			transformer.transform(xmlSource, result);
+		
+
+			model = (ChannelVariabilityModel) result.getResult();
+		} catch (Exception e) {
+
+		}
+		return model;
 	}
 }

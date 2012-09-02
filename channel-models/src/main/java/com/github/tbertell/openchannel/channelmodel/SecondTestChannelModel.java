@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SecondTestChannelModel extends ChannelVariabilityModel {
 
+	private static final long serialVersionUID = -2320114219536439363L;
+	
 	@XmlElement
 	private Integer timeout;
 
@@ -20,16 +22,6 @@ public class SecondTestChannelModel extends ChannelVariabilityModel {
 		this.timeout = timeout;
 	}
 
-	@Override
-	public String transformToChannel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void transformFromChannel(String channel) {
-		// TODO Auto-generated method stub
-	}
 
 	@Override
 	public void validate() {

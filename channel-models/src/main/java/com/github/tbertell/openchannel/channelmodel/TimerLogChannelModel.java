@@ -24,7 +24,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TestChannelModel extends ChannelVariabilityModel {
+public class TimerLogChannelModel extends ChannelVariabilityModel {
 
 	/**
 	 * 
@@ -37,42 +37,10 @@ public class TestChannelModel extends ChannelVariabilityModel {
 	@XmlElement
 	private String message;
 
-	public TestChannelModel() {
+	public TimerLogChannelModel() {
 		super();
 	}
 
-	public TestChannelModel(String channel) {
-
-		if (channel != null) {
-			transformFromChannel(channel);
-		}
-	}
-
-	@Override
-	public String transformToChannel() {
-
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("timerPeriodInMillis", timerPeriodInMillis.toString());
-		params.put("message", message);
-
-		return (new ModelTransformer()).transform(this, this.getId());
-	}
-
-	@Override
-	public void transformFromChannel(String channel) {
-		int beginning = channel.indexOf("value=\"");
-		int end = channel.indexOf("\"/>", beginning);
-		String message = channel.substring(beginning + 7, end);
-
-		beginning = channel.indexOf("timer:foo?period=");
-		end = channel.indexOf("\"/>", beginning);
-
-		String millis = channel.substring(beginning + 17, end);
-		Long timerInMillis = Long.valueOf(millis);
-
-		this.message = message;
-		this.timerPeriodInMillis = timerInMillis;
-	}
 
 	public String format(String unformattedXml) {
 		try {

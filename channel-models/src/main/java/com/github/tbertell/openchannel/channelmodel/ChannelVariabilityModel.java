@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlRootElement(name = "channel")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({ TestChannelModel.class, SecondTestChannelModel.class })
+@XmlSeeAlso({ TimerLogChannelModel.class, SecondTestChannelModel.class })
 public abstract class ChannelVariabilityModel implements Serializable {
 
 	/**
@@ -29,9 +29,6 @@ public abstract class ChannelVariabilityModel implements Serializable {
 		this.id = id;
 	}
 
-	public abstract String transformToChannel();
-
-	public abstract void transformFromChannel(String channel);
 
 	public abstract void validate();
 

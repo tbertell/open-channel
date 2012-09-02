@@ -15,7 +15,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.channelmodel.TestChannelModel;
+import com.github.tbertell.openchannel.channelmodel.TimerLogChannelModel;
 
 public class ChannelManager {
 
@@ -49,7 +49,7 @@ public class ChannelManager {
 
 	public ChannelVariabilityModel getChannel(String channelId) {
 		String channel = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
-		ChannelVariabilityModel m = new TestChannelModel(channel);
+		ChannelVariabilityModel m = new TimerLogChannelModel(channel);
 		return m;
 	}
 

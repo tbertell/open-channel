@@ -9,7 +9,7 @@ import javax.xml.bind.Unmarshaller;
 import org.testng.annotations.Test;
 
 import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.channelmodel.TestChannelModel;
+import com.github.tbertell.openchannel.channelmodel.TimerLogChannelModel;
 
 public class ChannelJaxbTest {
 
@@ -21,7 +21,7 @@ public class ChannelJaxbTest {
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-		TestChannelModel tc = new TestChannelModel();
+		TimerLogChannelModel tc = new TimerLogChannelModel();
 		tc.setMessage("msg");
 		tc.setId("id1");
 		m.marshal(tc, System.out);
