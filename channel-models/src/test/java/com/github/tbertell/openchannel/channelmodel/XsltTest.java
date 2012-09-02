@@ -26,24 +26,23 @@ public class XsltTest {
 		Templates templates;
 
 		templates = stf.newTemplates(new StreamSource((new XsltTest()).getClass().getResourceAsStream(
-				"TestChannel2Model.xsl")));
+				"TimerLogChannel2Model.xsl")));
 
 		Transformer transformer = templates.newTransformer();
 		transformer.setOutputProperty("indent", "yes");
 
 		transformer.transform(xmlSource, new StreamResult(System.out));
 
-		JAXBResult result = new JAXBResult(
-				JAXBContext.newInstance(ChannelVariabilityModel.class) );
+		JAXBResult result = new JAXBResult(JAXBContext.newInstance(ChannelVariabilityModel.class));
 		transformer.transform(xmlSource, result);
 		Object o = result.getResult();
-		
+
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		StreamResult rs = new StreamResult(os);
 		transformer.transform(xmlSource, rs);
 
 		templates = stf.newTemplates(new StreamSource((new XsltTest()).getClass().getResourceAsStream(
-				"TestChannelModel2Channel.xsl")));
+				"TimerLogChannelModel2Channel.xsl")));
 		transformer = templates.newTransformer();
 		transformer.setOutputProperty("indent", "yes");
 

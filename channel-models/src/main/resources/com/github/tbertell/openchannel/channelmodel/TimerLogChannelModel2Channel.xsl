@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:variable name="sayValue" select="testChannelModel/message" /> 
-	<xsl:variable name="timerPeriod" select="testChannelModel/timerPeriodInMillis" /> 
+	<xsl:variable name="sayValue" select="timerLogChannelModel/message" /> 
+	<xsl:variable name="timerPeriod" select="timerLogChannelModel/timerPeriodInMillis" /> 
 	<xsl:template match="/">
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
   xmlns:camel="http://camel.apache.org/schema/blueprint"

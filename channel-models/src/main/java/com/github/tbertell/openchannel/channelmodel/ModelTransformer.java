@@ -1,17 +1,15 @@
 package com.github.tbertell.openchannel.channelmodel;
 
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.util.JAXBResult;
+import javax.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -20,28 +18,21 @@ public class ModelTransformer {
 
 	private static final Map<String, Templates> CACHE = null;
 
-	public String transformFromModel(ChannelVariabilityModel model, String channelId) {
-
-		// TODO parametrit modelilta
-		Map<String, String> params = new HashMap<String, String>();
-
-		SAXTransformerFactory stf = (SAXTransformerFactory) TransformerFactory.newInstance();
-		Templates templates;
+	public String transformFromModel(ChannelVariabilityModel model) {
 
 		try {
-			// TODO add cache
-			templates = stf.newTemplates(new StreamSource(this.getClass().getResourceAsStream(
-					channelId + "2Channel.xsl")));
 
+			// set up XSLT transformation
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Templates templates = factory.newTemplates(new StreamSource((new ModelTransformer()).getClass()
+					.getResourceAsStream(model.getId() + "Model2Channel.xsl")));
 			Transformer transformer = templates.newTransformer();
 			transformer.setOutputProperty("indent", "yes");
 
-			for (Entry<String, String> entry : params.entrySet()) {
-				transformer.setParameter(entry.getKey(), entry.getValue());
-			}
-
+			// run transformation
 			StringWriter sw = new StringWriter();
-			transformer.transform(new DOMSource(), new StreamResult(sw));
+			JAXBSource source = new JAXBSource(JAXBContext.newInstance(ChannelVariabilityModel.class), model);
+			transformer.transform(source, new StreamResult(sw));
 
 			return sw.toString();
 
@@ -55,6 +46,8 @@ public class ModelTransformer {
 	}
 
 	public ChannelVariabilityModel transformToModel(String blueprint, String channelId) {
+
+		// TODO muunna string Sourceksi
 		Source xmlSource = new StreamSource();
 
 		SAXTransformerFactory stf = (SAXTransformerFactory) TransformerFactory.newInstance();
@@ -62,18 +55,14 @@ public class ModelTransformer {
 
 		ChannelVariabilityModel model = null;
 		try {
-			templates = stf.newTemplates(new StreamSource((new XsltTest()).getClass().getResourceAsStream(
-					channelId +"2Model.xsl")));
+			templates = stf.newTemplates(new StreamSource((new ModelTransformer()).getClass().getResourceAsStream(
+					channelId + "2Model.xsl")));
 
 			Transformer transformer = templates.newTransformer();
 			transformer.setOutputProperty("indent", "yes");
 
-			transformer.transform(xmlSource, new StreamResult(System.out));
-
-			JAXBResult result = new JAXBResult(
-					JAXBContext.newInstance(ChannelVariabilityModel.class));
+			JAXBResult result = new JAXBResult(JAXBContext.newInstance(ChannelVariabilityModel.class));
 			transformer.transform(xmlSource, result);
-		
 
 			model = (ChannelVariabilityModel) result.getResult();
 		} catch (Exception e) {

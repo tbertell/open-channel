@@ -26,7 +26,7 @@ public class ChannelManager {
 	}
 
 	public void updateChannel(String channelId, ChannelVariabilityModel model) {
-		String channel = model.transformToChannel();
+		String channel = model.toString();
 
 		BufferedWriter out = null;
 		try {
@@ -49,7 +49,7 @@ public class ChannelManager {
 
 	public ChannelVariabilityModel getChannel(String channelId) {
 		String channel = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
-		ChannelVariabilityModel m = new TimerLogChannelModel(channel);
+		ChannelVariabilityModel m = new TimerLogChannelModel();
 		return m;
 	}
 
