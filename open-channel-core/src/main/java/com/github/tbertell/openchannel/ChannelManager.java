@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -15,7 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.channelmodel.TimerLogChannelModel;
+import com.github.tbertell.openchannel.channelmodel.ModelTransformer;
 
 public class ChannelManager {
 
@@ -26,7 +28,9 @@ public class ChannelManager {
 	}
 
 	public void updateChannel(String channelId, ChannelVariabilityModel model) {
-		String channel = model.toString();
+
+		ModelTransformer transformer = new ModelTransformer();
+		String channel = transformer.transformFromModel(model);
 
 		BufferedWriter out = null;
 		try {
@@ -48,9 +52,17 @@ public class ChannelManager {
 	}
 
 	public ChannelVariabilityModel getChannel(String channelId) {
-		String channel = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
-		ChannelVariabilityModel m = new TimerLogChannelModel();
-		return m;
+		String blueprint = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
+
+		ModelTransformer transformer = new ModelTransformer();
+
+		ChannelVariabilityModel model = transformer.transformToModel(blueprint, channelId);
+
+		return model;
+	}
+	
+	public List<ChannelVariabilityModel> listChannels() {
+		return new ArrayList<ChannelVariabilityModel>();
 	}
 
 	private String convertXMLFileToString(String fileName) {

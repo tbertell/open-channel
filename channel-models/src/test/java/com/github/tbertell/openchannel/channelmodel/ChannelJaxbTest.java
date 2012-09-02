@@ -5,16 +5,19 @@ import java.io.File;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.dom.DOMResult;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.channelmodel.TimerLogChannelModel;
-
 public class ChannelJaxbTest {
+	
+	private static final String MSG = "msg";
+	private static final Long TIME = (long) 100;
+	
 
 	@Test
-	public void unmarshallChannel() throws Exception {
+	public void shouldMarshallAndUnmarshallChannel() throws Exception {
 		// create JAXB context and instantiate marshaller
 		//		JAXBContext context = JAXBContext.newInstance("com.github.tbertell.channel");
 		JAXBContext context = JAXBContext.newInstance(ChannelVariabilityModel.class);
@@ -22,25 +25,19 @@ public class ChannelJaxbTest {
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
 		TimerLogChannelModel tc = new TimerLogChannelModel();
-		tc.setMessage("msg");
-		tc.setId("id1");
-		m.marshal(tc, System.out);
-	}
+		tc.setMessage(MSG);
+		tc.setTimerPeriodInMillis(TIME);
+		
+		DOMResult result = new DOMResult();
+		
+		m.marshal(tc, result);
 
-	@Test
-	public void marshallChannel() throws Exception {
-
-		JAXBContext context = JAXBContext.newInstance(ChannelVariabilityModel.class);
 		// unmarshal from foo.xml
 		Unmarshaller u = context.createUnmarshaller();
+
+		TimerLogChannelModel resultJaxb = (TimerLogChannelModel) u.unmarshal(result.getNode());
 		
-		ChannelVariabilityModel fooObj = (ChannelVariabilityModel) u.unmarshal( new File( "src/test/resources/com/github/tbertell/openchannel/channelmodel/channel.xml" ) );
-
-		// marshal to System.out
-		Marshaller m = context.createMarshaller();
-		m.marshal(fooObj, System.out);
+		Assert.assertEquals(resultJaxb, tc);
 	}
-
-
 
 }

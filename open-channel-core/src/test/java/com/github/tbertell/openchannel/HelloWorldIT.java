@@ -1,14 +1,13 @@
 package com.github.tbertell.openchannel;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.InputStream;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
-import org.junit.BeforeClass;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 
 public class HelloWorldIT {
 	private static String endpointUrl;
@@ -23,9 +22,9 @@ public class HelloWorldIT {
 	public void testPing() throws Exception {
 		WebClient client = WebClient.create(endpointUrl + "/channel/channel1");
 		Response r = client.accept("application/xml").get();
-		assertEquals(Response.Status.OK.getStatusCode(), r.getStatus());
+		Assert.assertEquals(Response.Status.OK.getStatusCode(), r.getStatus());
 		String value = IOUtils.toString((InputStream) r.getEntity());
-		assertEquals("<thisisxml>xml</thisisxml>", value);
+		Assert.assertEquals("<thisisxml>xml</thisisxml>", value);
 	}
 
 	// @Test

@@ -47,8 +47,7 @@ public class ModelTransformer {
 
 	public ChannelVariabilityModel transformToModel(String blueprint, String channelId) {
 
-		// TODO muunna string Sourceksi
-		Source xmlSource = new StreamSource();
+		Source xmlSource = new StreamSource(new java.io.StringReader(blueprint));
 
 		SAXTransformerFactory stf = (SAXTransformerFactory) TransformerFactory.newInstance();
 		Templates templates;
