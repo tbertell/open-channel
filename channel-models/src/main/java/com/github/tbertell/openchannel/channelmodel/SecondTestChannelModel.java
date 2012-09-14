@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SecondTestChannelModel extends ChannelVariabilityModel {
 
 	private static final long serialVersionUID = -2320114219536439363L;
-	
+
 	@XmlElement
 	private Integer timeout;
 
@@ -21,7 +21,6 @@ public class SecondTestChannelModel extends ChannelVariabilityModel {
 	public void setTimeout(Integer timeout) {
 		this.timeout = timeout;
 	}
-
 
 	@Override
 	public void validate() {
