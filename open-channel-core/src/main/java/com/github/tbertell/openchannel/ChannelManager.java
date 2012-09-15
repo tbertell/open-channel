@@ -29,6 +29,7 @@ public class ChannelManager {
 
 	public void updateChannel(String channelId, ChannelVariabilityModel model) {
 
+		model.validate();
 		ModelTransformer transformer = new ModelTransformer();
 		String channel = transformer.transformFromModel(model);
 
@@ -60,7 +61,7 @@ public class ChannelManager {
 
 		return model;
 	}
-	
+
 	public List<ChannelVariabilityModel> listChannels() {
 		return new ArrayList<ChannelVariabilityModel>();
 	}

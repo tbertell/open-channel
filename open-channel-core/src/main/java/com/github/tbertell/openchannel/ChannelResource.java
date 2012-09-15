@@ -31,7 +31,7 @@ public class ChannelResource {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getChannels() {
+	public Response listChannels() {
 		return Response.noContent().build();
 	}
 
