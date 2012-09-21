@@ -1,23 +1,34 @@
 package com.github.tbertell.openchannel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
+import com.github.tbertell.openchannel.response.ChannelResponse;
+import com.github.tbertell.openchannel.response.ListChannelsResponse;
 
-@Path("/channel")
+@Path("/channels")
 public class ChannelResource {
 
 	@Autowired
 	private ChannelManager channelManager;
+
+	@Context
+	UriInfo uriInfo;
 
 	@GET
 	@Path("/{channelId}")
@@ -32,7 +43,13 @@ public class ChannelResource {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response listChannels() {
-		return Response.noContent().build();
+
+		List<ChannelVariabilityModel> list = channelManager.listChannels();
+
+		List<ChannelResponse> list = new ArrayList<ChannelResponse>();
+		final GenericEntity<List<ChannelResponse>> entity = new GenericEntity<List<ChannelResponse>>(list) {
+		};
+		return Response.ok().entity(entity).build();
 	}
 
 	@PUT
@@ -45,4 +62,14 @@ public class ChannelResource {
 
 		return Response.ok().build();
 	}
+
+	private ListChannelsResponse convertListToListChannelResponse(List<ChannelVariabilityModel> list) {
+		ListChannelsResponse response = new ListChannelsResponse();
+
+		for (ChannelVariabilityModel model : list) {
+			response.addChannelResponse(new ChannelResponse(uriInfo.getPath() + model.getId(), model.getDescription()));
+		}
+		return response;
+	}
+
 }

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -18,6 +19,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channelmodel.ModelTransformer;
+import com.github.tbertell.openchannel.channelmodel.ModelXslTransformer;
 
 public class ChannelManager {
 
@@ -30,7 +32,7 @@ public class ChannelManager {
 	public void updateChannel(String channelId, ChannelVariabilityModel model) {
 
 		model.validate();
-		ModelTransformer transformer = new ModelTransformer();
+		ModelTransformer transformer = new ModelXslTransformer();
 		String channel = transformer.transformFromModel(model);
 
 		BufferedWriter out = null;
@@ -55,7 +57,7 @@ public class ChannelManager {
 	public ChannelVariabilityModel getChannel(String channelId) {
 		String blueprint = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
 
-		ModelTransformer transformer = new ModelTransformer();
+		ModelTransformer transformer = new ModelXslTransformer();
 
 		ChannelVariabilityModel model = transformer.transformToModel(blueprint, channelId);
 
@@ -63,7 +65,30 @@ public class ChannelManager {
 	}
 
 	public List<ChannelVariabilityModel> listChannels() {
-		return new ArrayList<ChannelVariabilityModel>();
+
+		File channelDir = new File(CHANNEL_DIR);
+
+		File[] files = channelDir.listFiles(new FilenameFilter() {
+
+			@Override
+			public boolean accept(File dir, String name) {
+				if (name.endsWith("Channel.xml")) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		});
+
+		List<ChannelVariabilityModel> channels = new ArrayList<ChannelVariabilityModel>();
+
+		for (File file : files) {
+			String channelName = file.getName();
+			String channelId = channelName.substring(0, channelName.indexOf("."));
+			channels.add(getChannel(channelId));
+		}
+
+		return channels;
 	}
 
 	private String convertXMLFileToString(String fileName) {

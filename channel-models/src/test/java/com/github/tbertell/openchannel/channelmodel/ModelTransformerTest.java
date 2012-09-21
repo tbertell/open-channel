@@ -10,7 +10,7 @@ public class ModelTransformerTest {
 
 	@Test
 	public void shouldTransformModelToBlueprintAndBackToModel() {
-		ModelTransformer transformer = new ModelTransformer();
+		ModelTransformer transformer = new ModelXslTransformer();
 		TimerLogChannelModel sourceModel = new TimerLogChannelModel();
 
 		Assert.assertEquals(sourceModel.getId(), "TimerLogChannel");
