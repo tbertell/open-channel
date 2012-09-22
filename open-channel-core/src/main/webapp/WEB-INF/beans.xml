@@ -28,6 +28,6 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
     
 
 	<bean id="channelManager" class="com.github.tbertell.openchannel.ChannelManager" >
-		<constructor-arg index="0" type="java.lang.String" value="/home/tomppa/temp/"/>
+		<constructor-arg index="0" type="java.lang.String" value="/home/tomppa/Projects/open-channel/open-channel-core/src/test/resources/com/github/tbertell/openchannel/"/>
 	</bean>	
 </beans>
