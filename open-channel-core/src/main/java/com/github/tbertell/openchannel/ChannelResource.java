@@ -1,6 +1,5 @@
 package com.github.tbertell.openchannel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -44,10 +43,10 @@ public class ChannelResource {
 	@Produces(MediaType.APPLICATION_XML)
 	public Response listChannels() {
 
-		List<ChannelVariabilityModel> list = channelManager.listChannels();
+		List<ChannelVariabilityModel> modelList = channelManager.listChannels();
 
-		List<ChannelResponse> list = new ArrayList<ChannelResponse>();
-		final GenericEntity<List<ChannelResponse>> entity = new GenericEntity<List<ChannelResponse>>(list) {
+		ListChannelsResponse listResponse = convertListToListChannelResponse(modelList);
+		final GenericEntity<ListChannelsResponse> entity = new GenericEntity<ListChannelsResponse>(listResponse) {
 		};
 		return Response.ok().entity(entity).build();
 	}
@@ -67,7 +66,7 @@ public class ChannelResource {
 		ListChannelsResponse response = new ListChannelsResponse();
 
 		for (ChannelVariabilityModel model : list) {
-			response.addChannelResponse(new ChannelResponse(uriInfo.getPath() + model.getId(), model.getDescription()));
+			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath() +"/" + model.getId(), model.getDescription()));
 		}
 		return response;
 	}

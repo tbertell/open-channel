@@ -22,7 +22,8 @@ public class ChannelManagerTest {
 	public void shouldListChannels() {
 		String userDir = System.getProperty("user.dir");
 		String channelDir = userDir + TEST_RESOURCES;
-
+		System.out.println(channelDir);
+		
 		ChannelManager manager = new ChannelManager(channelDir);
 
 		List<ChannelVariabilityModel> list = manager.listChannels();

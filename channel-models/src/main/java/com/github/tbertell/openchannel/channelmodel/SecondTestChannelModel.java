@@ -14,6 +14,13 @@ public class SecondTestChannelModel extends ChannelVariabilityModel {
 	@XmlElement
 	private Integer timeout;
 
+	
+	public SecondTestChannelModel() {
+		super();
+		setId("SecondTestChannel");
+		setDescription("I'm just a test channel");
+	}
+
 	public Integer getTimeout() {
 		return timeout;
 	}

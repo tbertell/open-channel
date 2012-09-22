@@ -23,6 +23,7 @@ public class TimerLogChannelModel extends ChannelVariabilityModel {
 	public TimerLogChannelModel() {
 		super();
 		setId("TimerLogChannel");
+		setDescription("I'm TimerLogChannel");
 	}
 
 	public Long getTimerPeriodInMillis() {
