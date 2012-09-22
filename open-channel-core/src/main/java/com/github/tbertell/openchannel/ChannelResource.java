@@ -66,7 +66,11 @@ public class ChannelResource {
 		ListChannelsResponse response = new ListChannelsResponse();
 
 		for (ChannelVariabilityModel model : list) {
+<<<<<<< HEAD
 			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() +"/" + model.getId(), model.getDescription()));
+=======
+			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath() +"/" + model.getId(), model.getDescription()));
+>>>>>>> 2440ee80bd7354f74134cbd1d85eb169ca2a3682
 		}
 		return response;
 	}
