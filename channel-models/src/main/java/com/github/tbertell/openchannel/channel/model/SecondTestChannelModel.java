@@ -1,4 +1,4 @@
-package com.github.tbertell.openchannel.channelmodel;
+package com.github.tbertell.openchannel.channel.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

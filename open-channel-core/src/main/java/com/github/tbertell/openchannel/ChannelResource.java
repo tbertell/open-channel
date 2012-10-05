@@ -16,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.response.ChannelResponse;
 import com.github.tbertell.openchannel.response.ListChannelsResponse;
 
@@ -33,6 +33,7 @@ public class ChannelResource {
 	@Path("/{channelId}")
 	@Produces(MediaType.APPLICATION_XML)
 	public ChannelVariabilityModel getChannel(@PathParam("channelId") String channelId) {
+		
 		ChannelVariabilityModel model = channelManager.getChannel(channelId);
 
 		return model;
@@ -46,8 +47,10 @@ public class ChannelResource {
 		List<ChannelVariabilityModel> modelList = channelManager.listChannels();
 
 		ListChannelsResponse listResponse = convertListToListChannelResponse(modelList);
+		
 		final GenericEntity<ListChannelsResponse> entity = new GenericEntity<ListChannelsResponse>(listResponse) {
 		};
+		
 		return Response.ok().entity(entity).build();
 	}
 
@@ -63,6 +66,7 @@ public class ChannelResource {
 	}
 
 	private ListChannelsResponse convertListToListChannelResponse(List<ChannelVariabilityModel> list) {
+		
 		ListChannelsResponse response = new ListChannelsResponse();
 
 		for (ChannelVariabilityModel model : list) {

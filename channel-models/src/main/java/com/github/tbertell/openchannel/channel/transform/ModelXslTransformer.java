@@ -1,4 +1,4 @@
-package com.github.tbertell.openchannel.channelmodel;
+package com.github.tbertell.openchannel.channel.transform;
 
 import java.io.StringWriter;
 import java.util.Map;
@@ -13,6 +13,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 
 public class ModelXslTransformer implements ModelTransformer {
 

@@ -3,6 +3,10 @@ package com.github.tbertell.openchannel.channelmodel;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.github.tbertell.openchannel.channel.model.TimerLogChannelModel;
+import com.github.tbertell.openchannel.channel.transform.ModelTransformer;
+import com.github.tbertell.openchannel.channel.transform.ModelXslTransformer;
+
 public class ModelTransformerTest {
 
 	private static final String MESSAGE = "This works!";

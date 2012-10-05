@@ -15,10 +15,12 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
+
 public class XsltTest {
 
 	public static void main(String[] args) throws Exception {
-		File xmlFile = new File("src/main/resources/com/github/tbertell/openchannel/channelmodel/blueprint.xml");
+		File xmlFile = new File("src/main/resources/com/github/tbertell/openchannel/channel/model/blueprint.xml");
 
 		Source xmlSource = new StreamSource(xmlFile);
 

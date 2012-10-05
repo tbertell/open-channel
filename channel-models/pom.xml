@@ -74,9 +74,36 @@
 					</instructions>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.jvnet.jaxb2.maven2</groupId> <artifactId>maven-jaxb2-plugin</artifactId> 
-				<version>0.7.1</version> <executions> <execution> <goals> <goal>generate</goal> 
-				</goals> </execution> </executions> </plugin> -->
+			<!-- 
+			<plugin>
+				<groupId>com.sun.tools.jxc.maven2</groupId>
+				<artifactId>maven-jaxb-schemagen-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>process-sources</phase>
+						<configuration>
+							<destdir>${project.build.directory}/schemas</destdir>
+							<srcdir>src/main/java/com/github/tbertell/openchannel/channel/model</srcdir>		
+							<schemas>
+								<schema>
+									<namespace>http://activemq.apache.org/camel/schema/spring</namespace>
+									<file>camel-spring.xsd</file>
+								</schema>
+							</schemas>
+						</configuration>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			 -->
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jaxb2-maven-plugin</artifactId> 
+				<version>1.5</version> <executions> <execution> <goals> <goal>schemagen</goal> 
+				</goals> <phase>generate-resources</phase> <configuration> <includes> <include>com/github/tbertell/openchannel/channel/model/*.java</include> 
+				</includes> <outputDirectory>${project.build.directory}/schemas</outputDirectory> 
+				</configuration> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 </project>

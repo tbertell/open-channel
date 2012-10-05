@@ -5,7 +5,7 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 
 public class ChannelManagerTest {
 

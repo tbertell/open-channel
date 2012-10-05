@@ -17,9 +17,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.channelmodel.ModelTransformer;
-import com.github.tbertell.openchannel.channelmodel.ModelXslTransformer;
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
+import com.github.tbertell.openchannel.channel.transform.ModelTransformer;
+import com.github.tbertell.openchannel.channel.transform.ModelXslTransformer;
 
 public class ChannelManager {
 

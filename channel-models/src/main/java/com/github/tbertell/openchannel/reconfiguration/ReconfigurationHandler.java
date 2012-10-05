@@ -2,7 +2,7 @@ package com.github.tbertell.openchannel.reconfiguration;
 
 import java.util.Map;
 
-import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 
 public interface ReconfigurationHandler {
 

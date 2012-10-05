@@ -1,15 +1,14 @@
-package com.github.tbertell.openchannel.channelmodel;
+package com.github.tbertell.openchannel.channel.model;
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
-@XmlRootElement(name = "channel")
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({ TimerLogChannelModel.class, SecondTestChannelModel.class })
 public abstract class ChannelVariabilityModel implements Serializable {

@@ -2,8 +2,8 @@ package com.github.tbertell.openchannel.reconfiguration;
 
 import java.util.Map;
 
-import com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.channelmodel.TimerLogChannelModel;
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
+import com.github.tbertell.openchannel.channel.model.TimerLogChannelModel;
 
 public class TimerLogChannelReconfigurationHandler implements ReconfigurationHandler {
 

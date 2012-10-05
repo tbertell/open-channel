@@ -10,6 +10,9 @@ import javax.xml.transform.dom.DOMResult;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
+import com.github.tbertell.openchannel.channel.model.TimerLogChannelModel;
+
 public class ChannelJaxbTest {
 	
 	private static final String MSG = "msg";
