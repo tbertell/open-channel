@@ -1,5 +1,7 @@
 package com.github.tbertell.openchannel;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -13,6 +15,9 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,11 +37,28 @@ public class ChannelResource {
 	@GET
 	@Path("/{channelId}")
 	@Produces(MediaType.APPLICATION_XML)
-	public ChannelVariabilityModel getChannel(@PathParam("channelId") String channelId) {
+	public String getChannel(@PathParam("channelId") String channelId) {
 		
 		ChannelVariabilityModel model = channelManager.getChannel(channelId);
 
-		return model;
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(ChannelVariabilityModel.class);
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			
+			String schemaLocation = uriInfo.getBaseUri().toString() + model.getId() +".xsd";
+			marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, schemaLocation);
+			Writer writer = new StringWriter();
+			marshaller.marshal(model, writer);
+			return writer.toString();
+		} catch (JAXBException e) {
+			// TODO throw apporriate exception
+			e.printStackTrace();
+		}
+		
+		
+		return "";
 	}
 
 	@GET

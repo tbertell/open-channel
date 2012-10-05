@@ -1,6 +1,4 @@
-package com.github.tbertell.openchannel.channelmodel;
-
-import java.io.File;
+package com.github.tbertell.openchannel.channel.model;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -9,9 +7,6 @@ import javax.xml.transform.dom.DOMResult;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.channel.model.TimerLogChannelModel;
 
 public class ChannelJaxbTest {
 	

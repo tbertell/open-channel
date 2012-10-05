@@ -1,4 +1,4 @@
-package com.github.tbertell.openchannel.channelmodel;
+package com.github.tbertell.openchannel.channel.transform;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

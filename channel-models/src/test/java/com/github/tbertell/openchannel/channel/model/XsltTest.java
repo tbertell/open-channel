@@ -1,4 +1,4 @@
-package com.github.tbertell.openchannel.channelmodel;
+package com.github.tbertell.openchannel.channel.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
