@@ -17,7 +17,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.tbertell.openchannel</groupId>
+			<groupId>com.github.tbertell.openchannel.channelmodels</groupId>
 			<artifactId>channel-models</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>

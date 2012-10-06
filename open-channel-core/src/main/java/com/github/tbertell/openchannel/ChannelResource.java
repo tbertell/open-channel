@@ -25,7 +25,7 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.response.ChannelResponse;
 import com.github.tbertell.openchannel.response.ListChannelsResponse;
 
-@Path("/channels")
+@Path("/")
 public class ChannelResource {
 
 	@Autowired
@@ -38,7 +38,7 @@ public class ChannelResource {
 	@Path("/{channelId}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String getChannel(@PathParam("channelId") String channelId) {
-		
+
 		ChannelVariabilityModel model = channelManager.getChannel(channelId);
 
 		JAXBContext context;
@@ -46,8 +46,8 @@ public class ChannelResource {
 			context = JAXBContext.newInstance(ChannelVariabilityModel.class);
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			
-			String schemaLocation = uriInfo.getBaseUri().toString() + model.getId() +".xsd";
+
+			String schemaLocation = uriInfo.getBaseUri().toString() + model.getId() + ".xsd";
 			marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, schemaLocation);
 			Writer writer = new StringWriter();
 			marshaller.marshal(model, writer);
@@ -56,8 +56,7 @@ public class ChannelResource {
 			// TODO throw apporriate exception
 			e.printStackTrace();
 		}
-		
-		
+
 		return "";
 	}
 
@@ -69,10 +68,10 @@ public class ChannelResource {
 		List<ChannelVariabilityModel> modelList = channelManager.listChannels();
 
 		ListChannelsResponse listResponse = convertListToListChannelResponse(modelList);
-		
+
 		final GenericEntity<ListChannelsResponse> entity = new GenericEntity<ListChannelsResponse>(listResponse) {
 		};
-		
+
 		return Response.ok().entity(entity).build();
 	}
 
@@ -88,11 +87,12 @@ public class ChannelResource {
 	}
 
 	private ListChannelsResponse convertListToListChannelResponse(List<ChannelVariabilityModel> list) {
-		
+
 		ListChannelsResponse response = new ListChannelsResponse();
 
 		for (ChannelVariabilityModel model : list) {
-			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() +"/" + model.getId(), model.getDescription()));
+			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() + "/" + model.getId(),
+					model.getDescription()));
 		}
 		return response;
 	}

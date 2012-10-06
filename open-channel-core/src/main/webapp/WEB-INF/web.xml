@@ -28,6 +28,6 @@
 
 	<servlet-mapping>
 		<servlet-name>CXFServlet</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/channels/*</url-pattern>
 	</servlet-mapping>
 </web-app>
