@@ -1,2 +1,2 @@
-schemat sellaiseen paikkaan mistä ne löytyy
+QueueListener toteutus
 poikkeuskäsittely
