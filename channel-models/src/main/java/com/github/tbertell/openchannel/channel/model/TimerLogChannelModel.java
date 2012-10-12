@@ -44,7 +44,7 @@ public class TimerLogChannelModel extends ChannelVariabilityModel {
 
 	@Override
 	public void validate() {
-		// no implementation
+		// empty
 
 	}
 

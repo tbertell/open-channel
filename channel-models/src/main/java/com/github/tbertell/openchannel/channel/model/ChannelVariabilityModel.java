@@ -40,6 +40,9 @@ public abstract class ChannelVariabilityModel implements Serializable {
 		this.description = description;
 	}
 
+	/**
+	 * Throws InvalidArgumentException if not valid.
+	 */
 	public abstract void validate();
 
 	@Override

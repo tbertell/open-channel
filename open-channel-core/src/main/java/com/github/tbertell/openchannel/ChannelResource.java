@@ -10,10 +10,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -41,23 +43,24 @@ public class ChannelResource {
 
 		ChannelVariabilityModel model = channelManager.getChannel(channelId);
 
+		if (model == null) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance(ChannelVariabilityModel.class);
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-			String schemaLocation = uriInfo.getBaseUri().toString() + model.getId() + ".xsd";
-			marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, schemaLocation);
+			marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, createSchemaLocation(channelId));
 			Writer writer = new StringWriter();
 			marshaller.marshal(model, writer);
+			
 			return writer.toString();
 		} catch (JAXBException e) {
 			// TODO throw apporriate exception
 			e.printStackTrace();
+			throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);
 		}
-
-		return "";
 	}
 
 	@GET
@@ -67,6 +70,9 @@ public class ChannelResource {
 
 		List<ChannelVariabilityModel> modelList = channelManager.listChannels();
 
+		if (modelList == null || modelList.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 		ListChannelsResponse listResponse = convertListToListChannelResponse(modelList);
 
 		final GenericEntity<ListChannelsResponse> entity = new GenericEntity<ListChannelsResponse>(listResponse) {
@@ -81,7 +87,11 @@ public class ChannelResource {
 	@Path("/{channelId}")
 	public Response updateChannel(@PathParam("channelId") String channelId, ChannelVariabilityModel model) {
 
-		channelManager.updateChannel(channelId, model);
+		try {
+			channelManager.updateChannel(channelId, model);
+		} catch (Exception e) {
+			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+		}
 
 		return Response.ok().build();
 	}
@@ -91,10 +101,19 @@ public class ChannelResource {
 		ListChannelsResponse response = new ListChannelsResponse();
 
 		for (ChannelVariabilityModel model : list) {
-			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() + "/" + model.getId(),
+			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() + model.getId(),
 					model.getDescription()));
 		}
 		return response;
+	}
+	
+	private String createSchemaLocation(String channelId) {
+		
+		String baseUrl = uriInfo.getBaseUri().toString();
+		// replace /channels/ with /schemas/ +channelId.xsd
+		String schemaLocation = baseUrl.replace("channels", "schemas/" +channelId + ".xsd");
+		
+		return schemaLocation;
 	}
 
 }

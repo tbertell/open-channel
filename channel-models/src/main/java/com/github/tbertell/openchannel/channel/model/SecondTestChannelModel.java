@@ -31,7 +31,7 @@ public class SecondTestChannelModel extends ChannelVariabilityModel {
 
 	@Override
 	public void validate() {
-		// TODO Auto-generated method stub
+		// empty
 
 	}
 

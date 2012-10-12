@@ -29,8 +29,10 @@ public class ChannelManager {
 		CHANNEL_DIR = channelDir;
 	}
 
-	public void updateChannel(String channelId, ChannelVariabilityModel model) {
+	public boolean updateChannel(String channelId, ChannelVariabilityModel model) {
 
+		boolean success = false;
+		
 		model.validate();
 		ModelTransformer transformer = new ModelXslTransformer();
 		String channel = transformer.transformFromModel(model);
@@ -40,8 +42,7 @@ public class ChannelManager {
 			out = new BufferedWriter(new FileWriter(CHANNEL_DIR + channelId + ".xml"));
 			out.write(channel);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				if (out != null) {
@@ -52,14 +53,18 @@ public class ChannelManager {
 			}
 		}
 
+		return success;
 	}
 
 	public ChannelVariabilityModel getChannel(String channelId) {
 		String blueprint = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
 
-		ModelTransformer transformer = new ModelXslTransformer();
-
-		ChannelVariabilityModel model = transformer.transformToModel(blueprint, channelId);
+		ChannelVariabilityModel model = null;
+		
+		if (blueprint != null) {
+			ModelTransformer transformer = new ModelXslTransformer();
+			model = transformer.transformToModel(blueprint, channelId);
+		}
 
 		return model;
 	}
@@ -81,13 +86,13 @@ public class ChannelManager {
 		});
 
 		List<ChannelVariabilityModel> channels = new ArrayList<ChannelVariabilityModel>();
-
-		for (File file : files) {
-			String channelName = file.getName();
-			String channelId = channelName.substring(0, channelName.indexOf("."));
-			channels.add(getChannel(channelId));
+		if (files != null) {
+			for (File file : files) {
+				String channelName = file.getName();
+				String channelId = channelName.substring(0, channelName.indexOf("."));
+				channels.add(getChannel(channelId));
+			}
 		}
-
 		return channels;
 	}
 
@@ -101,6 +106,7 @@ public class ChannelManager {
 			serializer.transform(new DOMSource(doc), new StreamResult(stw));
 			return stw.toString();
 		} catch (Exception e) {
+			// file probably not found
 			e.printStackTrace();
 		}
 		return null;
