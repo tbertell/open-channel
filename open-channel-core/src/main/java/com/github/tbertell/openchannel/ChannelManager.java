@@ -19,6 +19,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channel.transform.ModelTransformer;
+import com.github.tbertell.openchannel.channel.transform.ModelTransformerFactory;
 import com.github.tbertell.openchannel.channel.transform.ModelXslTransformer;
 
 public class ChannelManager {
@@ -34,7 +35,9 @@ public class ChannelManager {
 		boolean success = false;
 		
 		model.validate();
-		ModelTransformer transformer = new ModelXslTransformer();
+		
+		ModelTransformer transformer = ModelTransformerFactory.createModelTransformer(model);
+		
 		String channel = transformer.transformFromModel(model);
 
 		BufferedWriter out = null;
