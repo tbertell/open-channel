@@ -1,9 +1,9 @@
-package com.github.tbertell.opechannel.service;
+package com.github.tbertell.openchannel.service;
 
 import javax.jws.WebService;
 
 @WebService
-public interface StockQuote {
+public interface StockQuoteService {
 
 	public String getQuote(String symbol);
 

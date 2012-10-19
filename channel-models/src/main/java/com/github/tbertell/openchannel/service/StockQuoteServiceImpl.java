@@ -1,13 +1,13 @@
-package com.github.tbertell.opechannel.service;
+package com.github.tbertell.openchannel.service;
 
 import javax.jws.WebService;
 
 @WebService(endpointInterface = "com.github.tbertell.opechannel.service.StockQuote")
-public class StockQuoteImpl implements StockQuote {
+public class StockQuoteServiceImpl implements StockQuoteService {
 
 	@Override
 	public String getQuote(String symbol) {
-		// TODO Auto-generated method stub
+		System.out.println("Toimii!");
 		return null;
 	}
 
