@@ -21,7 +21,7 @@
 		<route id="stockQuoteChannel">
 			<route>
 				<!-- CXF consumer using MESSAGE format -->
-				<from uri="cxf:bean:reportIncident?dataFormat=MESSAGE" />
+				<from uri="cxf:bean:stockquote?dataFormat=MESSAGE" />
 				<!-- log input received -->
 				<to uri="log:input" />
 				

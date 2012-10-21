@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/blueprint"
-       xsi:schemaLocation="
-       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
-       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
-
-  <bean id="helloBean" class="com.github.tbertell.openchannel.camel.channel.HelloBean">
-      <property name="say" value="Hi from Camel"/>
-  </bean>
-
-  <camelContext trace="false" xmlns="http://camel.apache.org/schema/blueprint">
-    <route id="stockQuoteChannel">
-      <from uri="timer:foo?period=5000"/>
-      <setBody>
-          <method ref="helloBean" method="hello"/>
-      </setBody>
-      <log message="The message contains ${body}"/>
-    </route>
-  </camelContext>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+	xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws" xmlns:cxf="http://cxf.apache.org/blueprint/core"
+	xmlns:camel="http://camel.apache.org/schema/blueprint" xmlns:camelcxf="http://camel.apache.org/schema/blueprint/cxf"
+	xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
+             http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+             ">
+	<!-- <camelcxf:cxfEndpoint id="stockquote" address="http://localhost:9001/stockquote" 
+		serviceClass="com.github.tbertell.opechannel.service.StockQuoteService"> 
+		<camelcxf:properties> <entry key="dataFormat" value="MESSAGE" /> </camelcxf:properties> 
+		</camelcxf:cxfEndpoint> -->
+	<bean id="stockQuoteWSClient" class="com.github.tbertell.opechannel.service.StockQuoteWSClient">
+		<property name="url"
+			value="http://www.webservicex.net/stockquote.asmx" />
+	</bean>
+	
+	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+		<route id="stockQuoteChannel">
+			<from
+				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.opechannel.service.StockQuoteResource" />
+			<to uri="log:input" />
+			<to uri="bean:stockQuoteWSClient"/>
+			<!-- send proxied request to real web service -->
+			<!-- <to ref="callRealWebService" /> -->
+			<!-- log answer from real web service -->
+			<to uri="log:output" />
+		</route>
+	</camelContext>
 
 </blueprint>
