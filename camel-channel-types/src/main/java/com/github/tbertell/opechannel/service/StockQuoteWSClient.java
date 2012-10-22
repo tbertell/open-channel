@@ -1,7 +1,6 @@
 package com.github.tbertell.opechannel.service;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.webservicex.StockQuote;
@@ -13,23 +12,26 @@ import org.slf4j.LoggerFactory;
 public class StockQuoteWSClient {
 	private String url = "http://www.webservicex.net/stockquote.asmx";
 
-	private long TTL = 1000;
+	private long cacheTTL = 1000;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteWSClient.class);
 
 	private final String START_ELEMENT = "<Last>";
 	private final String END_ELEMENT = "</Last>";
 
-	private static final ConcurrentHashMap<String, CacheElement> CACHE = new ConcurrentHashMap<String, CacheElement>();
+	private static final ConcurrentHashMap<String, CacheEntry> CACHE = new ConcurrentHashMap<String, CacheEntry>();
 
 	public String getQuote(String symbol) {
 
 		LOGGER.info("Start web service call with symbol: " + symbol);
 		long starttime = System.currentTimeMillis();
 
-		if (TTL != 0 && CACHE.contains(symbol)) {
-			CacheElement element = CACHE.get(symbol);
-			// TODO jatka tästä
+		// if TTL is 0 cache is not used
+		if (cacheTTL != 0 && CACHE.contains(symbol)) {
+			CacheEntry entry = CACHE.get(symbol);
+			if (isCacheEntryValid(entry, starttime)) {
+				return entry.getQuote();
+			}
 		}
 
 		StockQuote ss = new StockQuote();
@@ -38,6 +40,8 @@ public class StockQuoteWSClient {
 
 		long endtime = System.currentTimeMillis();
 		String quote = parseQuote(response);
+		CACHE.put(symbol, new CacheEntry(symbol, endtime));
+		
 		LOGGER.info("End web service call with response: " + quote + ", respose time: " + (endtime - starttime) + " ms");
 		return quote;
 	}
@@ -65,26 +69,43 @@ public class StockQuoteWSClient {
 		this.url = url;
 	}
 
-	private class CacheElement implements Serializable {
+	private boolean isCacheEntryValid(CacheEntry entry, long currentTime) {
+		if (entry.getLastAccessed().longValue() + cacheTTL > currentTime) {
+			LOGGER.debug("Cache hit");
+			return true;
+		} else {
+			LOGGER.debug("Cache invalid");
+			return false;
+		}
+	}
+	
+	private class CacheEntry implements Serializable {
 
 		private static final long serialVersionUID = 3113230821706755430L;
 
-		private String quote;
-		private Date lastAccessed;
+		private String symbol;
+		private Long lastAccessed;
+
+		
+		public CacheEntry(String symbol, Long lastAccessed) {
+			super();
+			this.symbol = symbol;
+			this.lastAccessed = lastAccessed;
+		}
 
 		public String getQuote() {
-			return quote;
+			return symbol;
 		}
 
 		public void setQuote(String quote) {
-			this.quote = quote;
+			this.symbol = quote;
 		}
 
-		public Date getLastAccessed() {
+		public Long getLastAccessed() {
 			return lastAccessed;
 		}
 
-		public void setLastAccessed(Date lastAccessed) {
+		public void setLastAccessed(Long lastAccessed) {
 			this.lastAccessed = lastAccessed;
 		}
 	}
