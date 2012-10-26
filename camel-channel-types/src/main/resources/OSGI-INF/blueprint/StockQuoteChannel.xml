@@ -9,26 +9,48 @@
              http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
-	<!-- <camelcxf:cxfEndpoint id="stockquote" address="http://localhost:9001/stockquote" 
-		serviceClass="com.github.tbertell.opechannel.service.StockQuoteService"> 
-		<camelcxf:properties> <entry key="dataFormat" value="MESSAGE" /> </camelcxf:properties> 
-		</camelcxf:cxfEndpoint> -->
-	<bean id="stockQuoteWSClient" class="com.github.tbertell.opechannel.service.StockQuoteWSClient">
-		<property name="url"
-			value="http://www.webservicex.net/stockquote.asmx" />
+
+	<bean id="stockQuoteSlowWSClient"
+		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
+		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
+		<property name="cacheTTL" value="10000" />
+		<property name="slow" value="true" />
 	</bean>
-	
+	<bean id="stockQuoteFastWSClient"
+		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
+		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
+		<property name="cacheTTL" value="10000" />
+		<property name="slow" value="false" />
+	</bean>
+	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
+	</bean>
+
+	<!-- use CF from ActiveMQ blueprint service running in container -->
+	<reference id="connectionFactory" interface="javax.jms.ConnectionFactory" />
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+
 	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
 		<route id="stockQuoteChannel">
 			<from
-				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.opechannel.service.StockQuoteResource" />
+				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
 			<to uri="log:input" />
-			<to uri="bean:stockQuoteWSClient"/>
-			<!-- send proxied request to real web service -->
-			<!-- <to ref="callRealWebService" /> -->
-			<!-- log answer from real web service -->
+			<to uri="bean:stockQuoteSlowWSClient" />
+			<to uri="log:output" />
+			<wireTap uri="seda:event">
+				<body><simple>${header.params}</simple></body>
+			</wireTap>
 			<to uri="log:output" />
 		</route>
+		
+		<route id="eventChannel">
+			<from uri="seda:event" />
+			<to uri="log:input" />
+			<to uri="activemq:queue:EVENT.QUEUE" />
+		</route>
 	</camelContext>
+
+
 
 </blueprint>

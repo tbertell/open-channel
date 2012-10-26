@@ -1,4 +1,4 @@
-package com.github.tbertell.opechannel.service;
+package com.github.tbertell.openchannel.service;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
