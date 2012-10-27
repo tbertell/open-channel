@@ -1,33 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/jms 
+http://www.springframework.org/schema/jms/spring-jms.xsd
 http://cxf.apache.org/jaxrs
 http://cxf.apache.org/schemas/jaxrs.xsd">
 
-  <import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
 
-  <context:property-placeholder/>
-  <context:annotation-config/>
-  <bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer"/>
-  <bean class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer"/>
+	<context:property-placeholder />
+	<context:annotation-config />
+	<context:component-scan base-package="com.github.tbertell.openchannel" />
+	<bean
+		class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer" />
+	<bean
+		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer" />
 
-   <jaxrs:server id="services" address="/">
-    <jaxrs:serviceBeans>
-      <bean class="com.github.tbertell.openchannel.ChannelResource" />
-    </jaxrs:serviceBeans>
-    <jaxrs:providers>
-        <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-    </jaxrs:providers>
-    </jaxrs:server>
-    
+	<jaxrs:server id="services" address="/">
+		<jaxrs:serviceBeans>
+			<bean class="com.github.tbertell.openchannel.ChannelResource" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
 
-	<bean id="channelManager" class="com.github.tbertell.openchannel.ChannelManager" >
-		<constructor-arg index="0" type="java.lang.String" value="/home/tomppa/Projects/open-channel/open-channel-core/src/test/resources/com/github/tbertell/openchannel/"/>
-	</bean>	
+	<jms:listener-container connection-factory="connectionFactory">
+		<jms:listener destination="EVENT.QUEUE" ref="queueListener"
+			method="onMessage" />
+	</jms:listener-container>
+
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL">
+			<value>tcp://localhost:61616</value>
+		</property>
+	</bean>
+
+	<bean id="channelManager" class="com.github.tbertell.openchannel.ChannelManager">
+		<constructor-arg index="0" type="java.lang.String"
+			value="/home/tomppa/Projects/open-channel/open-channel-core/src/test/resources/com/github/tbertell/openchannel/" />
+	</bean>
+	<bean id="queueListener" class="com.github.tbertell.openchannel.listener.QueueListener">
+	</bean>
+	<bean id="adaptationPolicyManager" class="com.github.tbertell.openchannel.AdaptationPolicyManager">
+	</bean>
 </beans>

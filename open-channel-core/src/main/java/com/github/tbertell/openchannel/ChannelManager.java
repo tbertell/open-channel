@@ -17,11 +17,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.springframework.stereotype.Component;
+
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channel.transform.ModelTransformer;
 import com.github.tbertell.openchannel.channel.transform.ModelTransformerFactory;
 import com.github.tbertell.openchannel.channel.transform.ModelXslTransformer;
 
+@Component
 public class ChannelManager {
 
 	private final String CHANNEL_DIR;

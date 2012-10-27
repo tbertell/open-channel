@@ -3,13 +3,15 @@ package com.github.tbertell.openchannel;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.reconfiguration.AdaptationPolicy;
 
+@Component
 public class AdaptationPolicyManager {
 
-	@Autowired
+	@Autowired(required=true)
 	private ChannelManager channelManager;
 
 	private static String HANDLER_PACKAGE = "com.github.tbertell.openchannel.reconfiguration";

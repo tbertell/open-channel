@@ -15,6 +15,7 @@ import com.github.tbertell.openchannel.AdaptationPolicyManager;
 
 @Component
 public class QueueListener implements MessageListener {
+	
 	public void onMessage(final Message message) {
 
 		if (message instanceof MapMessage) {
@@ -23,6 +24,9 @@ public class QueueListener implements MessageListener {
 			try {
 				Map<String, String> params = (Map<String, String>) converter.fromMessage(mapMessage);
 				String channelId = params.get("channelId");
+				
+				System.out.println("Received message with channelId" +channelId);
+				
 				AdaptationPolicyManager reconfManager = new AdaptationPolicyManager();
 				reconfManager.reconfigure(channelId, params);
 			} catch (MessageConversionException e) {
