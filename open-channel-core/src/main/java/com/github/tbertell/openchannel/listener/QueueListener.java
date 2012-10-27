@@ -11,7 +11,7 @@ import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
 import org.springframework.stereotype.Component;
 
-import com.github.tbertell.openchannel.ReconfigurationManager;
+import com.github.tbertell.openchannel.AdaptationPolicyManager;
 
 @Component
 public class QueueListener implements MessageListener {
@@ -23,7 +23,7 @@ public class QueueListener implements MessageListener {
 			try {
 				Map<String, String> params = (Map<String, String>) converter.fromMessage(mapMessage);
 				String channelId = params.get("channelId");
-				ReconfigurationManager reconfManager = new ReconfigurationManager();
+				AdaptationPolicyManager reconfManager = new AdaptationPolicyManager();
 				reconfManager.reconfigure(channelId, params);
 			} catch (MessageConversionException e) {
 				// TODO Auto-generated catch block

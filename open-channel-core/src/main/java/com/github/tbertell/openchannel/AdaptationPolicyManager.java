@@ -5,9 +5,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.reconfiguration.ReconfigurationHandler;
+import com.github.tbertell.openchannel.reconfiguration.AdaptationPolicy;
 
-public class ReconfigurationManager {
+public class AdaptationPolicyManager {
 
 	@Autowired
 	private ChannelManager channelManager;
@@ -23,7 +23,7 @@ public class ReconfigurationManager {
 			// do nothing
 		}
 		if (model != null) {
-			ReconfigurationHandler handler = findHandler(channelId);
+			AdaptationPolicy handler = findHandler(channelId);
 
 			if (handler != null && handler.isReconfigurationNeeded(params)) {
 				ChannelVariabilityModel newModel = handler.reconfigure(params, model);
@@ -32,11 +32,11 @@ public class ReconfigurationManager {
 		}
 	}
 
-	private ReconfigurationHandler findHandler(String channelId) {
+	private AdaptationPolicy findHandler(String channelId) {
 		try {
-			Class<ReconfigurationHandler> clazz = (Class<ReconfigurationHandler>) Class.forName(HANDLER_PACKAGE + "."
-					+ channelId + "ReconfigurationHandler");
-			ReconfigurationHandler handler = clazz.newInstance();
+			Class<AdaptationPolicy> clazz = (Class<AdaptationPolicy>) Class.forName(HANDLER_PACKAGE + "."
+					+ channelId + "AdaptationPolicy");
+			AdaptationPolicy handler = clazz.newInstance();
 			return handler;
 		} catch (Exception e) {
 			e.printStackTrace();
