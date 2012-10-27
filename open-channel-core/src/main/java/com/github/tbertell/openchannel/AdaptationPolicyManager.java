@@ -11,7 +11,7 @@ import com.github.tbertell.openchannel.reconfiguration.AdaptationPolicy;
 @Component
 public class AdaptationPolicyManager {
 
-	@Autowired(required=true)
+	@Autowired
 	private ChannelManager channelManager;
 
 	private static String HANDLER_PACKAGE = "com.github.tbertell.openchannel.reconfiguration";
@@ -36,8 +36,8 @@ public class AdaptationPolicyManager {
 
 	private AdaptationPolicy findHandler(String channelId) {
 		try {
-			Class<AdaptationPolicy> clazz = (Class<AdaptationPolicy>) Class.forName(HANDLER_PACKAGE + "."
-					+ channelId + "AdaptationPolicy");
+			Class<AdaptationPolicy> clazz = (Class<AdaptationPolicy>) Class.forName(HANDLER_PACKAGE + "." + channelId
+					+ "AdaptationPolicy");
 			AdaptationPolicy handler = clazz.newInstance();
 			return handler;
 		} catch (Exception e) {
@@ -47,4 +47,11 @@ public class AdaptationPolicyManager {
 		return null;
 	}
 
+	public ChannelManager getChannelManager() {
+		return channelManager;
+	}
+
+	public void setChannelManager(ChannelManager channelManager) {
+		this.channelManager = channelManager;
+	}
 }

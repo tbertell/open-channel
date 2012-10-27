@@ -3,6 +3,7 @@ package com.github.tbertell.openchannel;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -30,17 +31,18 @@ public class ChannelManager {
 	private final String CHANNEL_DIR;
 
 	public ChannelManager(String channelDir) {
+		super();
 		CHANNEL_DIR = channelDir;
 	}
 
 	public boolean updateChannel(String channelId, ChannelVariabilityModel model) {
 
 		boolean success = false;
-		
+
 		model.validate();
-		
+
 		ModelTransformer transformer = ModelTransformerFactory.createModelTransformer(model);
-		
+
 		String channel = transformer.transformFromModel(model);
 
 		BufferedWriter out = null;
@@ -66,7 +68,7 @@ public class ChannelManager {
 		String blueprint = convertXMLFileToString(CHANNEL_DIR + channelId + ".xml");
 
 		ChannelVariabilityModel model = null;
-		
+
 		if (blueprint != null) {
 			ModelTransformer transformer = new ModelXslTransformer();
 			model = transformer.transformToModel(blueprint, channelId);
@@ -111,8 +113,10 @@ public class ChannelManager {
 			Transformer serializer = TransformerFactory.newInstance().newTransformer();
 			serializer.transform(new DOMSource(doc), new StreamResult(stw));
 			return stw.toString();
+		} catch (FileNotFoundException fnfe) {
+			System.out.println("File " + fileName + " not found.");
+			// do nothing
 		} catch (Exception e) {
-			// file probably not found
 			e.printStackTrace();
 		}
 		return null;

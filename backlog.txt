@@ -1,3 +1,3 @@
-QueueListener toteutus
+toteuta cache-komponentti
 lokitus
 JavaDoc
