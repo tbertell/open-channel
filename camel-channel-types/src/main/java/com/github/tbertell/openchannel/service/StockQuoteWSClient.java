@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class StockQuoteWSClient {
 	private String url = "http://www.webservicex.net/stockquote.asmx";
 
-	private long cacheTTL = 1000;
+	private long cacheTTL = 10000;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteWSClient.class);
 
@@ -29,11 +29,14 @@ public class StockQuoteWSClient {
 
 	public String getQuote(String symbol, Exchange exchange) {
 
-		LOGGER.info("Start web service call with symbol: " + symbol +" url " +url +" cacheTTL " +cacheTTL);
+		LOGGER.info("Start web service call with symbol: " + symbol +" url " +url +" cacheTTL " +cacheTTL +" cache "+CACHE.containsKey(symbol));
+		logCache();
 		long starttime = System.currentTimeMillis();
 
 		// if TTL is 0 cache is not used
-		if (cacheTTL != 0 && CACHE.contains(symbol)) {
+		if (cacheTTL != 0 && CACHE.containsKey(symbol)) {
+			LOGGER.info("Cache contains " +symbol);
+			
 			CacheEntry entry = CACHE.get(symbol);
 			if (isCacheEntryValid(entry, starttime)) {
 				return entry.getQuote();
@@ -65,7 +68,8 @@ public class StockQuoteWSClient {
 		CACHE.put(symbol, new CacheEntry(symbol, endtime));
 
 		LOGGER.info("End web service call with response: " + quote + ", respose time: " + responseTime + " ms");
-		return quote;
+		
+		return "<quote>" +quote +"</quote>";
 	}
 
 	public static void main(String... args) {
@@ -93,10 +97,10 @@ public class StockQuoteWSClient {
 
 	private boolean isCacheEntryValid(CacheEntry entry, long currentTime) {
 		if (entry.getLastAccessed().longValue() + cacheTTL > currentTime) {
-			LOGGER.debug("Cache hit");
+			LOGGER.info("Cache hit!!!!!!!!!!!!!!!!!!!!!!!");
 			return true;
 		} else {
-			LOGGER.debug("Cache invalid");
+			LOGGER.info("Cache invalid!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
 			return false;
 		}
 	}
@@ -159,6 +163,13 @@ public class StockQuoteWSClient {
 		} catch (InterruptedException e) {
 			// don't sleep then
 			e.printStackTrace();
+		}
+	}
+	
+	private void logCache() {
+		LOGGER.info("Cache size " +CACHE.size());
+		for (CacheEntry entry: CACHE.values()) {
+			LOGGER.info("Cache " +entry.getQuote() +" " +entry.getLastAccessed());
 		}
 	}
 
