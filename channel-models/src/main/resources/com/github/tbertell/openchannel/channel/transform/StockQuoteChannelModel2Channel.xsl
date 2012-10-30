@@ -14,13 +14,13 @@
              http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
-
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
 		<property name="cacheTTL" value="{$cacheTTL}" />
 		<property name="slow" value="true" />
 		<property name="useCache" value="{$useCache}" />
+		<property name="responseTimeLimit" value="{$responseTimeLimit}" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
@@ -28,11 +28,11 @@
 		<property name="cacheTTL" value="{$cacheTTL}" />
 		<property name="slow" value="false" />
 		<property name="useCache" value="{$useCache}" />
+		<property name="responseTimeLimit" value="{$responseTimeLimit}" />
 	</bean>
 	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
 	</bean>
 
-	<!-- use CF from ActiveMQ blueprint service running in container -->
 	<reference id="connectionFactory" interface="javax.jms.ConnectionFactory" />
 	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
 		<property name="connectionFactory" ref="connectionFactory" />

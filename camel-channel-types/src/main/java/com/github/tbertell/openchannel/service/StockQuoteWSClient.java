@@ -22,10 +22,10 @@ public class StockQuoteWSClient {
 
 	private final String START_ELEMENT = "<Last>";
 	private final String END_ELEMENT = "</Last>";
-	
 	private Boolean slow = Boolean.TRUE;
-	
 	private Boolean useCache = Boolean.TRUE;
+	// used just as a placeholder for the value
+	private Long responseTimeLimit = Long.valueOf(0);
 
 	private static final ConcurrentHashMap<String, CacheEntry> CACHE = new ConcurrentHashMap<String, CacheEntry>();
 
@@ -133,7 +133,13 @@ public class StockQuoteWSClient {
 		this.useCache = useCache;
 	}
 
+	public Long getResponseTimeLimit() {
+		return responseTimeLimit;
+	}
 
+	public void setResponseTimeLimit(Long responseTimeLimit) {
+		this.responseTimeLimit = responseTimeLimit;
+	}
 
 	private class CacheEntry implements Serializable {
 

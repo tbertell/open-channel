@@ -16,6 +16,7 @@
 		<property name="cacheTTL" value="10000" />
 		<property name="slow" value="true" />
 		<property name="useCache" value="true" />
+		<property name="responseTimeLimit" value="123" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
@@ -23,6 +24,7 @@
 		<property name="cacheTTL" value="10000" />
 		<property name="slow" value="false" />
 		<property name="useCache" value="true" />
+		<property name="responseTimeLimit" value="123" />
 	</bean>
 	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
 	</bean>
