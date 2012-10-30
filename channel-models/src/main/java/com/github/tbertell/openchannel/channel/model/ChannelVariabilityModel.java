@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({ TimerLogChannelModel.class, SecondTestChannelModel.class })
+@XmlSeeAlso({ TimerLogChannelModel.class, SecondTestChannelModel.class, StockQuoteChannelModel.class })
 public abstract class ChannelVariabilityModel implements Serializable {
 
 	/**

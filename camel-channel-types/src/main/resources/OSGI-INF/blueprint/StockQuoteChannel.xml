@@ -10,13 +10,13 @@
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
 
-	<bean id="stockQuoteSlowWSClient"
+	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
 		<property name="cacheTTL" value="10000" />
 		<property name="slow" value="true" />
 	</bean>
-	<bean id="stockQuoteFastWSClient"
+	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
 		<property name="cacheTTL" value="10000" />
@@ -36,7 +36,7 @@
 			<from
 				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
 			<to uri="log:input" />
-			<to uri="bean:stockQuoteSlowWSClient" />
+			<to uri="bean:stockQuotePrimaryWSClient" />
 			<to uri="log:output" />
 			<wireTap uri="seda:event">
 				<body><simple>${header.params}</simple></body>
