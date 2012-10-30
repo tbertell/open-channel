@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:variable name="useCache" select="stockQuoteChannelModel/useCache" /> 
 	<xsl:variable name="cacheTTL" select="stockQuoteChannelModel/cacheTTL" />
-	<xsl:variable name="resposeTimeLimit" select="stockQuoteChannelModel/resposeTimeLimit" /> 
+	<xsl:variable name="responseTimeLimit" select="stockQuoteChannelModel/responseTimeLimit" />
 	<xsl:variable name="serviceProvider" select="stockQuoteChannelModel/serviceProvider" />
 	<xsl:template match="/">
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
@@ -18,16 +18,16 @@
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="{cacheTTL}" />
+		<property name="cacheTTL" value="{$cacheTTL}" />
 		<property name="slow" value="true" />
-		<property name="useCache" value="{useCache}" />
+		<property name="useCache" value="{$useCache}" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="{cacheTTL}" />
+		<property name="cacheTTL" value="{$cacheTTL}" />
 		<property name="slow" value="false" />
-		<property name="useCache" value="{useCache}" />
+		<property name="useCache" value="{$useCache}" />
 	</bean>
 	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
 	</bean>
@@ -44,7 +44,7 @@
 				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
 			<to uri="log:input" />
 				<xsl:choose>
-			  		<xsl:when test="serviceProvider='PRIMARY'">
+			  		<xsl:when test="$serviceProvider='PRIMARY'">
 				    <to uri="bean:stockQuotePrimaryWSClient" />
 				  </xsl:when>
 				  <xsl:otherwise>

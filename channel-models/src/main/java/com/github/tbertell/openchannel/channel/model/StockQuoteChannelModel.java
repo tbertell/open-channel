@@ -24,7 +24,7 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 	private Long cacheTTL;
 	
 	@XmlElement
-	private Long resposeTimeLimit; 
+	private Long responseTimeLimit; 
 
 	@XmlElement
 	private StockQuoteServiceProvider serviceProvider;
@@ -51,12 +51,12 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 		this.cacheTTL = cacheTTL;
 	}
 
-	public Long getResposeTimeLimit() {
-		return resposeTimeLimit;
+	public Long getResponseTimeLimit() {
+		return responseTimeLimit;
 	}
 
-	public void setResposeTimeLimit(Long resposeTimeLimit) {
-		this.resposeTimeLimit = resposeTimeLimit;
+	public void setResponseTimeLimit(Long resposeTimeLimit) {
+		this.responseTimeLimit = resposeTimeLimit;
 	}
 
 	public StockQuoteServiceProvider getServiceProvider() {
@@ -75,7 +75,7 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 				+ ((cacheTTL == null) ? 0 : cacheTTL.hashCode());
 		result = prime
 				* result
-				+ ((resposeTimeLimit == null) ? 0 : resposeTimeLimit.hashCode());
+				+ ((responseTimeLimit == null) ? 0 : responseTimeLimit.hashCode());
 		result = prime * result
 				+ ((serviceProvider == null) ? 0 : serviceProvider.hashCode());
 		result = prime * result
@@ -97,10 +97,10 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 				return false;
 		} else if (!cacheTTL.equals(other.cacheTTL))
 			return false;
-		if (resposeTimeLimit == null) {
-			if (other.resposeTimeLimit != null)
+		if (responseTimeLimit == null) {
+			if (other.responseTimeLimit != null)
 				return false;
-		} else if (!resposeTimeLimit.equals(other.resposeTimeLimit))
+		} else if (!responseTimeLimit.equals(other.responseTimeLimit))
 			return false;
 		if (serviceProvider != other.serviceProvider)
 			return false;
@@ -115,7 +115,7 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 	@Override
 	public String toString() {
 		return "StockQuoteChannelModel [useCache=" + useCache + ", cacheTTL="
-				+ cacheTTL + ", resposeTimeLimit=" + resposeTimeLimit
+				+ cacheTTL + ", resposeTimeLimit=" + responseTimeLimit
 				+ ", serviceProvider=" + serviceProvider + "]";
 	}
 

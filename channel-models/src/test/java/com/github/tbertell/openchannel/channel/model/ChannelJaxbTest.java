@@ -39,7 +39,7 @@ public class ChannelJaxbTest {
 
 		StockQuoteChannelModel model = new StockQuoteChannelModel();
 		model.setCacheTTL(Long.valueOf(123));
-		model.setResposeTimeLimit(Long.valueOf(321));
+		model.setResponseTimeLimit(Long.valueOf(321));
 		model.setServiceProvider(StockQuoteServiceProvider.PRIMARY);
 		model.setUseCache(Boolean.TRUE);
 		
