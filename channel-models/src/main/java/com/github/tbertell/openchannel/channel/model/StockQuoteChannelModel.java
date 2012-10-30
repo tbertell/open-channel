@@ -10,6 +10,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class StockQuoteChannelModel extends ChannelVariabilityModel {
 
 	private static final long serialVersionUID = 7132028137150247870L;
+	
+	public StockQuoteChannelModel() {
+		super();
+		setId("StockQuoteChannel");
+		setDescription("Channel for getting stock quote.");
+	}
 
 	@XmlElement
 	private Boolean useCache;

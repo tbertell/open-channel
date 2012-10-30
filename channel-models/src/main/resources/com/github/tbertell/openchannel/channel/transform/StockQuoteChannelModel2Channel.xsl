@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:variable name="useCache" select="stockQuoteChannelModel/useCache" /> 
+	<xsl:variable name="cacheTTL" select="stockQuoteChannelModel/cacheTTL" />
+	<xsl:variable name="resposeTimeLimit" select="stockQuoteChannelModel/resposeTimeLimit" /> 
+	<xsl:variable name="serviceProvider" select="stockQuoteChannelModel/serviceProvider" />
+	<xsl:template match="/">
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
 	xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws" xmlns:cxf="http://cxf.apache.org/blueprint/core"
@@ -13,16 +18,16 @@
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="10000" />
+		<property name="cacheTTL" value="{cacheTTL}" />
 		<property name="slow" value="true" />
-		<property name="useCache" value="true" />
+		<property name="useCache" value="{useCache}" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="10000" />
+		<property name="cacheTTL" value="{cacheTTL}" />
 		<property name="slow" value="false" />
-		<property name="useCache" value="true" />
+		<property name="useCache" value="{useCache}" />
 	</bean>
 	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
 	</bean>
@@ -38,7 +43,15 @@
 			<from
 				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
 			<to uri="log:input" />
-			<to uri="bean:stockQuotePrimaryWSClient" />
+				<xsl:choose>
+			  		<xsl:when test="serviceProvider='PRIMARY'">
+				    <to uri="bean:stockQuotePrimaryWSClient" />
+				  </xsl:when>
+				  <xsl:otherwise>
+				   <to uri="bean:stockQuoteSecondaryWSClient" />
+				  </xsl:otherwise>
+				</xsl:choose>
+			
 			<wireTap uri="seda:event">
 				<body><simple>${header.params}</simple></body>
 			</wireTap>
@@ -52,3 +65,5 @@
 		</route>
 	</camelContext>
 </blueprint>
+	</xsl:template>
+</xsl:stylesheet>

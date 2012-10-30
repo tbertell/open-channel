@@ -23,7 +23,9 @@ public class StockQuoteWSClient {
 	private final String START_ELEMENT = "<Last>";
 	private final String END_ELEMENT = "</Last>";
 	
-	private Boolean slow = true;
+	private Boolean slow = Boolean.TRUE;
+	
+	private Boolean useCache = Boolean.TRUE;
 
 	private static final ConcurrentHashMap<String, CacheEntry> CACHE = new ConcurrentHashMap<String, CacheEntry>();
 
@@ -33,8 +35,7 @@ public class StockQuoteWSClient {
 		logCache();
 		long starttime = System.currentTimeMillis();
 
-		// if TTL is 0 cache is not used
-		if (cacheTTL != 0 && CACHE.containsKey(symbol)) {
+		if (useCache && CACHE.containsKey(symbol)) {
 			LOGGER.info("Cache contains " +symbol);
 			
 			CacheEntry entry = CACHE.get(symbol);
@@ -114,12 +115,22 @@ public class StockQuoteWSClient {
 		this.cacheTTL = cacheTTL;
 	}
 
-	public boolean getSlow() {
+	public Boolean getSlow() {
 		return slow;
 	}
 
-	public void setSlow(boolean isSlow) {
+	public void setSlow(Boolean slow) {
 		this.slow = slow;
+	}
+
+	
+
+	public Boolean getUseCache() {
+		return useCache;
+	}
+
+	public void setUseCache(Boolean useCache) {
+		this.useCache = useCache;
 	}
 
 

@@ -5,6 +5,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.stream.StreamResult;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -57,6 +58,9 @@ public class ChannelJaxbTest {
 		DOMResult result = new DOMResult();
 		
 		m.marshal(tc, result);
+		
+		StreamResult sResult = new StreamResult(System.out);
+		m.marshal(tc, sResult);
 
 		// unmarshal from foo.xml
 		Unmarshaller u = context.createUnmarshaller();
