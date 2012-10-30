@@ -14,6 +14,9 @@
              http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
+     <xsl:comment>
+     	<xsl:value-of select="$responseTimeLimit"/>
+     </xsl:comment>
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
