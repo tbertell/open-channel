@@ -5,11 +5,12 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
-
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 @XmlSeeAlso({ TimerLogChannelModel.class, SecondTestChannelModel.class, StockQuoteChannelModel.class })
 public abstract class ChannelVariabilityModel implements Serializable {
 
