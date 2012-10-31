@@ -49,9 +49,10 @@ public class ModelTransformerTest {
 		String blueprint = transformer.transformFromModel(sourceModel);
 		
 		System.out.println(blueprint);
-//		StockQuoteChannelModel resultModel = (StockQuoteChannelModel) transformer.transformToModel(blueprint,
-//				sourceModel.getId());
-//
-//		Assert.assertEquals(resultModel, sourceModel);
+		StockQuoteChannelModel resultModel = (StockQuoteChannelModel) transformer.transformToModel(blueprint,
+				sourceModel.getId());
+
+		System.out.println(resultModel);
+		Assert.assertEquals(resultModel, sourceModel);
 	}
 }
