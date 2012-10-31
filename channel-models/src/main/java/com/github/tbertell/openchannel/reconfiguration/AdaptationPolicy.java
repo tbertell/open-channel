@@ -6,8 +6,6 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 
 public interface AdaptationPolicy {
 
-	public boolean isReconfigurationNeeded(Map<String, String> params);
-
 	public ChannelVariabilityModel reconfigure(Map<String, String> params, ChannelVariabilityModel model);
 
 }

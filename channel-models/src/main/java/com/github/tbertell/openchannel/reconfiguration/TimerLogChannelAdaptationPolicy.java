@@ -12,26 +12,6 @@ public class TimerLogChannelAdaptationPolicy implements AdaptationPolicy {
 	 * 
 	 * @see
 	 * com.github.tbertell.openchannel.reconfiguration.ReconfigurationHandler
-	 * #isReconfigurationNeeded(java.util.Map)
-	 */
-	@Override
-	public boolean isReconfigurationNeeded(Map<String, String> params) {
-		String responseTime = params.get("responseTime");
-		if (responseTime != null) {
-			Long rt = Long.valueOf(responseTime);
-
-			if (rt > 100) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.tbertell.openchannel.reconfiguration.ReconfigurationHandler
 	 * #reconfigure(java.util.Map,
 	 * com.github.tbertell.openchannel.channelmodel.TimerLogChannelModel)
 	 */

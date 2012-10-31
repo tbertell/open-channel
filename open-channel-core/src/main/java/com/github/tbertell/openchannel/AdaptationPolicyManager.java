@@ -27,7 +27,7 @@ public class AdaptationPolicyManager {
 		if (model != null) {
 			AdaptationPolicy handler = findHandler(channelId);
 
-			if (handler != null && handler.isReconfigurationNeeded(params)) {
+			if (handler != null) {
 				ChannelVariabilityModel newModel = handler.reconfigure(params, model);
 				channelManager.updateChannel(channelId, newModel);
 			}
