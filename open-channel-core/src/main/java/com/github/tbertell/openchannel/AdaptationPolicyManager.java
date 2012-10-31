@@ -29,7 +29,10 @@ public class AdaptationPolicyManager {
 
 			if (handler != null) {
 				ChannelVariabilityModel newModel = handler.reconfigure(params, model);
-				channelManager.updateChannel(channelId, newModel);
+				// update channel only if it's changed
+				if (!model.equals(newModel)) {
+					channelManager.updateChannel(channelId, newModel);
+				}
 			}
 		}
 	}

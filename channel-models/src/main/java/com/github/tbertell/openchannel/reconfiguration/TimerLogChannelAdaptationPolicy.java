@@ -5,7 +5,7 @@ import java.util.Map;
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channel.model.TimerLogChannelModel;
 
-public class TimerLogChannelAdaptationPolicy implements AdaptationPolicy {
+public class TimerLogChannelAdaptationPolicy implements AdaptationPolicy<TimerLogChannelModel> {
 
 	/*
 	 * (non-Javadoc)
@@ -16,19 +16,18 @@ public class TimerLogChannelAdaptationPolicy implements AdaptationPolicy {
 	 * com.github.tbertell.openchannel.channelmodel.TimerLogChannelModel)
 	 */
 	@Override
-	public ChannelVariabilityModel reconfigure(Map<String, String> params, ChannelVariabilityModel model) {
+	public TimerLogChannelModel reconfigure(Map<String, String> params, TimerLogChannelModel model) {
 
 		String responseTime = params.get("responseTime");
 
 		TimerLogChannelModel newModel = new TimerLogChannelModel();
-		TimerLogChannelModel oldModel = (TimerLogChannelModel) model;
-		newModel.setTimerPeriodInMillis(Long.valueOf(oldModel.getTimerPeriodInMillis()));
+		newModel.setTimerPeriodInMillis(Long.valueOf(model.getTimerPeriodInMillis()));
 		if (responseTime != null) {
 			Long rt = Long.valueOf(responseTime);
 			newModel.setMessage("TimerLogChannelModel is reconfigured at " + System.currentTimeMillis());
-			newModel.setTimerPeriodInMillis(Long.valueOf(oldModel.getTimerPeriodInMillis()));
+			newModel.setTimerPeriodInMillis(Long.valueOf(model.getTimerPeriodInMillis()));
 		} else {
-			newModel.setMessage(oldModel.getMessage());
+			newModel.setMessage(model.getMessage());
 		}
 		return newModel;
 	}
