@@ -37,7 +37,7 @@ public class AdaptationPolicyManager {
 		}
 	}
 
-	private AdaptationPolicy findHandler(String channelId) {
+	private AdaptationPolicy<?> findHandler(String channelId) {
 		try {
 			Class<AdaptationPolicy> clazz = (Class<AdaptationPolicy>) Class.forName(HANDLER_PACKAGE + "." + channelId
 					+ "AdaptationPolicy");

@@ -24,12 +24,12 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			Long rt = Long.valueOf(responseTime);
 			
 			// check if reconfiguration is needed
-			if (rt > model.getResponseTimeLimit()) {
+			if (rt > model.getResponseTimeLimit() && StockQuoteServiceProvider.PRIMARY.equals(model.getServiceProvider())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.SECONDARY);
 			} else if (StockQuoteServiceProvider.SECONDARY.equals(model.getServiceProvider())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);		
 			} else {
-				return model;
+				newModel.setServiceProvider(model.getServiceProvider());
 			}
 			
 		}

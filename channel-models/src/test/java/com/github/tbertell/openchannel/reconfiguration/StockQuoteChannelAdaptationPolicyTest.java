@@ -45,7 +45,7 @@ public class StockQuoteChannelAdaptationPolicyTest {
 		assertEquals(changedToPrimary.getServiceProvider(), StockQuoteServiceProvider.PRIMARY);
 		
 		// stays primary
-		StockQuoteChannelModel statysPrimary = (StockQuoteChannelModel) policy.reconfigure(params, changedToSecondary);
-		assertEquals(noChange, changedToSecondary);
+		StockQuoteChannelModel staysPrimary = (StockQuoteChannelModel) policy.reconfigure(params, changedToSecondary);
+		assertEquals(staysPrimary, changedToPrimary);
 	}
 }
