@@ -14,27 +14,25 @@
              http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
-     <xsl:comment>
-     	<xsl:value-of select="$responseTimeLimit"/>
-     </xsl:comment>
+	<bean id="stockQuoteCache"
+		class="com.github.tbertell.openchannel.service.SimpleStockQuoteCache">
+		<property name="cacheTTL" value="{$cacheTTL}" />
+		<property name="useCache" value="{$useCache}" />
+	</bean>
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="{$cacheTTL}" />
 		<property name="slow" value="true" />
-		<property name="useCache" value="{$useCache}" />
 		<property name="responseTimeLimit" value="{$responseTimeLimit}" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="{$cacheTTL}" />
 		<property name="slow" value="false" />
-		<property name="useCache" value="{$useCache}" />
 		<property name="responseTimeLimit" value="{$responseTimeLimit}" />
 	</bean>
 	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
-	</bean>
+	</bean>	
 
 	<reference id="connectionFactory" interface="javax.jms.ConnectionFactory" />
 	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
@@ -46,15 +44,29 @@
 			<from
 				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
 			<to uri="log:input" />
-				<xsl:choose>
-			  		<xsl:when test="$serviceProvider='PRIMARY'">
-				    <to uri="bean:stockQuotePrimaryWSClient" />
-				  </xsl:when>
-				  <xsl:otherwise>
-				   <to uri="bean:stockQuoteSecondaryWSClient" />
-				  </xsl:otherwise>
-				</xsl:choose>
-			
+			<xsl:choose>
+		  		<xsl:when test="$useCache='true'">
+				<to uri="bean:stockQuoteCache?method=getQuote" />
+				</xsl:when>
+			</xsl:choose>
+			<choice>
+	            <when>
+	            	<el>${in.headers.cacheHit != 'true'}</el>
+	                <xsl:choose>
+				  		<xsl:when test="$serviceProvider='PRIMARY'">
+					    <to uri="bean:stockQuotePrimaryWSClient" />
+					  </xsl:when>
+					  <xsl:otherwise>
+					   <to uri="bean:stockQuoteSecondaryWSClient" />
+					  </xsl:otherwise>
+					</xsl:choose>
+	                <to uri="log:input" />
+	                <to uri="bean:stockQuoteCache?method=updateCache" />
+					<wireTap uri="seda:event">
+						<body><simple>${header.params}</simple></body>
+					</wireTap>
+	            </when>
+        	</choice>
 			<wireTap uri="seda:event">
 				<body><simple>${header.params}</simple></body>
 			</wireTap>

@@ -1,10 +1,8 @@
 package com.github.tbertell.openchannel.service;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.webservicex.StockQuote;
 import net.webservicex.StockQuoteSoap;
@@ -16,61 +14,47 @@ import org.slf4j.LoggerFactory;
 public class StockQuoteWSClient {
 	private String url = "http://www.webservicex.net/stockquote.asmx";
 
-	private long cacheTTL = 10000;
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteWSClient.class);
 
 	private final String START_ELEMENT = "<Last>";
 	private final String END_ELEMENT = "</Last>";
 	private Boolean slow = Boolean.TRUE;
-	private Boolean useCache = Boolean.TRUE;
+
 	// used just as a placeholder for the value
 	private Long responseTimeLimit = Long.valueOf(0);
 
-	private static final ConcurrentHashMap<String, CacheEntry> CACHE = new ConcurrentHashMap<String, CacheEntry>();
+	public void getQuote(String symbol, Exchange exchange) {
 
-	public String getQuote(String symbol, Exchange exchange) {
-
-		LOGGER.info("Start web service call with symbol: " + symbol +" url " +url +" cacheTTL " +cacheTTL +" cache "+CACHE.containsKey(symbol));
-		logCache();
+		LOGGER.info("Start web service call with symbol: " + symbol + " url " + url);
 		long starttime = System.currentTimeMillis();
-
-		if (useCache && CACHE.containsKey(symbol)) {
-			LOGGER.info("Cache contains " +symbol);
-			
-			CacheEntry entry = CACHE.get(symbol);
-			if (isCacheEntryValid(entry, starttime)) {
-				return entry.getQuote();
-			}
-		}
 
 		// simulate slow response time
 		if (slow) {
 			waitRandomTime();
 		}
-		
+
 		StockQuote ss = new StockQuote();
 		StockQuoteSoap port = ss.getStockQuoteSoap();
 		String response = port.getQuote(symbol);
 
 		long endtime = System.currentTimeMillis();
 		Long responseTime = (endtime - starttime);
-		
+
 		String quote = parseQuote(response);
-		
+
 		// setup headers
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("responseTime", responseTime.toString());
 		params.put("channelId", "StockQuoteChannel");
-		
-		exchange.getIn().setHeader("params", params);
-		exchange.getIn().setHeader("quote", "<quote>" +quote +"</quote>");
-		
-		CACHE.put(symbol, new CacheEntry(symbol, endtime));
+
+		exchange.getOut().setHeader("params", params);
+		exchange.getOut().setHeader("quote", quote);
+		exchange.getOut().setHeader("symbol", symbol);
+		exchange.getOut().setBody("<quote>" + quote + "</quote>");
 
 		LOGGER.info("End web service call with response: " + quote + ", respose time: " + responseTime + " ms");
-		
-		return "<quote>" +quote +"</quote>";
+
+		// return "<quote>" + quote + "</quote>";
 	}
 
 	public static void main(String... args) {
@@ -96,41 +80,12 @@ public class StockQuoteWSClient {
 		this.url = url;
 	}
 
-	private boolean isCacheEntryValid(CacheEntry entry, long currentTime) {
-		if (entry.getLastAccessed().longValue() + cacheTTL > currentTime) {
-			LOGGER.info("Cache hit!!!!!!!!!!!!!!!!!!!!!!!");
-			return true;
-		} else {
-			LOGGER.info("Cache invalid!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
-			return false;
-		}
-	}
-	
-
-	public long getCacheTTL() {
-		return cacheTTL;
-	}
-
-	public void setCacheTTL(long cacheTTL) {
-		this.cacheTTL = cacheTTL;
-	}
-
 	public Boolean getSlow() {
 		return slow;
 	}
 
 	public void setSlow(Boolean slow) {
 		this.slow = slow;
-	}
-
-	
-
-	public Boolean getUseCache() {
-		return useCache;
-	}
-
-	public void setUseCache(Boolean useCache) {
-		this.useCache = useCache;
 	}
 
 	public Long getResponseTimeLimit() {
@@ -141,52 +96,14 @@ public class StockQuoteWSClient {
 		this.responseTimeLimit = responseTimeLimit;
 	}
 
-	private class CacheEntry implements Serializable {
-
-		private static final long serialVersionUID = 3113230821706755430L;
-
-		private String symbol;
-		private Long lastAccessed;
-
-
-		public CacheEntry(String symbol, Long lastAccessed) {
-			super();
-			this.symbol = symbol;
-			this.lastAccessed = lastAccessed;
-		}
-
-		public String getQuote() {
-			return symbol;
-		}
-
-		public void setQuote(String quote) {
-			this.symbol = quote;
-		}
-
-		public Long getLastAccessed() {
-			return lastAccessed;
-		}
-
-		public void setLastAccessed(Long lastAccessed) {
-			this.lastAccessed = lastAccessed;
-		}
-	}
-
 	private void waitRandomTime() {
 		int sleepTime = new Random().nextInt(5000);
-		LOGGER.info("Wait for " +sleepTime + " ms");
+		LOGGER.info("Wait for " + sleepTime + " ms");
 		try {
 			Thread.sleep(sleepTime);
 		} catch (InterruptedException e) {
 			// don't sleep then
 			e.printStackTrace();
-		}
-	}
-	
-	private void logCache() {
-		LOGGER.info("Cache size " +CACHE.size());
-		for (CacheEntry entry: CACHE.values()) {
-			LOGGER.info("Cache " +entry.getQuote() +" " +entry.getLastAccessed());
 		}
 	}
 

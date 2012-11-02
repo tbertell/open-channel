@@ -6,8 +6,6 @@ import org.testng.annotations.Test;
 import com.github.tbertell.openchannel.channel.model.StockQuoteChannelModel;
 import com.github.tbertell.openchannel.channel.model.StockQuoteServiceProvider;
 import com.github.tbertell.openchannel.channel.model.TimerLogChannelModel;
-import com.github.tbertell.openchannel.channel.transform.ModelTransformer;
-import com.github.tbertell.openchannel.channel.transform.ModelXslTransformer;
 
 public class ModelTransformerTest {
 
@@ -31,23 +29,22 @@ public class ModelTransformerTest {
 
 		Assert.assertEquals(resultModel, sourceModel);
 	}
-	
+
 	@Test
 	public void shouldTransformStockQuotesChannelModelToBlueprintAndBackToModel() {
-		
+
 		StockQuoteChannelModel sourceModel = new StockQuoteChannelModel();
 		ModelTransformer transformer = ModelTransformerFactory.createModelTransformer(sourceModel);
-		
 
 		Assert.assertEquals(sourceModel.getId(), "StockQuoteChannel");
 
 		sourceModel.setCacheTTL(Long.valueOf(123));
 		sourceModel.setResponseTimeLimit(Long.valueOf(321));
 		sourceModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);
-		sourceModel.setUseCache(Boolean.TRUE);
+		sourceModel.setUseCache(Boolean.FALSE);
 
 		String blueprint = transformer.transformFromModel(sourceModel);
-		
+
 		System.out.println(blueprint);
 		StockQuoteChannelModel resultModel = (StockQuoteChannelModel) transformer.transformToModel(blueprint,
 				sourceModel.getId());

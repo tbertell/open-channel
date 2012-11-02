@@ -10,21 +10,22 @@
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
 
+	<bean id="stockQuoteCache"
+		class="com.github.tbertell.openchannel.service.SimpleStockQuoteCache">
+		<property name="cacheTTL" value="30000" />
+		<property name="useCache" value="true" />
+	</bean>
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="10000" />
 		<property name="slow" value="true" />
-		<property name="useCache" value="true" />
-		<property name="responseTimeLimit" value="123" />
+		<property name="responseTimeLimit" value="12300" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="cacheTTL" value="10000" />
 		<property name="slow" value="false" />
-		<property name="useCache" value="true" />
-		<property name="responseTimeLimit" value="123" />
+		<property name="responseTimeLimit" value="12300" />
 	</bean>
 	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
 	</bean>
@@ -40,10 +41,18 @@
 			<from
 				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
 			<to uri="log:input" />
-			<to uri="bean:stockQuotePrimaryWSClient" />
-			<wireTap uri="seda:event">
-				<body><simple>${header.params}</simple></body>
-			</wireTap>
+			<to uri="bean:stockQuoteCache?method=getQuote" />
+			<choice>
+	            <when>
+	            	<el>${in.headers.cacheHit != 'true'}</el>
+	                <to uri="bean:stockQuotePrimaryWSClient" />
+	                <to uri="log:input" />
+	                <to uri="bean:stockQuoteCache?method=updateCache" />
+					<wireTap uri="seda:event">
+						<body><simple>${header.params}</simple></body>
+					</wireTap>
+	            </when>
+        	</choice>
 			<to uri="log:output" />
 		</route>
 		
