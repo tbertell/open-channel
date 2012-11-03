@@ -23,7 +23,7 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 	@XmlElement(required = true)
 	private Boolean useCache;
 
-	@XmlElement(required = true)
+	@XmlElement
 	@XmlSchemaType(name = "positiveInteger")
 	private BigInteger cacheTTL;
 
@@ -36,8 +36,10 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 
 	@Override
 	public void validate() {
-		if (getResponseTimeLimit().compareTo(getCacheTTL()) < 0) {
+		if (getUseCache() && getResponseTimeLimit().compareTo(getCacheTTL()) < 0) {
 			throw new IllegalArgumentException("Response time limit should be greater than cache time to live value.");
+		} else if (getUseCache() && getCacheTTL() == null) {
+			throw new IllegalArgumentException("CacheTTL must be defined if cache is used.");
 		}
 
 	}

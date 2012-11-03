@@ -62,9 +62,6 @@
 					</xsl:choose>
 	                <to uri="log:input" />
 	                <to uri="bean:stockQuoteCache?method=updateCache" />
-					<wireTap uri="seda:event">
-						<body><simple>${header.params}</simple></body>
-					</wireTap>
 	            </when>
         	</choice>
 			<wireTap uri="seda:event">

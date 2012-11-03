@@ -54,7 +54,7 @@ public class ChannelResource {
 			marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, createSchemaLocation(channelId));
 			Writer writer = new StringWriter();
 			marshaller.marshal(model, writer);
-			
+
 			return writer.toString();
 		} catch (JAXBException e) {
 			// TODO throw apporriate exception
@@ -89,7 +89,11 @@ public class ChannelResource {
 
 		try {
 			channelManager.updateChannel(channelId, model);
+		} catch (IllegalArgumentException iae) {
+			iae.printStackTrace();
+			throw new WebApplicationException(Status.BAD_REQUEST);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
 
@@ -101,18 +105,18 @@ public class ChannelResource {
 		ListChannelsResponse response = new ListChannelsResponse();
 
 		for (ChannelVariabilityModel model : list) {
-			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() + model.getId(),
-					model.getDescription()));
+			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() + model.getId(), model
+					.getDescription()));
 		}
 		return response;
 	}
-	
+
 	private String createSchemaLocation(String channelId) {
-		
+
 		String baseUrl = uriInfo.getBaseUri().toString();
 		// replace /channels/ with /schemas/ +channelId.xsd
-		String schemaLocation = baseUrl.replace("channels", "schemas/" +channelId + ".xsd");
-		
+		String schemaLocation = baseUrl.replace("channels", "schemas/" + channelId + ".xsd");
+
 		return schemaLocation;
 	}
 

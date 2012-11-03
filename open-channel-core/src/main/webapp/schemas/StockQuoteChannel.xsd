@@ -5,7 +5,7 @@
 
   <xs:complexType name="channelVariabilityModel" abstract="true">
     <xs:sequence>
-      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="id" type="xs:string" minOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -13,10 +13,10 @@
     <xs:complexContent>
       <xs:extension base="channelVariabilityModel">
         <xs:sequence>
-          <xs:element name="useCache" type="xs:boolean"/>
+          <xs:element name="useCache" type="xs:boolean" minOccurs="1"/>
           <xs:element name="cacheTTL" type="xs:positiveInteger"/>
-          <xs:element name="responseTimeLimit" type="xs:positiveInteger"/>
-          <xs:element name="serviceProvider" type="stockQuoteServiceProvider"/>
+          <xs:element name="responseTimeLimit" type="xs:positiveInteger" minOccurs="1"/>
+          <xs:element name="serviceProvider" type="stockQuoteServiceProvider" minOccurs="1"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
