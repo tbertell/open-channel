@@ -23,11 +23,11 @@ public class ChannelManagerTest {
 		String userDir = System.getProperty("user.dir");
 		String channelDir = userDir + TEST_RESOURCES;
 		System.out.println(channelDir);
-		
+
 		ChannelManager manager = new ChannelManager(channelDir);
 
 		List<ChannelVariabilityModel> list = manager.listChannels();
 
-		Assert.assertEquals(list.size(), 2);
+		Assert.assertEquals(list.size(), 1);
 	}
 }

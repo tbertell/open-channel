@@ -1,5 +1,7 @@
 package com.github.tbertell.openchannel.channel.transform;
 
+import java.math.BigInteger;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -38,8 +40,8 @@ public class ModelTransformerTest {
 
 		Assert.assertEquals(sourceModel.getId(), "StockQuoteChannel");
 
-		sourceModel.setCacheTTL(Long.valueOf(123));
-		sourceModel.setResponseTimeLimit(Long.valueOf(321));
+		sourceModel.setCacheTTL(BigInteger.valueOf(123));
+		sourceModel.setResponseTimeLimit(BigInteger.valueOf(321));
 		sourceModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);
 		sourceModel.setUseCache(Boolean.FALSE);
 

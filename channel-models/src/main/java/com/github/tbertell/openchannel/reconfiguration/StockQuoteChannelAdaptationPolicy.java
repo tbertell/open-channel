@@ -8,35 +8,36 @@ import com.github.tbertell.openchannel.channel.model.StockQuoteServiceProvider;
 public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<StockQuoteChannelModel> {
 
 	/**
-	 * There are three different cases:
-	 * 	1. response time is below limit and primary service provider is used -> no action,
-	 *  2. response time is below limit and secondary service provider is used -> switch back to primary,
-	 *  3. response time is above limit and primary service provider is used -> switch to secondary.
+	 * There are three different cases: 1. response time is below limit and
+	 * primary service provider is used -> no action, 2. response time is below
+	 * limit and secondary service provider is used -> switch back to primary,
+	 * 3. response time is above limit and primary service provider is used ->
+	 * switch to secondary.
 	 */
 	@Override
-	public StockQuoteChannelModel reconfigure(Map<String, String> params,
-			StockQuoteChannelModel model) {
+	public StockQuoteChannelModel reconfigure(Map<String, String> params, StockQuoteChannelModel model) {
 
 		StockQuoteChannelModel newModel = new StockQuoteChannelModel();
 
 		String responseTime = params.get("responseTime");
 		if (responseTime != null) {
 			Long rt = Long.valueOf(responseTime);
-			
+
 			// check if reconfiguration is needed
-			if (rt > model.getResponseTimeLimit() && StockQuoteServiceProvider.PRIMARY.equals(model.getServiceProvider())) {
+			if (rt > model.getResponseTimeLimit().longValue()
+					&& StockQuoteServiceProvider.PRIMARY.equals(model.getServiceProvider())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.SECONDARY);
 			} else if (StockQuoteServiceProvider.SECONDARY.equals(model.getServiceProvider())) {
-				newModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);		
+				newModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);
 			} else {
 				newModel.setServiceProvider(model.getServiceProvider());
 			}
-			
+
 		}
 		newModel.setCacheTTL(model.getCacheTTL());
 		newModel.setResponseTimeLimit(model.getResponseTimeLimit());
 		newModel.setUseCache(model.getUseCache());
-		
+
 		return newModel;
 	}
 

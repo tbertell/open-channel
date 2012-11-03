@@ -1,37 +1,44 @@
 package com.github.tbertell.openchannel.channel.model;
 
+import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StockQuoteChannelModel extends ChannelVariabilityModel {
 
 	private static final long serialVersionUID = 7132028137150247870L;
-	
+
 	public StockQuoteChannelModel() {
 		super();
 		setId("StockQuoteChannel");
 		setDescription("Channel for getting stock quote.");
 	}
 
-	@XmlElement
+	@XmlElement(required = true)
 	private Boolean useCache;
-	
-	@XmlElement
-	private Long cacheTTL;
-	
-	@XmlElement
-	private Long responseTimeLimit; 
 
-	@XmlElement
+	@XmlElement(required = true)
+	@XmlSchemaType(name = "positiveInteger")
+	private BigInteger cacheTTL;
+
+	@XmlElement(required = true)
+	@XmlSchemaType(name = "positiveInteger")
+	private BigInteger responseTimeLimit;
+
+	@XmlElement(required = true)
 	private StockQuoteServiceProvider serviceProvider;
-	
+
 	@Override
 	public void validate() {
-		// not needed
+		if (getResponseTimeLimit().compareTo(getCacheTTL()) < 0) {
+			throw new IllegalArgumentException("Response time limit should be greater than cache time to live value.");
+		}
 
 	}
 
@@ -43,19 +50,19 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 		this.useCache = useCache;
 	}
 
-	public Long getCacheTTL() {
+	public BigInteger getCacheTTL() {
 		return cacheTTL;
 	}
 
-	public void setCacheTTL(Long cacheTTL) {
+	public void setCacheTTL(BigInteger cacheTTL) {
 		this.cacheTTL = cacheTTL;
 	}
 
-	public Long getResponseTimeLimit() {
+	public BigInteger getResponseTimeLimit() {
 		return responseTimeLimit;
 	}
 
-	public void setResponseTimeLimit(Long resposeTimeLimit) {
+	public void setResponseTimeLimit(BigInteger resposeTimeLimit) {
 		this.responseTimeLimit = resposeTimeLimit;
 	}
 
@@ -71,15 +78,10 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result
-				+ ((cacheTTL == null) ? 0 : cacheTTL.hashCode());
-		result = prime
-				* result
-				+ ((responseTimeLimit == null) ? 0 : responseTimeLimit.hashCode());
-		result = prime * result
-				+ ((serviceProvider == null) ? 0 : serviceProvider.hashCode());
-		result = prime * result
-				+ ((useCache == null) ? 0 : useCache.hashCode());
+		result = prime * result + ((cacheTTL == null) ? 0 : cacheTTL.hashCode());
+		result = prime * result + ((responseTimeLimit == null) ? 0 : responseTimeLimit.hashCode());
+		result = prime * result + ((serviceProvider == null) ? 0 : serviceProvider.hashCode());
+		result = prime * result + ((useCache == null) ? 0 : useCache.hashCode());
 		return result;
 	}
 
@@ -114,9 +116,8 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 
 	@Override
 	public String toString() {
-		return "StockQuoteChannelModel [useCache=" + useCache + ", cacheTTL="
-				+ cacheTTL + ", resposeTimeLimit=" + responseTimeLimit
-				+ ", serviceProvider=" + serviceProvider + "]";
+		return "StockQuoteChannelModel [useCache=" + useCache + ", cacheTTL=" + cacheTTL + ", resposeTimeLimit="
+				+ responseTimeLimit + ", serviceProvider=" + serviceProvider + "]";
 	}
 
 }

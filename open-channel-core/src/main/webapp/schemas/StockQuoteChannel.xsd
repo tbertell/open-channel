@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="stockQuoteChannelModel" type="stockQuoteChannelModel"/>
+
+  <xs:complexType name="channelVariabilityModel" abstract="true">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="stockQuoteChannelModel">
+    <xs:complexContent>
+      <xs:extension base="channelVariabilityModel">
+        <xs:sequence>
+          <xs:element name="useCache" type="xs:boolean"/>
+          <xs:element name="cacheTTL" type="xs:positiveInteger"/>
+          <xs:element name="responseTimeLimit" type="xs:positiveInteger"/>
+          <xs:element name="serviceProvider" type="stockQuoteServiceProvider"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:simpleType name="stockQuoteServiceProvider">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PRIMARY"/>
+      <xs:enumeration value="SECONDARY"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
