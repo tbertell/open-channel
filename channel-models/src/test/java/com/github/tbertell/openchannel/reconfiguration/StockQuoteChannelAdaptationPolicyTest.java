@@ -26,7 +26,7 @@ public class StockQuoteChannelAdaptationPolicyTest {
 	}
 
 	@Test
-	public void testChange() {
+	public void testChange() throws InterruptedException {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("responseTime", "10001");
 
@@ -44,6 +44,7 @@ public class StockQuoteChannelAdaptationPolicyTest {
 
 		// change back to primary
 		params.put("responseTime", "10000");
+		Thread.sleep(6000);
 		StockQuoteChannelModel changedToPrimary = (StockQuoteChannelModel) policy.reconfigure(params,
 				changedToSecondary);
 		assertEquals(changedToPrimary.getServiceProvider(), StockQuoteServiceProvider.PRIMARY);

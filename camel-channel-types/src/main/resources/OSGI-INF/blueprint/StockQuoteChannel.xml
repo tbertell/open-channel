@@ -12,22 +12,18 @@
 
 	<bean id="stockQuoteCache"
 		class="com.github.tbertell.openchannel.service.SimpleStockQuoteCache">
-		<property name="cacheTTL" value="30000" />
-		<property name="useCache" value="true" />
+		<property name="cacheTTL" value="5000" />
+		<property name="useCache" value="false" />
 	</bean>
 	<bean id="stockQuotePrimaryWSClient"
-		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
+		class="com.github.tbertell.openchannel.service.StockQuoteSlowWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="slow" value="true" />
-		<property name="responseTimeLimit" value="12300" />
+		<property name="responseTimeLimit" value="6000" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="slow" value="false" />
-		<property name="responseTimeLimit" value="12300" />
-	</bean>
-	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
+		<property name="responseTimeLimit" value="6000" />
 	</bean>
 
 	<!-- use CF from ActiveMQ blueprint service running in container -->
@@ -39,8 +35,7 @@
 	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
 		<route id="stockQuoteChannel">
 			<from
-				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
-			<to uri="log:input" />
+				uri="vm:get.stockquote" />
 			<to uri="bean:stockQuoteCache?method=getQuote" />
 			<choice>
 	            <when>
@@ -48,18 +43,11 @@
 	                <to uri="bean:stockQuotePrimaryWSClient" />
 	                <to uri="log:input" />
 	                <to uri="bean:stockQuoteCache?method=updateCache" />
-					<wireTap uri="seda:event">
+					<wireTap uri="vm:event">
 						<body><simple>${header.params}</simple></body>
 					</wireTap>
 	            </when>
         	</choice>
-			<to uri="log:output" />
-		</route>
-		
-		<route id="eventChannel">
-			<from uri="seda:event" />
-			<to uri="log:input" />
-			<to uri="activemq:queue:EVENT.QUEUE" />
 		</route>
 	</camelContext>
 </blueprint>

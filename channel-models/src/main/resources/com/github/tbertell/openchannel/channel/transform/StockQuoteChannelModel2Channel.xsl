@@ -20,19 +20,15 @@
 		<property name="useCache" value="{$useCache}" />
 	</bean>
 	<bean id="stockQuotePrimaryWSClient"
-		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
+		class="com.github.tbertell.openchannel.service.StockQuoteSlowWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="slow" value="true" />
 		<property name="responseTimeLimit" value="{$responseTimeLimit}" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="slow" value="false" />
 		<property name="responseTimeLimit" value="{$responseTimeLimit}" />
 	</bean>
-	<bean id="eventPublisher" class="com.github.tbertell.openchannel.service.EventPublisher">
-	</bean>	
 
 	<reference id="connectionFactory" interface="javax.jms.ConnectionFactory" />
 	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
@@ -42,8 +38,7 @@
 	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
 		<route id="stockQuoteChannel">
 			<from
-				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
-			<to uri="log:input" />
+				uri="vm:get.stockquote" />
 			<xsl:choose>
 		  		<xsl:when test="$useCache='true'">
 				<to uri="bean:stockQuoteCache?method=getQuote" />
@@ -64,16 +59,9 @@
 	                <to uri="bean:stockQuoteCache?method=updateCache" />
 	            </when>
         	</choice>
-			<wireTap uri="seda:event">
+			<wireTap uri="vm:event">
 				<body><simple>${header.params}</simple></body>
 			</wireTap>
-			<to uri="log:output" />
-		</route>
-		
-		<route id="eventChannel">
-			<from uri="seda:event" />
-			<to uri="log:input" />
-			<to uri="activemq:queue:EVENT.QUEUE" />
 		</route>
 	</camelContext>
 </blueprint>

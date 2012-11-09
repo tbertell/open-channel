@@ -7,6 +7,10 @@ import com.github.tbertell.openchannel.channel.model.StockQuoteServiceProvider;
 
 public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<StockQuoteChannelModel> {
 
+	private static long lastChanged = 0;
+	private static int counter = 1;
+	private final static long FIVE_SECONDS = 5000;
+
 	/**
 	 * There are three different cases: 1. response time is below limit and
 	 * primary service provider is used -> no action, 2. response time is below
@@ -24,10 +28,15 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			Long rt = Long.valueOf(responseTime);
 
 			// check if reconfiguration is needed
+			System.out.println("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
+					+ model.getServiceProvider() + " numero " + counter);
+			counter++;
 			if (rt > model.getResponseTimeLimit().longValue()
 					&& StockQuoteServiceProvider.PRIMARY.equals(model.getServiceProvider())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.SECONDARY);
-			} else if (StockQuoteServiceProvider.SECONDARY.equals(model.getServiceProvider())) {
+				StockQuoteChannelAdaptationPolicy.lastChanged = System.currentTimeMillis();
+			} else if (shouldChangeBackToPrimary(model.getServiceProvider(), rt, model.getResponseTimeLimit()
+					.longValue())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);
 			} else {
 				newModel.setServiceProvider(model.getServiceProvider());
@@ -41,4 +50,18 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 		return newModel;
 	}
 
+	/**
+	 * If secondary service provider has been used for at least 5 seconds change
+	 * back to primary.
+	 * 
+	 * @param rt
+	 */
+	private boolean shouldChangeBackToPrimary(StockQuoteServiceProvider provider, Long responseTime,
+			Long responseTimeLimit) {
+		if (responseTime < responseTimeLimit && StockQuoteServiceProvider.SECONDARY.equals(provider)
+				&& (lastChanged + FIVE_SECONDS) < System.currentTimeMillis()) {
+			return true;
+		}
+		return false;
+	}
 }
