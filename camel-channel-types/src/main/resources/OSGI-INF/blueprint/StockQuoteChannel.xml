@@ -37,7 +37,7 @@
 	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
 		<route id="stockQuoteChannel">
 			<from
-				uri="vm:get.stockquote" />
+				uri="vm:get.stockquote?concurrentConsumers=5" />
 			<to uri="bean:stockQuoteCache?method=getQuote" />
 			<choice>
 	            <when>
