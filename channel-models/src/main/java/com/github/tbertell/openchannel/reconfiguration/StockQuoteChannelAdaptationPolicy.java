@@ -58,7 +58,7 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 	 */
 	private boolean shouldChangeBackToPrimary(StockQuoteServiceProvider provider, Long responseTime,
 			Long responseTimeLimit) {
-		if (responseTime < responseTimeLimit && StockQuoteServiceProvider.SECONDARY.equals(provider)
+		if (responseTime <= responseTimeLimit && StockQuoteServiceProvider.SECONDARY.equals(provider)
 				&& (lastChanged + FIVE_SECONDS) < System.currentTimeMillis()) {
 			return true;
 		}
