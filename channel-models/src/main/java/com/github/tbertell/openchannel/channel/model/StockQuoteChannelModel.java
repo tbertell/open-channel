@@ -118,7 +118,7 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 
 	@Override
 	public String toString() {
-		return "StockQuoteChannelModel [useCache=" + useCache + ", cacheTTL=" + cacheTTL + ", resposeTimeLimit="
+		return "StockQuoteChannelModel [useCache=" + useCache + ", cacheTTL=" + cacheTTL + ", responseTimeLimit="
 				+ responseTimeLimit + ", serviceProvider=" + serviceProvider + "]";
 	}
 

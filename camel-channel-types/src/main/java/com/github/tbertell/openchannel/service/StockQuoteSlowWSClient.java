@@ -76,7 +76,7 @@ public class StockQuoteSlowWSClient {
 	}
 
 	private void waitRandomTime() {
-		int sleepTime = new Random().nextInt(10000);
+		int sleepTime = new Random().nextInt(1500);
 		LOGGER.error("Wait for " + sleepTime + " ms");
 		try {
 			Thread.sleep(sleepTime);

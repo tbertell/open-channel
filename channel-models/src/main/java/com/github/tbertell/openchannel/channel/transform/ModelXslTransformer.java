@@ -2,6 +2,7 @@ package com.github.tbertell.openchannel.channel.transform;
 
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.util.JAXBResult;
@@ -19,6 +20,8 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 public class ModelXslTransformer implements ModelTransformer {
 
 	private static final Map<String, Templates> CACHE = null;
+	// counter used for versioning of osgi bundles
+	private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
 	/* (non-Javadoc)
 	 * @see com.github.tbertell.openchannel.channelmodel.ModelTransformer#transformFromModel(com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel)
@@ -34,7 +37,8 @@ public class ModelXslTransformer implements ModelTransformer {
 					.getResourceAsStream(model.getId() + "Model2Channel.xsl")));
 			Transformer transformer = templates.newTransformer();
 			transformer.setOutputProperty("indent", "yes");
-
+			int counter = COUNTER.incrementAndGet();
+			transformer.setParameter("counter", counter);
 			// run transformation
 			StringWriter sw = new StringWriter();
 			JAXBSource source = new JAXBSource(JAXBContext.newInstance(ChannelVariabilityModel.class), model);

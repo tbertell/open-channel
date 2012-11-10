@@ -23,7 +23,7 @@ public class LoadTest {
 
 		List<LoadTestResult> times = new LinkedList<LoadTestResult>();
 		try {
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 30; i++) {
 				StockQuoteChannelModel channel = getChannel();
 				times.add(new LoadTestResult(getQuote(), channel));
 				Thread.sleep(200);

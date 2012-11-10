@@ -9,21 +9,23 @@
              http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
-
+    <manifest xmlns="http://karaf.apache.org/xmlns/deployer/spring/v1.0.0">
+      Bundle-Version = 1.0.0.0
+  	</manifest>         
 	<bean id="stockQuoteCache"
 		class="com.github.tbertell.openchannel.service.SimpleStockQuoteCache">
-		<property name="cacheTTL" value="5000" />
+		<property name="cacheTTL" value="1500" />
 		<property name="useCache" value="false" />
 	</bean>
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteSlowWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="responseTimeLimit" value="6000" />
+		<property name="responseTimeLimit" value="2000" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="responseTimeLimit" value="6000" />
+		<property name="responseTimeLimit" value="2000" />
 	</bean>
 
 	<!-- use CF from ActiveMQ blueprint service running in container -->

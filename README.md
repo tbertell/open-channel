@@ -10,3 +10,6 @@ Models and model transformations.
 
 open-channel-core
 Framework core implementation.
+
+Apache ServiceMix
+features:install camel-juel
