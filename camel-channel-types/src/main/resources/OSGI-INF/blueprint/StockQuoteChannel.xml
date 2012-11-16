@@ -14,18 +14,18 @@
   	</manifest>         
 	<bean id="stockQuoteCache"
 		class="com.github.tbertell.openchannel.service.SimpleStockQuoteCache">
-		<property name="cacheTTL" value="1500" />
+		<property name="cacheTTL" value="1000" />
 		<property name="useCache" value="false" />
 	</bean>
 	<bean id="stockQuotePrimaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteSlowWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="responseTimeLimit" value="2000" />
+		<property name="responseTimeLimit" value="800" />
 	</bean>
 	<bean id="stockQuoteSecondaryWSClient"
 		class="com.github.tbertell.openchannel.service.StockQuoteWSClient">
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
-		<property name="responseTimeLimit" value="2000" />
+		<property name="responseTimeLimit" value="1000" />
 	</bean>
 
 	<!-- use CF from ActiveMQ blueprint service running in container -->

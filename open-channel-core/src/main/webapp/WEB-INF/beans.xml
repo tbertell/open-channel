@@ -44,7 +44,7 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 
 	<bean id="channelManager" class="com.github.tbertell.openchannel.ChannelManager">
 		<constructor-arg index="0" type="java.lang.String"
-			value="/home/ubuntu/Java/apache-servicemix-4.4.2/deploy/" />
+			value="/home/tomppa/Java/apache-servicemix-4.4.2/deploy/" />
 	</bean>
 	
 	<bean id="queueListener" class="com.github.tbertell.openchannel.listener.QueueListener">

@@ -15,6 +15,9 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 
 public class ModelXslTransformer implements ModelTransformer {
@@ -23,14 +26,20 @@ public class ModelXslTransformer implements ModelTransformer {
 	// counter used for versioning of osgi bundles
 	private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
-	/* (non-Javadoc)
-	 * @see com.github.tbertell.openchannel.channelmodel.ModelTransformer#transformFromModel(com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel)
+	private static final Logger LOGGER = LoggerFactory.getLogger(ModelXslTransformer.class);
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.tbertell.openchannel.channelmodel.ModelTransformer#
+	 * transformFromModel
+	 * (com.github.tbertell.openchannel.channelmodel.ChannelVariabilityModel)
 	 */
 	@Override
-	public String transformFromModel(ChannelVariabilityModel model) {
+	public String transformFromModel(ChannelVariabilityModel model) throws Exception {
 
+		String result = null;
 		try {
-
 			// set up XSLT transformation
 			TransformerFactory factory = TransformerFactory.newInstance();
 			Templates templates = factory.newTemplates(new StreamSource((new ModelXslTransformer()).getClass()
@@ -44,22 +53,23 @@ public class ModelXslTransformer implements ModelTransformer {
 			JAXBSource source = new JAXBSource(JAXBContext.newInstance(ChannelVariabilityModel.class), model);
 			transformer.transform(source, new StreamResult(sw));
 
-			return sw.toString();
+			result = sw.toString();
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("XSL transformation failed for model " + model, e);
+			throw e;
 		}
-
-		return "";
-
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.tbertell.openchannel.channelmodel.ModelTransformer#transformToModel(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.tbertell.openchannel.channelmodel.ModelTransformer#
+	 * transformToModel(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public ChannelVariabilityModel transformToModel(String blueprint, String channelId) {
+	public ChannelVariabilityModel transformToModel(String blueprint, String channelId) throws Exception {
 
 		Source xmlSource = new StreamSource(new java.io.StringReader(blueprint));
 
@@ -79,7 +89,8 @@ public class ModelXslTransformer implements ModelTransformer {
 
 			model = (ChannelVariabilityModel) result.getResult();
 		} catch (Exception e) {
-
+			LOGGER.error("XSL transformation failed for channel " + channelId, e);
+			throw e;
 		}
 		return model;
 	}

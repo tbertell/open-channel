@@ -15,7 +15,7 @@ public class ModelTransformerTest {
 	private static final Long PERIOD = (long) 10000;
 
 	@Test
-	public void shouldTransformTimerLogChannelModelToBlueprintAndBackToModel() {
+	public void shouldTransformTimerLogChannelModelToBlueprintAndBackToModel() throws Exception {
 		ModelTransformer transformer = new ModelXslTransformer();
 		TimerLogChannelModel sourceModel = new TimerLogChannelModel();
 
@@ -33,7 +33,7 @@ public class ModelTransformerTest {
 	}
 
 	@Test
-	public void shouldTransformStockQuotesChannelModelToBlueprintAndBackToModel() {
+	public void shouldTransformStockQuotesChannelModelToBlueprintAndBackToModel() throws Exception {
 
 		StockQuoteChannelModel sourceModel = new StockQuoteChannelModel();
 		ModelTransformer transformer = ModelTransformerFactory.createModelTransformer(sourceModel);

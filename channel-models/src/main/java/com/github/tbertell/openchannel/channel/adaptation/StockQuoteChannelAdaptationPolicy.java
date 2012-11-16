@@ -1,6 +1,9 @@
-package com.github.tbertell.openchannel.reconfiguration;
+package com.github.tbertell.openchannel.channel.adaptation;
 
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.tbertell.openchannel.channel.model.StockQuoteChannelModel;
 import com.github.tbertell.openchannel.channel.model.StockQuoteServiceProvider;
@@ -9,7 +12,9 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 
 	private static long lastChanged = 0;
 	private static int counter = 1;
-	private final static long FIVE_SECONDS = 5000;
+	private long stickyTime = 5000;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteChannelAdaptationPolicy.class);
 
 	/**
 	 * There are three different cases: 1. response time is below limit and
@@ -28,8 +33,9 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			Long rt = Long.valueOf(responseTime);
 
 			// check if reconfiguration is needed
-			System.out.println("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
+			LOGGER.debug("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
 					+ model.getServiceProvider() + " numero " + counter);
+
 			counter++;
 			if (rt > model.getResponseTimeLimit().longValue()
 					&& StockQuoteServiceProvider.PRIMARY.equals(model.getServiceProvider())) {
@@ -59,9 +65,14 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 	private boolean shouldChangeBackToPrimary(StockQuoteServiceProvider provider, Long responseTime,
 			Long responseTimeLimit) {
 		if (responseTime <= responseTimeLimit && StockQuoteServiceProvider.SECONDARY.equals(provider)
-				&& (lastChanged + FIVE_SECONDS) < System.currentTimeMillis()) {
+				&& (lastChanged + stickyTime) < System.currentTimeMillis()) {
 			return true;
 		}
 		return false;
 	}
+
+	public void setStickyTime(long stickyTime) {
+		this.stickyTime = stickyTime;
+	}
+
 }

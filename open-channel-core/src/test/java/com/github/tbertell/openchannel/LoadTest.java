@@ -2,9 +2,9 @@ package com.github.tbertell.openchannel;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -13,6 +13,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.joda.time.DateTime;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channel.model.StockQuoteChannelModel;
@@ -23,10 +24,11 @@ public class LoadTest {
 
 		List<LoadTestResult> times = new LinkedList<LoadTestResult>();
 		try {
-			for (int i = 0; i < 40; i++) {
+
+			for (int i = 0; i < 20; i++) {
 				StockQuoteChannelModel channel = getChannel();
 				times.add(new LoadTestResult(getQuote(), channel));
-//				Thread.sleep(1500);
+				Thread.sleep(1200 + new Random().nextInt(500));
 			}
 
 		} catch (ClientProtocolException e) {
@@ -37,7 +39,8 @@ public class LoadTest {
 
 			e.printStackTrace();
 		}
-		Thread.sleep(5000);
+		Thread.sleep(2000);
+
 		for (LoadTestResult l : times) {
 			System.out.println("Response time " + l.responseTime + " channel " + l.channel + " date " + l.date);
 		}
@@ -104,13 +107,13 @@ public class LoadTest {
 	static class LoadTestResult {
 		public Long responseTime;
 		public StockQuoteChannelModel channel;
-		public Date date;
+		public DateTime date;
 
 		public LoadTestResult(Long responseTime, StockQuoteChannelModel channel) {
 			super();
 			this.responseTime = responseTime;
 			this.channel = channel;
-			this.date = new Date();
+			this.date = new DateTime();
 		}
 
 	}

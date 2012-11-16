@@ -18,17 +18,20 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channel.transform.ModelTransformer;
 import com.github.tbertell.openchannel.channel.transform.ModelTransformerFactory;
-import com.github.tbertell.openchannel.channel.transform.ModelXslTransformer;
 
 @Component
 public class ChannelManager {
 
 	private final String CHANNEL_DIR;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChannelManager.class);
 
 	public ChannelManager(String channelDir) {
 		super();
@@ -43,7 +46,12 @@ public class ChannelManager {
 
 		ModelTransformer transformer = ModelTransformerFactory.createModelTransformer(model);
 
-		String channel = transformer.transformFromModel(model);
+		String channel;
+		try {
+			channel = transformer.transformFromModel(model);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		BufferedWriter out = null;
 		try {
@@ -70,8 +78,12 @@ public class ChannelManager {
 		ChannelVariabilityModel model = null;
 
 		if (blueprint != null) {
-			ModelTransformer transformer = new ModelXslTransformer();
-			model = transformer.transformToModel(blueprint, channelId);
+			ModelTransformer transformer = ModelTransformerFactory.createModelTransformer(model);
+			try {
+				model = transformer.transformToModel(blueprint, channelId);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 
 		return model;
@@ -114,10 +126,9 @@ public class ChannelManager {
 			serializer.transform(new DOMSource(doc), new StreamResult(stw));
 			return stw.toString();
 		} catch (FileNotFoundException fnfe) {
-			System.out.println("File " + fileName + " not found.");
-			// do nothing
+			LOGGER.debug("File " + fileName + " not found.");
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.debug("convertXMLFileToString failed with exception ", e);
 		}
 		return null;
 	}

@@ -1,4 +1,4 @@
-package com.github.tbertell.openchannel.reconfiguration;
+package com.github.tbertell.openchannel.channel.adaptation;
 
 import static org.testng.Assert.assertEquals;
 
@@ -44,7 +44,8 @@ public class StockQuoteChannelAdaptationPolicyTest {
 
 		// change back to primary
 		params.put("responseTime", "10000");
-		Thread.sleep(6000);
+		policy.setStickyTime(100);
+		Thread.sleep(600);
 		StockQuoteChannelModel changedToPrimary = (StockQuoteChannelModel) policy.reconfigure(params,
 				changedToSecondary);
 		assertEquals(changedToPrimary.getServiceProvider(), StockQuoteServiceProvider.PRIMARY);

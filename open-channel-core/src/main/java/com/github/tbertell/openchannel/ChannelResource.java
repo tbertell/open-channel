@@ -21,6 +21,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
@@ -35,6 +37,8 @@ public class ChannelResource {
 
 	@Context
 	UriInfo uriInfo;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChannelResource.class);
 
 	@GET
 	@Path("/{channelId}")
@@ -57,8 +61,7 @@ public class ChannelResource {
 
 			return writer.toString();
 		} catch (JAXBException e) {
-			// TODO throw apporriate exception
-			e.printStackTrace();
+			LOGGER.error("getChannel failed", e);
 			throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -90,10 +93,10 @@ public class ChannelResource {
 		try {
 			channelManager.updateChannel(channelId, model);
 		} catch (IllegalArgumentException iae) {
-			iae.printStackTrace();
+			LOGGER.error("non valid channel " + model, iae);
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("updateChannel failed", e);
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
 

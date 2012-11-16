@@ -5,16 +5,16 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.tbertell.openchannel.channel.adaptation.AdaptationPolicy;
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
-import com.github.tbertell.openchannel.reconfiguration.AdaptationPolicy;
 
 @Component
-public class AdaptationPolicyManager {
+public class AdaptationManager {
 
 	@Autowired
 	private ChannelManager channelManager;
 
-	private static String HANDLER_PACKAGE = "com.github.tbertell.openchannel.reconfiguration";
+	private static String HANDLER_PACKAGE = "com.github.tbertell.openchannel.channel.adaptation";
 
 	public void reconfigure(String channelId, Map<String, String> params) {
 		ChannelVariabilityModel model = null;
@@ -44,7 +44,6 @@ public class AdaptationPolicyManager {
 			AdaptationPolicy handler = clazz.newInstance();
 			return handler;
 		} catch (Exception e) {
-			e.printStackTrace();
 			// no need to do anything
 		}
 		return null;

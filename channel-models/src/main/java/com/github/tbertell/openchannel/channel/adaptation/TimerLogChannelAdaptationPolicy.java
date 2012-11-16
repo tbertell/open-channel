@@ -1,4 +1,4 @@
-package com.github.tbertell.openchannel.reconfiguration;
+package com.github.tbertell.openchannel.channel.adaptation;
 
 import java.util.Map;
 
