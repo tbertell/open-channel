@@ -37,6 +37,17 @@
 			<artifactId>camel-juel</artifactId>
 			<version>2.8.5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.osgi</groupId>
+			<artifactId>spring-osgi-core</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -44,6 +55,7 @@
 
 		<plugins>
 			<!-- Generate Java classes from WSDL during build -->
+			<!--  
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-codegen-plugin</artifactId>
@@ -69,8 +81,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<!-- Add generated sources - avoids having to copy generated sources to 
 				build location -->
+				<!--  
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -89,6 +103,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -108,8 +123,11 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>camel-channel-types</Bundle-SymbolicName>
-						<Private-Package>com.github.tbertell.openchannel.camel.channel.*,net.webservicex.*</Private-Package>
-						<Import-Package>*,org.apache.camel.osgi</Import-Package>
+						<!-- 
+						<Export-Package>net.webservicex.*</Export-Package>
+						 -->
+						<Private-Package>com.github.tbertell.openchannel.service,net.webservicex</Private-Package>
+						<Import-Package>*</Import-Package>
 						<DynamicImport-Package>org.apache.cxf.*,
 							org.springframework.beans.*</DynamicImport-Package>
 						<!-- exclude osgi blueprint -->

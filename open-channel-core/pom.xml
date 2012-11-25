@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.tbertell.openchannel.core</groupId>
 	<artifactId>open-channel-core</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>war</packaging>
 	<name>OpenChannel Core</name>
 	<description>OpenChannel Core</description>
 	<parent>
@@ -113,6 +113,7 @@
 						<wtpversion>2.0</wtpversion>
 					</configuration>
 				</plugin>
+				<!--  
 				<plugin>
 					<artifactId>maven-war-plugin</artifactId>
 					<configuration>
@@ -121,7 +122,9 @@
 						</archive>
 					</configuration>
 				</plugin>
+				-->
 				<!-- to generate the MANIFEST-FILE of the bundle -->
+				<!--  
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
@@ -150,14 +153,17 @@
 							<Embed-Transitive>true</Embed-Transitive>
 							<Bundle-SymbolicName>open-channel-core</Bundle-SymbolicName>
 							<Private-Package>com.github.tbertell.openchannel.*</Private-Package>
-							<Import-Package>*,org.apache.camel.osgi</Import-Package>
-							<DynamicImport-Package>org.apache.cxf.*,
-								org.springframework.beans.*</DynamicImport-Package>
+							<Import-Package>
+							org.apache.camel.osgi,
+							!*</Import-Package>
+							<DynamicImport-Package>org.xml.sax,org.osgi.*,org.apache.cxf.*,javax.*,org.w3c.*,
+								javax.servlet,javax.servlet.http,javax.servlet.*</DynamicImport-Package>
 							<Web-ContextPath>CHANGEME</Web-ContextPath>
 							<Webapp-Context>CHANGEME</Webapp-Context>
 						</instructions>
 					</configuration>
 				</plugin>
+				-->
 			</plugins>
 			<!-- 
 		</pluginManagement>

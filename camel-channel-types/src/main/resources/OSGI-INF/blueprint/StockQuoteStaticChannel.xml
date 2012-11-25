@@ -10,11 +10,14 @@
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
 
+	<bean id="routeStatusChecker" class="com.github.tbertell.openchannel.service.RouteStatusChecker"/>
 	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+	
 		<route id="stockQuoteStaticChannel">
 			<from
 				uri="cxfrs://http://localhost:9000?resourceClasses=com.github.tbertell.openchannel.service.StockQuoteResource" />
 			<to uri="log:input" />
+			<to uri="bean:routeStatusChecker" />
 			<to uri="vm:get.stockquote" />
 			<to uri="log:output" />
 		</route>
