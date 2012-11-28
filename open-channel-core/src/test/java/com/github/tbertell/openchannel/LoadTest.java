@@ -1,10 +1,11 @@
 package com.github.tbertell.openchannel;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.bind.JAXBContext;
@@ -22,23 +23,25 @@ import com.github.tbertell.openchannel.channel.model.StockQuoteChannelModel;
 public class LoadTest {
 
 	private static AtomicInteger counter = new AtomicInteger(0);
-	
+
 	private static long endtime = 0;
-	
+
 	public static void main(String[] args) throws Exception {
 
 		List<LoadTestResult> times = new LinkedList<LoadTestResult>();
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < 25; i++) {
-			new Thread("Thread" +i) {
+			new Thread("Thread" + i) {
 				public void run() {
 					for (int i = 0; i < 10; i++) {
 						try {
 							int c = counter.incrementAndGet();
 							long start = System.currentTimeMillis();
-							getQuote();
+
+							String result = getQuote();
+
 							long loppu = System.currentTimeMillis();
-							System.out.println("Taski " +c +" on valmis " +(loppu - start));
+							System.out.println("Taski " + c + " on valmis " + (loppu - start) + " tulos " + result);
 							endtime = loppu;
 						} catch (Exception e) {
 
@@ -48,15 +51,15 @@ public class LoadTest {
 			}.start();
 		}
 
-		
 		Thread.sleep(100000);
-		System.out.println("Total time " +(System.currentTimeMillis() - start));
+		System.out.println("Total time " + (endtime - start));
 		for (LoadTestResult l : times) {
-			//			System.out.println("Response time " + l.responseTime + " channel " + l.channel + " date " + l.date);
+			// System.out.println("Response time " + l.responseTime +
+			// " channel " + l.channel + " date " + l.date);
 		}
 	}
 
-	private static long getQuote() throws IOException, ClientProtocolException {
+	private static String getQuote() throws IOException, ClientProtocolException {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpGet getRequest = new HttpGet("http://localhost:9000/stockquote/NOK");
 		getRequest.addHeader("accept", "text/html");
@@ -66,20 +69,21 @@ public class LoadTest {
 		if (response.getStatusLine().getStatusCode() != 200) {
 			// throw new RuntimeException("Failed : HTTP error code : " +
 			// response.getStatusLine().getStatusCode());
-			return 0;
+			return response.getStatusLine().getStatusCode() + "";
 		}
 
-		// BufferedReader br = new BufferedReader(new
-		// InputStreamReader((response.getEntity().getContent())));
-		//
-		// String output;
-		// System.out.println("Output from Server .... \n");
-		// while ((output = br.readLine()) != null) {
-		// System.out.println(output);
-		// }
+		BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+
+		String output;
+		StringBuilder result = new StringBuilder();
+
+		while ((output = br.readLine()) != null) {
+			result.append(output);
+			break;
+		}
 
 		httpClient.getConnectionManager().shutdown();
-		return (endtime - startime);
+		return result.toString();
 	}
 
 	private static StockQuoteChannelModel getChannel() throws IOException, ClientProtocolException {
