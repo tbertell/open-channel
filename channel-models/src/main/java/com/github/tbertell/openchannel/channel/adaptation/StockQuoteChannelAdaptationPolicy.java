@@ -33,6 +33,8 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			Long rt = Long.valueOf(responseTime);
 
 			// check if reconfiguration is needed
+//			System.out.println("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
+//					+ model.getServiceProvider() + " numero " + counter);
 			LOGGER.debug("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
 					+ model.getServiceProvider() + " numero " + counter);
 

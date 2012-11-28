@@ -37,7 +37,7 @@
 	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
 		<route id="stockQuoteChannel">
 			<from
-				uri="vm:get.stockquote?concurrentConsumers=5" />
+				uri="vm:get.stockquote?concurrentConsumers=20" />
 			<choice>
 	            <when>
 	            	<el>${in.headers.cacheHit != 'true'}</el>

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -20,29 +21,38 @@ import com.github.tbertell.openchannel.channel.model.StockQuoteChannelModel;
 
 public class LoadTest {
 
+	private static AtomicInteger counter = new AtomicInteger(0);
+	
+	private static long endtime = 0;
+	
 	public static void main(String[] args) throws Exception {
 
 		List<LoadTestResult> times = new LinkedList<LoadTestResult>();
-		try {
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < 25; i++) {
+			new Thread("Thread" +i) {
+				public void run() {
+					for (int i = 0; i < 10; i++) {
+						try {
+							int c = counter.incrementAndGet();
+							long start = System.currentTimeMillis();
+							getQuote();
+							long loppu = System.currentTimeMillis();
+							System.out.println("Taski " +c +" on valmis " +(loppu - start));
+							endtime = loppu;
+						} catch (Exception e) {
 
-			for (int i = 0; i < 30; i++) {
-				StockQuoteChannelModel channel = getChannel();
-				times.add(new LoadTestResult(getQuote(), channel));
-				Thread.sleep(new Random().nextInt(500));
-			}
-
-		} catch (ClientProtocolException e) {
-
-			e.printStackTrace();
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
+						}
+					}
+				}
+			}.start();
 		}
-		Thread.sleep(2000);
 
+		
+		Thread.sleep(100000);
+		System.out.println("Total time " +(System.currentTimeMillis() - start));
 		for (LoadTestResult l : times) {
-			System.out.println("Response time " + l.responseTime + " channel " + l.channel + " date " + l.date);
+			//			System.out.println("Response time " + l.responseTime + " channel " + l.channel + " date " + l.date);
 		}
 	}
 
