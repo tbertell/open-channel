@@ -21,6 +21,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,10 +95,10 @@ public class ChannelResource {
 			channelManager.updateChannel(channelId, model);
 		} catch (IllegalArgumentException iae) {
 			LOGGER.error("non valid channel " + model, iae);
-			throw new WebApplicationException(Status.BAD_REQUEST);
+			throw createException(Status.BAD_REQUEST, "non valid channel " + model);
 		} catch (Exception e) {
 			LOGGER.error("updateChannel failed", e);
-			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+			throw createException(Status.INTERNAL_SERVER_ERROR, "updateChannel failed");
 		}
 
 		return Response.ok().build();
@@ -121,6 +122,14 @@ public class ChannelResource {
 		String schemaLocation = baseUrl.replace("channels", "schemas/" + channelId + ".xsd");
 
 		return schemaLocation;
+	}
+	
+	private WebApplicationException createException(Status status, String message) {
+		ResponseBuilderImpl builder = new ResponseBuilderImpl();
+		builder.status(status);
+		builder.entity(message);
+		Response response = builder.build();
+		return new WebApplicationException(response);
 	}
 
 }
