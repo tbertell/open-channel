@@ -36,6 +36,12 @@ public class StockQuoteChannelModel extends ChannelVariabilityModel {
 
 	@Override
 	public void validate() {
+		if (getServiceProvider() == null) {
+			throw new IllegalArgumentException("ServiceProvider is mandatory.");
+		}
+		if (getResponseTimeLimit() == null) {
+			throw new IllegalArgumentException("Response time is mandatory.");
+		}
 		if (getUseCache() && getResponseTimeLimit().compareTo(getCacheTTL()) < 0) {
 			throw new IllegalArgumentException("Response time limit should be greater than cache time to live value.");
 		} else if (getUseCache() && getCacheTTL() == null) {

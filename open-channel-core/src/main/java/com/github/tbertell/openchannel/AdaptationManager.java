@@ -3,6 +3,7 @@ package com.github.tbertell.openchannel;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.github.tbertell.openchannel.channel.adaptation.AdaptationPolicy;
@@ -12,6 +13,7 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 public class AdaptationManager {
 
 	@Autowired
+	@Qualifier("mockChannelManager")
 	private ChannelManager channelManager;
 
 	private static String HANDLER_PACKAGE = "com.github.tbertell.openchannel.channel.adaptation";
