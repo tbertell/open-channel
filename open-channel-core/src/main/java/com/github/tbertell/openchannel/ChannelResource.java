@@ -25,6 +25,7 @@ import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.response.ChannelResponse;
@@ -34,6 +35,7 @@ import com.github.tbertell.openchannel.response.ListChannelsResponse;
 public class ChannelResource {
 
 	@Autowired
+	@Qualifier("mockChannelManager")
 	private ChannelManager channelManager;
 
 	@Context
@@ -95,7 +97,7 @@ public class ChannelResource {
 			channelManager.updateChannel(channelId, model);
 		} catch (IllegalArgumentException iae) {
 			LOGGER.error("non valid channel " + model, iae);
-			throw createException(Status.BAD_REQUEST, "non valid channel " + model);
+			throw createException(Status.BAD_REQUEST, "Invalid channel. Reason: " + iae.getMessage());
 		} catch (Exception e) {
 			LOGGER.error("updateChannel failed", e);
 			throw createException(Status.INTERNAL_SERVER_ERROR, "updateChannel failed");
@@ -123,7 +125,7 @@ public class ChannelResource {
 
 		return schemaLocation;
 	}
-	
+
 	private WebApplicationException createException(Status status, String message) {
 		ResponseBuilderImpl builder = new ResponseBuilderImpl();
 		builder.status(status);

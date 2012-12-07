@@ -24,7 +24,7 @@ public class ChannelManagerTest {
 		String channelDir = userDir + TEST_RESOURCES;
 		System.out.println(channelDir);
 
-		ChannelManager manager = new ChannelManager(channelDir);
+		ChannelManager manager = new CamelChannelManager(channelDir);
 
 		List<ChannelVariabilityModel> list = manager.listChannels();
 
