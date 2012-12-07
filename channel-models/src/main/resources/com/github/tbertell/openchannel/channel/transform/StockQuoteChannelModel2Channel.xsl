@@ -47,11 +47,23 @@
 			<xsl:choose>
 		  		<xsl:when test="$useCache='true'">
 				<to uri="bean:stockQuoteCache?method=getQuote" />
+				<choice>
+					<when>
+		            	<el>${in.headers.cacheHit != 'true'}</el>
+		                <xsl:choose>
+					  		<xsl:when test="$serviceProvider='PRIMARY'">
+						    <to uri="bean:stockQuotePrimaryWSClient" />
+						  </xsl:when>
+						  <xsl:otherwise>
+						   <to uri="bean:stockQuoteSecondaryWSClient" />
+						  </xsl:otherwise>
+						</xsl:choose>
+		                <to uri="log:input" />
+		                <to uri="bean:stockQuoteCache?method=updateCache" />
+		            </when>
+	            </choice>
 				</xsl:when>
-			</xsl:choose>
-			<choice>
-	            <when>
-	            	<el>${in.headers.cacheHit != 'true'}</el>
+				<xsl:otherwise>
 	                <xsl:choose>
 				  		<xsl:when test="$serviceProvider='PRIMARY'">
 					    <to uri="bean:stockQuotePrimaryWSClient" />
@@ -62,8 +74,8 @@
 					</xsl:choose>
 	                <to uri="log:input" />
 	                <to uri="bean:stockQuoteCache?method=updateCache" />
-	            </when>
-        	</choice>
+				</xsl:otherwise>
+			</xsl:choose>
 			<wireTap uri="vm:event">
 				<body><simple>${header.params}</simple></body>
 			</wireTap>

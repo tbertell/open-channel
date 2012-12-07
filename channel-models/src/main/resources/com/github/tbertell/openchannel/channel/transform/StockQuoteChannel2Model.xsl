@@ -7,7 +7,11 @@
     <responseTimeLimit><xsl:value-of select="osgi:blueprint/osgi:bean[@id='stockQuotePrimaryWSClient']/osgi:property[@name='responseTimeLimit']/@value"/></responseTimeLimit>
     <serviceProvider>
     <xsl:choose>
+    	<!-- If cache is used information is inside choice element -->
   		<xsl:when test="osgi:blueprint/camel:camelContext/camel:route[@id='stockQuoteChannel']/camel:choice/camel:when/camel:to[position()=1]/@uri='bean:stockQuotePrimaryWSClient'">
+	    	PRIMARY
+	  	</xsl:when>
+	  	<xsl:when test="osgi:blueprint/camel:camelContext/camel:route[@id='stockQuoteChannel']/camel:to[position()=1]/@uri='bean:stockQuotePrimaryWSClient'">
 	    	PRIMARY
 	  	</xsl:when>
 	  	<xsl:otherwise>

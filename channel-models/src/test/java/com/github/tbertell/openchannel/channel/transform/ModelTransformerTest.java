@@ -43,7 +43,7 @@ public class ModelTransformerTest {
 		sourceModel.setCacheTTL(BigInteger.valueOf(123));
 		sourceModel.setResponseTimeLimit(BigInteger.valueOf(321));
 		sourceModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);
-		sourceModel.setUseCache(Boolean.FALSE);
+		sourceModel.setUseCache(Boolean.TRUE);
 
 		String blueprint = transformer.transformFromModel(sourceModel);
 
