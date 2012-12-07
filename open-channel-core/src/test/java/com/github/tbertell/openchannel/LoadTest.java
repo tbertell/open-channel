@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -42,8 +41,9 @@ public class LoadTest {
 
 							String result = getQuote();
 							long loppu = System.currentTimeMillis();
-							
-							System.out.println("Taski " + c +" " +Thread.currentThread().getName() +" on valmis " + (loppu - endtime) + " tulos " + result);
+
+							System.out.println("Taski " + c + " " + Thread.currentThread().getName() + " on valmis "
+									+ (loppu - endtime) + " tulos " + result);
 							endtime = loppu;
 							Thread.sleep(new Random().nextInt(200));
 						} catch (Exception e) {
