@@ -21,13 +21,15 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 		class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer" />
 	<bean
 		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer" />
-
+	<bean id="authenticationHandler" class="com.github.tbertell.openchannel.authentication.AuthenticationHandler" />
+	
 	<jaxrs:server id="services" address="/">
 		<jaxrs:serviceBeans>
 			<bean class="com.github.tbertell.openchannel.ChannelResource" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+			<ref bean="authenticationHandler" />
 		</jaxrs:providers>
 	</jaxrs:server>
 
