@@ -111,8 +111,8 @@ public class ChannelResource {
 		ListChannelsResponse response = new ListChannelsResponse();
 
 		for (ChannelVariabilityModel model : list) {
-			response.addChannelResponse(new ChannelResponse(uriInfo.getAbsolutePath().toString() + model.getId(), model
-					.getDescription()));
+			response.addChannelResponse(new ChannelResponse(model.getId(), uriInfo.getAbsolutePath().toString()
+					+ model.getId(), model.getDescription()));
 		}
 		return response;
 	}

@@ -10,9 +10,11 @@ import com.github.tbertell.openchannel.channel.model.StockQuoteServiceProvider;
 
 public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<StockQuoteChannelModel> {
 
-	private static long lastChanged = 0;
+	private static long lastChangedToSecondary = 0;
 	private static int counter = 1;
-	private long stickyTime = 5000;
+	private long stickyTime = 30000;
+
+	private static long lastResponseTime = 0;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteChannelAdaptationPolicy.class);
 
@@ -33,8 +35,9 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			Long rt = Long.valueOf(responseTime);
 
 			// check if reconfiguration is needed
-//			System.out.println("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
-//					+ model.getServiceProvider() + " numero " + counter);
+			// System.out.println("rt on " + rt + " limit on " +
+			// model.getResponseTimeLimit() + " sp on "
+			// + model.getServiceProvider() + " numero " + counter);
 			LOGGER.debug("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
 					+ model.getServiceProvider() + " numero " + counter);
 
@@ -42,13 +45,14 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			if (rt > model.getResponseTimeLimit().longValue()
 					&& StockQuoteServiceProvider.PRIMARY.equals(model.getServiceProvider())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.SECONDARY);
-				StockQuoteChannelAdaptationPolicy.lastChanged = System.currentTimeMillis();
+				StockQuoteChannelAdaptationPolicy.lastChangedToSecondary = System.currentTimeMillis();
 			} else if (shouldChangeBackToPrimary(model.getServiceProvider(), rt, model.getResponseTimeLimit()
 					.longValue())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.PRIMARY);
 			} else {
 				newModel.setServiceProvider(model.getServiceProvider());
 			}
+			lastResponseTime = rt;
 
 		}
 		newModel.setCacheTTL(model.getCacheTTL());
@@ -67,9 +71,15 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 	private boolean shouldChangeBackToPrimary(StockQuoteServiceProvider provider, Long responseTime,
 			Long responseTimeLimit) {
 		if (responseTime <= responseTimeLimit && StockQuoteServiceProvider.SECONDARY.equals(provider)
-				&& (lastChanged + stickyTime) < System.currentTimeMillis()) {
+				&& (lastChangedToSecondary + stickyTime) < System.currentTimeMillis()) {
 			return true;
 		}
+		return false;
+	}
+
+	private boolean shouldChangeToSecondary(Long responseTime, Long responseTimeLimit,
+			StockQuoteServiceProvider currentServiceProvider) {
+		// TODO: implements
 		return false;
 	}
 

@@ -33,7 +33,7 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 		</jaxrs:providers>
 	</jaxrs:server>
 
-	<jms:listener-container connection-factory="connectionFactory">
+	<!-- <jms:listener-container connection-factory="connectionFactory">
 		<jms:listener destination="EVENT.QUEUE" ref="queueListener"
 			method="onMessage" />
 	</jms:listener-container>
@@ -42,7 +42,7 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 		<property name="brokerURL">
 			<value>tcp://localhost:61616</value>
 		</property>
-	</bean>
+	</bean> -->
 
 	<bean id="camelChannelManager" class="com.github.tbertell.openchannel.CamelChannelManager">
 		<constructor-arg index="0" type="java.lang.String"
