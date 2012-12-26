@@ -1,6 +1,7 @@
 package com.github.tbertell.openchannel.channel.adaptation;
 
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,8 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 	private long stickyTime = 30000;
 
 	private static long lastResponseTime = 0;
+
+	private final ArrayBlockingQueue<Long> ringList = new ArrayBlockingQueue<Long>(2);
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteChannelAdaptationPolicy.class);
 

@@ -13,14 +13,14 @@ public class RouteStatusChecker {
 		boolean waited = false;
 		while (ContextShutdownEventNotifier.getShouldWait()) {
 			try {
-				LOGGER.error("Waiting!!!!!!!!!!!!!!!!!!1");
+				LOGGER.debug("Waiting!!!!!!!!!!!!!!!!!!1");
 				waited = true;
-				Thread.sleep(200);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				LOGGER.error("InterruptedException " + e);
+				LOGGER.debug("InterruptedException " + e);
 			}
 		}
 
-		LOGGER.error("Waited " + waited);
+		LOGGER.debug("Waited " + waited);
 	}
 }

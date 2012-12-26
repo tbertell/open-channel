@@ -4,28 +4,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>OpenChannel UI</title>
 
-<link rel="stylesheet"
-	href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-<script
-	src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 
 </head>
 <body>
 
 	<!-- Container page -->
-	<div data-role="page" data-theme="b" id="containerPage">
+	<div data-role="page" id="home">
 		<div data-role="header" id="hdrChannelTypes" data-nobackbtn="true">
 			<h1>Channel type list</h1>
 		</div>
 
 		<div data-role="content" id="contentChannelTypes">
-			<ul data-role="listview" data-split-icon="arrow-r"
-				data-split-theme="d" id="channelDetails"></ul>
+			<ul data-role="listview" data-inset="true" id="channelDetails"></ul>
 		</div>
 
 		<div data-role="footer" id="ftrChannelTypes"></div>
-	</div>
+	
 
 	<!-- StockQuoteChannel -->
 	<div data-role="header" id="hdrStockQuoteChannel" data-nobackbtn="true">
@@ -36,13 +33,13 @@
 
 	<div data-role="content" id="contentStockQuoteChannel"></div>
 
-	<div data-role="footer" id="ftrDetails">
+	<div data-role="footer" id="ftrStockQuoteChannel">
 		<a id="buttonUpdate" data-icon="arrow-r" class="ui-btn-right" href=""
 			data-role="button" data-inline="true">Update</a>
 	</div>
 
 	<!-- TimerLogChannel -->
-	<div data-role="header" id="hdrDetails" data-nobackbtn="true">
+	<div data-role="header" id="hdrTimerLogChannel" data-nobackbtn="true">
 		<h1>TimerLogChannel</h1>
 		<a id="buttonHdrShowChannelTypes" data-icon="arrow-l"
 			class="ui-btn-left" href="" data-role="button" data-inline="true">Back</a>
@@ -50,7 +47,7 @@
 
 	<div data-role="content" id="contentTimerLogChannel"></div>
 
-	<div data-role="footer" id="ftrDetails">
+	<div data-role="footer" id="ftrTimerLogChannel">
 		<a id="buttonUpdate" data-icon="arrow-r" class="ui-btn-right" href=""
 			data-role="button" data-inline="true">Update</a>
 	</div>
@@ -74,16 +71,11 @@
 	
 	$(document).ready(function () {  
 	  showProgress();  
-	  findAll(createList);	
+	  findAll(createList);
+	  showChannelTypes();
 	});
 	   
 	function createList(xml) {  
-		var HTML_FRG1 = '<li id="';  
-		var HTML_FRG2 = '"><h3><a id="';  
-		var HTML_FRG3 = '"  href="#">';  
-		var HTML_FRG4 = '</a></h3><p id="';  
-		var HTML_FRG5 = '"></p><a href="#" data-transition="slideup" id="';  
-		var HTML_FRG6 = '"/></li>';
 		
 		var channelDetailsVar = $('#channelDetails'); 
 		
@@ -92,9 +84,15 @@
 			var description = $(this).find("description").text();
 			var link = $(this).find("link").attr("href");
 			
-			$(HTML_FRG1 + id +'_li' + HTML_FRG2 + id +'_h' + HTML_FRG3 + id + HTML_FRG4 + description + HTML_FRG5 +  
-				id +'_a' + HTML_FRG6).prependTo(channelDetailsVar); 
+			var liId = "channel_d_li_" +id;
+			var descId = "channel_p_" +id;
+			var editId = "channel_d_" +id;
+			
+			$('<li id="' + liId + '"><a href="#" id="' +  editId +'"><h3>'+ id + '</h3><p>' + description + 
+					'</p>' + '</a></li>').prependTo(channelDetailsVar); 
 		});
+		
+		$(channelDetailsVar).listview("refresh");
 	}  
 
 	
@@ -102,8 +100,11 @@
 	    $.ajax({
 	        type: 'GET',
 	        url: rootURL,
-	        dataType: "application/xml",
+	        dataType: "xml",
 	        headers: {"Authorization": make_base_auth('test', 'test1')},
+	        error: function(jqXHR, textStatus, errorThrown) {
+	          console.log('AJAX call failed: '+textStatus+' '+errorThrown); //  or you can do: alert('AJAX call failed: '+textStatus+' '+errorThrown');
+	        },
 	        success: handler
 	    });
 	    return false;
@@ -179,11 +180,11 @@
 	 
 	function showProgress() {
 		hideChannelTypes();
-	  hideStockQuoteChannel();
-	  hideTimerLogChannel();
-	  hdrProgressVar.show();
-	  contentProgressVar.show();
-	  ftrProgressVar.show();
+	  	hideStockQuoteChannel();
+	  	hideTimerLogChannel();
+	  	hdrProgressVar.show();
+	  	contentProgressVar.show();
+	  	ftrProgressVar.show();
 	}
 	
 	function hideProgress() {
@@ -192,5 +193,6 @@
 		ftrProgressVar.hide();
 	}   
     </script>
+    </div>
 </body>
 </html>
