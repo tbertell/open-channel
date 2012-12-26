@@ -71,7 +71,7 @@
 	
 	$(document).ready(function () {  
 	  showProgress();  
-	  findAll(createList);
+	  doGetCall(createList, rootURL);
 	  showChannelTypes();
 	});
 	   
@@ -89,26 +89,31 @@
 			var editId = "channel_d_" +id;
 			
 			$('<li id="' + liId + '"><a href="#" id="' +  editId +'"><h3>'+ id + '</h3><p>' + description + 
-					'</p>' + '</a></li>').prependTo(channelDetailsVar); 
+					'</p>' + '</a></li>').prependTo(channelDetailsVar);
+			$('#' +liId).click(function() {
+				 console.log('clicked: ' +liId); 
+			 });
 		});
-		
+		 
 		$(channelDetailsVar).listview("refresh");
 	}  
 
+
 	
-	function findAll(handler) {
+	function doGetCall(handler, restUri) {
 	    $.ajax({
 	        type: 'GET',
-	        url: rootURL,
+	        url: restUri,
 	        dataType: "xml",
 	        headers: {"Authorization": make_base_auth('test', 'test1')},
 	        error: function(jqXHR, textStatus, errorThrown) {
-	          console.log('AJAX call failed: '+textStatus+' '+errorThrown); //  or you can do: alert('AJAX call failed: '+textStatus+' '+errorThrown');
+	          console.log('AJAX call failed: '+textStatus+' '+errorThrown); 
 	        },
 	        success: handler
 	    });
 	    return false;
 	}
+	
 	
 	function make_base_auth(user, password) {
 	  var tok = user + ':' + password;
