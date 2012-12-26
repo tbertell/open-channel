@@ -38,6 +38,7 @@
 		<route id="stockQuoteChannel">
 			<from
 				uri="vm:get.stockquote?concurrentConsumers=20" />
+			<to uri="bean:stockQuoteCache?method=getQuote"/>
 			<choice>
 	            <when>
 	            	<el>${in.headers.cacheHit != 'true'}</el>
