@@ -11,7 +11,7 @@
 </head>
 <body>
 
-	<!-- Container page -->
+	<!-- Home page -->
 	<div data-role="page" id="home">
 		<div data-role="header" id="hdrChannelTypes" data-nobackbtn="true">
 			<h1>Channel type list</h1>
@@ -22,27 +22,60 @@
 		</div>
 
 		<div data-role="footer" id="ftrChannelTypes"></div>
-	
+		
+		<!-- Progress 
+		<div data-role="header" id="hdrProgress" data-nobackbtn="true">
+			<h1>Processing...</h1>
+		</div>
+		<div data-role="content" id="contentProgress">
+			<div align="CENTER">
+				<h4>Please wait.</h4>
+			</div>
+			<div align="CENTER">
+				<img id="spin" src="img/wait.gif" />
+			</div>
+		</div>
+		<div data-role="footer" id="ftrProgress"></div>
+		-->
+</div>	
 
-	<!-- StockQuoteChannel -->
-	<div data-role="header" id="hdrStockQuoteChannel" data-nobackbtn="true">
+<!-- StockQuoteChannel page -->
+<div data-role="page" id="StockQuoteChannel">
+	<div data-role="header" id="hdrStockQuoteChannel">
+		<a href="index.html" data-icon="arrow-l">Back</a>
 		<h1>StockQuoteChannel</h1>
-		<a id="buttonHdrShowChannelTypes" data-icon="arrow-l"
-			class="ui-btn-left" href="" data-role="button" data-inline="true">Back</a>
 	</div>
 
-	<div data-role="content" id="contentStockQuoteChannel"></div>
+	<div data-role="content" id="contentStockQuoteChannel">
+		
+					<div id="cacheDiv" data-role="fieldcontain">
+						<label for="cacheTTL">CacheTTL</label> <input type="text" id="cacheTTL" />
+					</div>
+					<div id="responseTimeDiv" data-role="fieldcontain">
+						<label for="responseTimeLimit">ResponseTimeLimit</label> <input value="dummy" type="text" id="responseTimeLimit" />
+					</div>
+					<div id="serviceProviderDiv" data-role="fieldcontain">
+						<label for="serviceProvider">ServiceProvider</label> <input readonly id="serviceProvider" />
+					</div>
+					<div id="cacheDiv" data-role="fieldcontain">
+						<label for="flip-s">Cache</label>
+						<select name="flip-s" id="flip-s" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+					</div>
+				<a id="buttonUpdateStockQuoteChannel" href="" data-role="button" data-inline="true">Update</a>
+	</div>
 
 	<div data-role="footer" id="ftrStockQuoteChannel">
-		<a id="buttonUpdate" data-icon="arrow-r" class="ui-btn-right" href=""
-			data-role="button" data-inline="true">Update</a>
 	</div>
+</div>
 
-	<!-- TimerLogChannel -->
+<!-- TimerLogChannel page -->
+<div data-role="page" id="TimerLogChannel">
 	<div data-role="header" id="hdrTimerLogChannel" data-nobackbtn="true">
+		<a href="index.html" data-icon="arrow-l">Back</a>
 		<h1>TimerLogChannel</h1>
-		<a id="buttonHdrShowChannelTypes" data-icon="arrow-l"
-			class="ui-btn-left" href="" data-role="button" data-inline="true">Back</a>
 	</div>
 
 	<div data-role="content" id="contentTimerLogChannel"></div>
@@ -51,28 +84,13 @@
 		<a id="buttonUpdate" data-icon="arrow-r" class="ui-btn-right" href=""
 			data-role="button" data-inline="true">Update</a>
 	</div>
-
-	<!-- Progress -->
-	<div data-role="header" id="hdrProgress" data-nobackbtn="true">
-		<h1>Processing...</h1>
-	</div>
-	<div data-role="content" id="contentProgress">
-		<div align="CENTER">
-			<h4>Please wait.</h4>
-		</div>
-		<div align="CENTER">
-			<img id="spin" src="img/wait.gif" />
-		</div>
-	</div>
-	<div data-role="footer" id="ftrProgress"></div>
+</div>
 	<script>
     
 	var rootURL = 'http://localhost:8080/channels/';
 	
-	$(document).ready(function () {  
-	  showProgress();  
+	$(document).ready(function () {
 	  doGetCall(createList, rootURL);
-	  showChannelTypes();
 	});
 	   
 	function createList(xml) {  
@@ -88,17 +106,29 @@
 			var descId = "channel_p_" +id;
 			var editId = "channel_d_" +id;
 			
-			$('<li id="' + liId + '"><a href="#" id="' +  editId +'"><h3>'+ id + '</h3><p>' + description + 
+			$('<li id="' + liId + '"><a href="#' +id +'" id="' +  editId +'"><h3>'+ id + '</h3><p>' + description + 
 					'</p>' + '</a></li>').prependTo(channelDetailsVar);
 			$('#' +liId).click(function() {
-				 console.log('clicked: ' +liId); 
+				doGetCall(createStockQuoteChannel, rootURL +'StockQuoteChannel')	 
 			 });
 		});
 		 
 		$(channelDetailsVar).listview("refresh");
 	}  
-
-
+	
+	function createStockQuoteChannel(xml) {
+		
+		var useCache = $(xml).find("useCache").text();
+		var cacheTTL = $(xml).find("cacheTTL").text();
+	    var responseTimeLimit = $(xml).find("responseTimeLimit").text();
+	    var serviceProvider = $(xml).find("serviceProvider").text();
+	    
+	    
+	    $("#cacheTTL").val(cacheTTL);
+	    $("#responseTimeLimit").val(responseTimeLimit);
+	    $("#serviceProvider").val(serviceProvider);
+	    
+	}
 	
 	function doGetCall(handler, restUri) {
 	    $.ajax({
@@ -198,6 +228,5 @@
 		ftrProgressVar.hide();
 	}   
     </script>
-    </div>
 </body>
 </html>
