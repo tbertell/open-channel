@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>OpenChannel UI</title>
+
+<link rel="stylesheet" href="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
+
+</head>
+<body>
+
+	<!-- Home page -->
+	<div data-role="page" id="home">
+		<div data-role="header" id="hdrChannelTypes" data-theme="b" data-nobackbtn="true">
+			<h1>Channel list</h1>
+		</div>
+
+		<div data-role="content" id="contentChannelTypes">
+			<ul data-role="listview" data-inset="true" id="channelDetails"></ul>
+		</div>
+
+		<div data-role="footer" id="ftrChannelTypes"></div>
+		
+		<!-- Progress 
+		<div data-role="header" id="hdrProgress" data-nobackbtn="true">
+			<h1>Processing...</h1>
+		</div>
+		<div data-role="content" id="contentProgress">
+			<div align="CENTER">
+				<h4>Please wait.</h4>
+			</div>
+			<div align="CENTER">
+				<img id="spin" src="img/wait.gif" />
+			</div>
+		</div>
+		<div data-role="footer" id="ftrProgress"></div>
+		-->
+</div>	
+
+<!-- StockQuoteChannel page -->
+<div data-role="page" id="StockQuoteChannel">
+	<div data-role="header" id="hdrStockQuoteChannel" data-theme="b">
+		<a href="index.html" data-icon="arrow-l">Back</a>
+		<h1>StockQuoteChannel</h1>
+	</div>
+
+	<div data-role="content" id="contentStockQuoteChannel">
+		
+			<div id="responseTimeDiv" data-role="fieldcontain">
+				<label for="responseTimeLimit">Response time limit (ms)</label> <input value="dummy" type="text" id="responseTimeLimit" />
+			</div>
+			<div id="serviceProviderDiv" data-role="fieldcontain">
+				<label for="serviceProvider">Service provider</label> <input readonly name="serviceProvider" id="serviceProvider" />
+			</div>
+			<div id="cacheTTLDiv" data-role="fieldcontain">
+				<label for="cacheTTL">Cache TTL (ms)</label> <input type="text" id="cacheTTL" />
+			</div>
+			<div id="cacheDiv" data-role="fieldcontain">
+				<label for="useCache">Cache</label>
+				<select name="useCache" id="useCache" data-role="slider">
+					<option value="false">Off</option>
+					<option value="true">On</option>
+				</select>
+			</div>
+			<a id="buttonUpdateStockQuoteChannel" href="" data-role="button" data-inline="true">Update</a>
+	</div>
+
+	<div data-role="footer" id="ftrStockQuoteChannel">
+	</div>
+</div>
+
+<!-- TimerLogChannel page -->
+<div data-role="page" id="TimerLogChannel">
+	<div data-role="header" id="hdrTimerLogChannel" data-nobackbtn="true" data-theme="b">
+		<a href="index.html" data-icon="arrow-l">Back</a>
+		<h1>TimerLogChannel</h1>
+	</div>
+
+	<div data-role="content" id="contentTimerLogChannel">
+			<div id="timerPeriodInMillisDiv" data-role="fieldcontain">
+				<label for="timerPeriodInMillis">Timer period (ms)</label> <input type="text" id="timerPeriodInMillis" />
+			</div>
+			<div id="messageDiv" data-role="fieldcontain">
+				<label for="message">Log message</label> <input type="text" id="message" />
+			</div>
+			<a id="buttonUpdateTimerLogChannel" href="" data-role="button" data-inline="true">Update</a>
+	</div>
+
+	<div data-role="footer" id="ftrTimerLogChannel">
+	</div>
+</div>
+	<script>
+    
+	var rootURL = 'http://camelopenchannel.appspot.com/channels/';
+	
+	$(document).ready(function () {
+	  doGetCall(createList, rootURL);
+	});
+	   
+	function createList(xml) {  
+		
+		var channelDetailsVar = $('#channelDetails'); 
+		
+		$(xml).find("channel").each(function() {
+			var id = $(this).find("id").text();
+			var description = $(this).find("description").text();
+			var link = $(this).find("link").attr("href");
+			
+			var liId = "channel_d_li_" +id;
+			var descId = "channel_p_" +id;
+			var editId = "channel_d_" +id;
+			
+			$('<li id="' + liId + '"><a href="#' +id +'" id="' +  editId +'"><h3>'+ id + '</h3><p>' + description + 
+					'</p>' + '</a></li>').prependTo(channelDetailsVar);
+			$('#' +liId).click(function() {
+				if (id == 'StockQuoteChannel') {
+					doGetCall(createStockQuoteChannel, rootURL +'StockQuoteChannel')
+				} else {
+					doGetCall(createTimerLogChannel, rootURL +'TimerLogChannel')
+				}
+			 });
+		});
+		 
+		$(channelDetailsVar).listview("refresh");
+	}  
+	
+	function createStockQuoteChannel(xml) {
+		
+		var useCache = $(xml).find("useCache").text();
+		var cacheTTL = $(xml).find("cacheTTL").text();
+	    var responseTimeLimit = $(xml).find("responseTimeLimit").text();
+	    var serviceProvider = $(xml).find("serviceProvider").text();
+	    
+	    
+	    $("#useCache").val(useCache).slider("refresh");
+	    $("#cacheTTL").val(cacheTTL);
+	    $("#responseTimeLimit").val(responseTimeLimit);
+	    $("#serviceProvider").val(serviceProvider);
+	    
+	    
+		$("#buttonUpdateStockQuoteChannel").click(function(xml) {
+			var useCacheVar = $("#useCache").val();
+			var cacheTTLVar = $("#cacheTTL").val();
+			var responseTimeLimitVar = $("#responseTimeLimit").val();
+			var serviceProviderVar = $("#serviceProvider").val();
+			
+			var result = '<stockQuoteChannelModel>' +
+			createXmlElement('useCache', useCacheVar) +
+			createXmlElement('cacheTTL', cacheTTLVar) +
+			createXmlElement('responseTimeLimit', responseTimeLimitVar) +
+			createXmlElement('serviceProvider', serviceProviderVar) +
+			'</stockQuoteChannelModel>';
+			
+			xmlDoc = $.parseXML(result)
+			
+			console.log(result);
+			 
+			doPut(rootURL +'StockQuoteChannel', result);
+		 });
+	    
+	}
+	
+function createTimerLogChannel(xml) {
+		
+		var timerPeriodInMillis = $(xml).find("timerPeriodInMillis").text();
+		var message = $(xml).find("message").text();
+	    
+	    $("#timerPeriodInMillis").val(timerPeriodInMillis);
+	    $("#message").val(message);
+	    
+		$("#buttonUpdateTimerLogChannel").click(function(xml) {
+			var timerPeriodInMillisVar = $("#timerPeriodInMillis").val();
+			var messageVar = $("#message").val();
+				
+			var result = '<timerLogChannelModel>' +
+			createXmlElement('timerPeriodInMillis', timerPeriodInMillisVar) +
+			createXmlElement('message', messageVar) +
+			'</timerLogChannelModel>';
+			
+			xmlDoc = $.parseXML(result)
+			
+			console.log(result);
+			 
+			doPut(rootURL +'TimerLogChannel', result);
+		 });    
+	}
+	
+	function doPut(restUri, xml) {
+		$.ajax({
+	        type: 'PUT',
+	        url: restUri,
+	        data : xml,
+	        dataType: "xml",
+	        contentType: "application/xml",
+	        headers: {"Authorization": make_base_auth('test', 'test1')},
+	        error: function(jqXHR, textStatus, errorThrown) {
+	          console.log('AJAX call failed: '+textStatus+' '+errorThrown); 
+	        },
+	        success: function() {
+	        	alert('Channel updated successfully!');
+	        }
+	    });
+	    return false;
+	}
+	
+	function doGetCall(handler, restUri) {
+	    $.ajax({
+	        type: 'GET',
+	        url: restUri,
+	        dataType: "xml",
+	        headers: {"Authorization": make_base_auth('test', 'test1')},
+	        error: function(jqXHR, textStatus, errorThrown) {
+	          console.log('AJAX call failed: '+textStatus+' '+errorThrown); 
+	        },
+	        success: handler
+	    });
+	    return false;
+	}
+	
+	function createXmlElement(element, value) {
+		var result = '<' +element + '>' +value +'</' +element + '>';
+		return result;
+	}
+	
+	function make_base_auth(user, password) {
+	  var tok = user + ':' + password;
+	  var hash = btoa(tok);
+	  return "Basic " + hash;
+	}
+    </script>
+</body>
+</html>
