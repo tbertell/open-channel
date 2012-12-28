@@ -4,17 +4,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>OpenChannel UI</title>
 
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+<link rel="stylesheet" href="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
 
 </head>
 <body>
 
 	<!-- Home page -->
 	<div data-role="page" id="home">
-		<div data-role="header" id="hdrChannelTypes" data-nobackbtn="true">
-			<h1>Channel type list</h1>
+		<div data-role="header" id="hdrChannelTypes" data-theme="b" data-nobackbtn="true">
+			<h1>Channel list</h1>
 		</div>
 
 		<div data-role="content" id="contentChannelTypes">
@@ -41,30 +41,30 @@
 
 <!-- StockQuoteChannel page -->
 <div data-role="page" id="StockQuoteChannel">
-	<div data-role="header" id="hdrStockQuoteChannel">
+	<div data-role="header" id="hdrStockQuoteChannel" data-theme="b">
 		<a href="index.html" data-icon="arrow-l">Back</a>
 		<h1>StockQuoteChannel</h1>
 	</div>
 
 	<div data-role="content" id="contentStockQuoteChannel">
 		
-					<div id="cacheDiv" data-role="fieldcontain">
-						<label for="cacheTTL">Cache TTL (ms)</label> <input type="text" id="cacheTTL" />
-					</div>
-					<div id="responseTimeDiv" data-role="fieldcontain">
-						<label for="responseTimeLimit">Response time limit (ms)</label> <input value="dummy" type="text" id="responseTimeLimit" />
-					</div>
-					<div id="serviceProviderDiv" data-role="fieldcontain">
-						<label for="serviceProvider">Service provider</label> <input readonly id="serviceProvider" />
-					</div>
-					<div id="cacheDiv" data-role="fieldcontain">
-						<label for="useCache">Cache</label>
-						<select name="useCache" id="useCache" data-role="slider">
-							<option value="false">Off</option>
-							<option value="true">On</option>
-						</select>
-					</div>
-				<a id="buttonUpdateStockQuoteChannel" href="" data-role="button" data-inline="true">Update</a>
+			<div id="responseTimeDiv" data-role="fieldcontain">
+				<label for="responseTimeLimit">Response time limit (ms)</label> <input value="dummy" type="text" id="responseTimeLimit" />
+			</div>
+			<div id="serviceProviderDiv" data-role="fieldcontain">
+				<label for="serviceProvider">Service provider</label> <input readonly name="serviceProvider" id="serviceProvider" />
+			</div>
+			<div id="cacheTTLDiv" data-role="fieldcontain">
+				<label for="cacheTTL">Cache TTL (ms)</label> <input type="text" id="cacheTTL" />
+			</div>
+			<div id="cacheDiv" data-role="fieldcontain">
+				<label for="useCache">Cache</label>
+				<select name="useCache" id="useCache" data-role="slider">
+					<option value="false">Off</option>
+					<option value="true">On</option>
+				</select>
+			</div>
+			<a id="buttonUpdateStockQuoteChannel" href="" data-role="button" data-inline="true">Update</a>
 	</div>
 
 	<div data-role="footer" id="ftrStockQuoteChannel">
@@ -73,16 +73,22 @@
 
 <!-- TimerLogChannel page -->
 <div data-role="page" id="TimerLogChannel">
-	<div data-role="header" id="hdrTimerLogChannel" data-nobackbtn="true">
+	<div data-role="header" id="hdrTimerLogChannel" data-nobackbtn="true" data-theme="b">
 		<a href="index.html" data-icon="arrow-l">Back</a>
 		<h1>TimerLogChannel</h1>
 	</div>
 
-	<div data-role="content" id="contentTimerLogChannel"></div>
+	<div data-role="content" id="contentTimerLogChannel">
+			<div id="timerPeriodInMillisDiv" data-role="fieldcontain">
+				<label for="timerPeriodInMillis">Timer period (ms)</label> <input type="text" id="timerPeriodInMillis" />
+			</div>
+			<div id="messageDiv" data-role="fieldcontain">
+				<label for="message">Log message</label> <input type="text" id="message" />
+			</div>
+			<a id="buttonUpdateTimerLogChannel" href="" data-role="button" data-inline="true">Update</a>
+	</div>
 
 	<div data-role="footer" id="ftrTimerLogChannel">
-		<a id="buttonUpdate" data-icon="arrow-r" class="ui-btn-right" href=""
-			data-role="button" data-inline="true">Update</a>
 	</div>
 </div>
 	<script>
@@ -109,7 +115,11 @@
 			$('<li id="' + liId + '"><a href="#' +id +'" id="' +  editId +'"><h3>'+ id + '</h3><p>' + description + 
 					'</p>' + '</a></li>').prependTo(channelDetailsVar);
 			$('#' +liId).click(function() {
-				doGetCall(createStockQuoteChannel, rootURL +'StockQuoteChannel')	 
+				if (id == 'StockQuoteChannel') {
+					doGetCall(createStockQuoteChannel, rootURL +'StockQuoteChannel')
+				} else {
+					doGetCall(createTimerLogChannel, rootURL +'TimerLogChannel')
+				}
 			 });
 		});
 		 
@@ -123,10 +133,12 @@
 	    var responseTimeLimit = $(xml).find("responseTimeLimit").text();
 	    var serviceProvider = $(xml).find("serviceProvider").text();
 	    
-	    $("#useCache").val(useCache);
+	    
+	    $("#useCache").val(useCache).slider("refresh");
 	    $("#cacheTTL").val(cacheTTL);
 	    $("#responseTimeLimit").val(responseTimeLimit);
 	    $("#serviceProvider").val(serviceProvider);
+	    
 	    
 		$("#buttonUpdateStockQuoteChannel").click(function(xml) {
 			var useCacheVar = $("#useCache").val();
@@ -134,7 +146,7 @@
 			var responseTimeLimitVar = $("#responseTimeLimit").val();
 			var serviceProviderVar = $("#serviceProvider").val();
 			
-			var result = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><stockQuoteChannelModel>' +
+			var result = '<stockQuoteChannelModel>' +
 			createXmlElement('useCache', useCacheVar) +
 			createXmlElement('cacheTTL', cacheTTLVar) +
 			createXmlElement('responseTimeLimit', responseTimeLimitVar) +
@@ -150,17 +162,45 @@
 	    
 	}
 	
+function createTimerLogChannel(xml) {
+		
+		var timerPeriodInMillis = $(xml).find("timerPeriodInMillis").text();
+		var message = $(xml).find("message").text();
+	    
+	    $("#timerPeriodInMillis").val(timerPeriodInMillis);
+	    $("#message").val(message);
+	    
+		$("#buttonUpdateTimerLogChannel").click(function(xml) {
+			var timerPeriodInMillisVar = $("#timerPeriodInMillis").val();
+			var messageVar = $("#message").val();
+				
+			var result = '<timerLogChannelModel>' +
+			createXmlElement('timerPeriodInMillis', timerPeriodInMillisVar) +
+			createXmlElement('message', messageVar) +
+			'</timerLogChannelModel>';
+			
+			xmlDoc = $.parseXML(result)
+			
+			console.log(result);
+			 
+			doPut(rootURL +'TimerLogChannel', result);
+		 });    
+	}
+	
 	function doPut(restUri, xml) {
 		$.ajax({
 	        type: 'PUT',
 	        url: restUri,
 	        data : xml,
 	        dataType: "xml",
+	        contentType: "application/xml",
 	        headers: {"Authorization": make_base_auth('test', 'test1')},
 	        error: function(jqXHR, textStatus, errorThrown) {
 	          console.log('AJAX call failed: '+textStatus+' '+errorThrown); 
 	        },
-	        success: false
+	        success: function() {
+	        	alert('Channel updated successfully!');
+	        }
 	    });
 	    return false;
 	}
@@ -189,83 +229,6 @@
 	  var hash = btoa(tok);
 	  return "Basic " + hash;
 	}
-	
-	
-	var hdrChannelTypesVar = $('#hdrChannelTypes');
-	var contentChannelTypesVar = $('#contentChannelTypes');
-	var ftrChannelTypesVar = $('#ftrChannelTypes');
-	
-	var hdrStockQuoteChannelVar = $('#hdrStockQuoteChannel');
-	var contentStockQuoteChannelVar = $('#contentStockQuoteChannel');
-	var ftrStockQuoteChannelVar = $('#ftrStockQuoteChannel');
-	
-	var hdrTimerLogChannelVar = $('#hdrTimerLogChannel');
-	var contentTimerLogChannelVar = $('#contentTimerLogChannel');
-	var ftrTimerLogChannelVar = $('#ftrTimerLogChannel');
-	
-	var hdrProgressVar = $('#hdrProgress');
-	var contentProgressVar = $('#contentProgress');
-	var ftrProgressVar = $('#ftrProgress');
-	
-	function hideChannelTypes() {
-		hdrChannelTypesVar.hide();
-		contentChannelTypesVar.hide();
-		ftrChannelTypesVar.hide();      
-	}
-	
-	function showChannelTypes() {
-		hideStockQuoteChannel();
-		hideTimerLogChannel();
-	  hideProgress();
-	  hdrChannelTypesVar.show();
-		contentChannelTypesVar.show();
-		ftrChannelTypesVar.show();
-	}
-	
-	function hideStockQuoteChannel() {
-		hdrStockQuoteChannelVar.hide();
-		contentStockQuoteChannelVar.hide();
-		ftrStockQuoteChannelVar.hide();      
-	}
-	
-	function showStockQuoteChannel() {
-		hideChannelTypes();
-		hideTimerLogChannel();
-	  hideProgress();
-	  hdrStockQuoteChannelVar.show();
-		contentStockQuoteChannelVar.show();
-		ftrStockQuoteChannelVar.show();     
-	}
-	
-	function hideTimerLogChannel() {
-		hdrTimerLogChannelVar.hide();
-		contentTimerLogChannelVar.hide();
-		ftrTimerLogChannelVar.hide();      
-	}
-	
-	function showTimerLogChannel() {
-		hideChannelTypes();
-		showStockQuoteChannel();
-	  hideProgress();
-		hdrTimerLogChannelVar.show();
-		contentTimerLogChannelVar.show();
-		ftrTimerLogChannelVar.show(); 
-	}
-	 
-	function showProgress() {
-		hideChannelTypes();
-	  	hideStockQuoteChannel();
-	  	hideTimerLogChannel();
-	  	hdrProgressVar.show();
-	  	contentProgressVar.show();
-	  	ftrProgressVar.show();
-	}
-	
-	function hideProgress() {
-		hdrProgressVar.hide();
-		contentProgressVar.hide();
-		ftrProgressVar.hide();
-	}   
     </script>
 </body>
 </html>
