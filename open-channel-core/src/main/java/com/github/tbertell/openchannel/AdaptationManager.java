@@ -13,7 +13,7 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 public class AdaptationManager {
 
 	@Autowired
-	@Qualifier("mockChannelManager")
+	@Qualifier("camelChannelManager")
 	private ChannelManager channelManager;
 
 	private static String HANDLER_PACKAGE = "com.github.tbertell.openchannel.channel.adaptation";

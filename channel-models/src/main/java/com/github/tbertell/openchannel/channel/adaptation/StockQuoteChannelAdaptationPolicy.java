@@ -13,7 +13,7 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 
 	private static long lastChangedToSecondary = 0;
 	private static int counter = 1;
-	private long stickyTime = 30000;
+	private long stickyTime = 10000;
 
 	private static long lastResponseTime = 0;
 

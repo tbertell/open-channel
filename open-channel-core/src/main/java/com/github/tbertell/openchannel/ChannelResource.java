@@ -35,7 +35,7 @@ import com.github.tbertell.openchannel.response.ListChannelsResponse;
 public class ChannelResource {
 
 	@Autowired
-	@Qualifier("mockChannelManager")
+	@Qualifier("camelChannelManager")
 	private ChannelManager channelManager;
 
 	@Context
