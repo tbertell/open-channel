@@ -3,6 +3,8 @@ package com.github.tbertell.openchannel.service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.webservicex.StockQuote;
 import net.webservicex.StockQuoteSoap;
@@ -76,12 +78,23 @@ public class StockQuoteSlowWSClient {
 	}
 
 	private void waitRandomTime() {
-		int sleepTime = new Random().nextInt(4000);
-		LOGGER.error("Wait for " + sleepTime + " ms");
+		int sleepTime = ((new Random().nextInt(4000) + new Random().nextInt(4000)) - 5000);
+		System.out.println(sleepTime);
+		if (sleepTime < 0) {
+			sleepTime = new Random().nextInt(500);
+		}
+		
+		LOGGER.debug("Wait for " + sleepTime + " ms");
 		try {
 			Thread.sleep(sleepTime);
 		} catch (InterruptedException e) {
 			LOGGER.error("Sleep failed ", e);
 		}
+	}
+	
+	public static void main(String ... args) {
+		StockQuoteSlowWSClient ws = new StockQuoteSlowWSClient();
+		for (int i = 0; i < 50; i++)
+		ws.waitRandomTime();
 	}
 }
