@@ -49,13 +49,16 @@
 	<div data-role="content" id="contentStockQuoteChannel">
 		
 			<div id="responseTimeDiv" data-role="fieldcontain">
-				<label for="responseTimeLimit">Response time limit (ms)</label> <input value="dummy" type="text" id="responseTimeLimit" />
+				<label for="responseTimeLimit">Response time limit (ms)</label>
+			 	<input type="range" name="slider" id="responseTimeLimit" value="0" min="0" max="4000"  />
 			</div>
 			<div id="serviceProviderDiv" data-role="fieldcontain">
-				<label for="serviceProvider">Service provider</label> <input readonly name="serviceProvider" id="serviceProvider" />
+				<label for="serviceProvider">Service provider</label>
+				<input readonly name="serviceProvider" id="serviceProvider" />
 			</div>
 			<div id="cacheTTLDiv" data-role="fieldcontain">
-				<label for="cacheTTL">Cache TTL (ms)</label> <input type="text" id="cacheTTL" />
+				<label for="cacheTTL">Cache TTL (ms)</label> 
+				<input type="range" name="slider" id="cacheTTL" value="0" min="0" max="10000"  />
 			</div>
 			<div id="cacheDiv" data-role="fieldcontain">
 				<label for="useCache">Cache</label>
@@ -64,7 +67,10 @@
 					<option value="true">On</option>
 				</select>
 			</div>
-			<a id="buttonUpdateStockQuoteChannel" href="" data-role="button" data-inline="true">Update</a>
+			<div id="updateStockQuoteChannel">
+				<a id="buttonUpdateStockQuoteChannel" href="" data-role="button" data-inline="true">Update</a>
+				<p id="updated" style="float:right" data-inline="true">Channel updated!</p>
+			</div>
 	</div>
 
 	<div data-role="footer" id="ftrStockQuoteChannel">
@@ -135,10 +141,11 @@
 	    
 	    
 	    $("#useCache").val(useCache).slider("refresh");
-	    $("#cacheTTL").val(cacheTTL);
-	    $("#responseTimeLimit").val(responseTimeLimit);
+	    $("#cacheTTL").val(cacheTTL).slider("refresh");
+	    $("#responseTimeLimit").val(responseTimeLimit).slider("refresh");
 	    $("#serviceProvider").val(serviceProvider);
 	    
+	    $("#updated").hide();
 	    
 		$("#buttonUpdateStockQuoteChannel").click(function(xml) {
 			var useCacheVar = $("#useCache").val();
@@ -199,7 +206,7 @@ function createTimerLogChannel(xml) {
 	          console.log('AJAX call failed: '+textStatus+' '+errorThrown); 
 	        },
 	        success: function() {
-	        	alert('Channel updated successfully!');
+	        	$("#updated").fadeIn('slow').delay(4000).fadeOut('slow'); 
 	        }
 	    });
 	    return false;
