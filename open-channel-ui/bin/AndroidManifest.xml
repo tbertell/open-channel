@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name=".OpenChannelUI"
+            android:name=".OpenChannelActivity"
             android:label="@string/app_name"  
             android:configChanges="orientation|keyboardHidden">
             
