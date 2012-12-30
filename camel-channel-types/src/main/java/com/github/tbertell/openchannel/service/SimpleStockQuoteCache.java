@@ -16,9 +16,15 @@ public class SimpleStockQuoteCache {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleStockQuoteCache.class);
 
 	private static final ConcurrentHashMap<String, CacheEntry> CACHE = new ConcurrentHashMap<String, CacheEntry>();
-
+	
 	public void getQuote(String symbol, Exchange exchange) {
 		logCache();
+		int index = symbol.indexOf("_");
+		String correlationId = "";
+		if (index > 0 ) {
+			correlationId = symbol.substring(index + 1);
+			symbol = symbol.substring(0, index);
+		}
 		if (CACHE.containsKey(symbol)) {
 			CacheEntry entry = CACHE.get(symbol);
 			LOGGER.info("Cache contains " + symbol + " " + entry.getQuote());

@@ -25,6 +25,14 @@ public class StockQuoteSlowWSClient {
 	private final String END_ELEMENT = "</Last>";
 
 	public void getQuote(String symbol, Exchange exchange) {
+		int index = symbol.indexOf("_");
+		String correlationId = "";
+		
+		if (index > 0 ) {
+			correlationId = symbol.substring(index + 1);
+			symbol = symbol.substring(0, index);
+		}
+		
 		LOGGER.info("Start web service call with symbol: " + symbol + " url " + url);
 		long starttime = System.currentTimeMillis();
 
