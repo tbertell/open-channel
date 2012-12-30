@@ -20,14 +20,18 @@ public class SimpleStockQuoteCache {
 	public void getQuote(String symbol, Exchange exchange) {
 		logCache();
 		int index = symbol.indexOf("_");
-		String correlationId = "";
+		String correlationId = null;
 		if (index > 0 ) {
 			correlationId = symbol.substring(index + 1);
 			symbol = symbol.substring(0, index);
 		}
 		if (CACHE.containsKey(symbol)) {
 			CacheEntry entry = CACHE.get(symbol);
-			LOGGER.info("Cache contains " + symbol + " " + entry.getQuote());
+			if (correlationId != null) {
+				LOGGER.info("Cache contains " + symbol + " " + entry.getQuote() + " CID " +correlationId);
+			} else {
+				LOGGER.debug("Cache contains " + symbol + " " + entry.getQuote());
+			} 
 			if (isCacheEntryValid(entry, System.currentTimeMillis())) {
 				exchange.getOut().setBody(entry.getQuote());
 				exchange.getOut().setHeader("cacheHit", "true");

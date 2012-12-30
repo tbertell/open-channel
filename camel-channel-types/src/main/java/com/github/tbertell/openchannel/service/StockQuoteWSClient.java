@@ -53,7 +53,11 @@ public class StockQuoteWSClient {
 		exchange.getOut().setHeader("symbol", symbol);
 		exchange.getOut().setBody("<quote>" + quote + "</quote>");
 
-		LOGGER.info("End web service call with response: " + quote + ", respose time: " + responseTime + " ms");
+		if (correlationId != null) {
+			LOGGER.info("End web service call: " + quote + ", response time: " + responseTime + " ms" + " CID " +correlationId);
+		} else {
+			LOGGER.info("End web service call: " + quote + ", response time: " + responseTime + " ms");
+		}
 
 	}
 
