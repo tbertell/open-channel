@@ -32,10 +32,16 @@ public class StockQuote extends Service {
     public final static QName StockQuoteSoap = new QName("http://www.webserviceX.NET/", "StockQuoteSoap");
     public final static QName StockQuoteSoap12 = new QName("http://www.webserviceX.NET/", "StockQuoteSoap12");
     public final static QName StockQuoteHttpGet = new QName("http://www.webserviceX.NET/", "StockQuoteHttpGet");
+    protected final static String USER_DIR = System.getProperty("user.dir");
+    protected final static String FS = System.getProperty("file.separator");
+
     static {
         URL url = null;
         try {
-            url = new URL("file:/home/tomppa/Projects/open-channel/camel-channel-types/src/main/wsdl/stockquote.wsdl");
+        	URL baseUrl = StockQuote.class.getResource(".");
+            url = new URL(baseUrl, "../../wsdl/stockquote.wsdl");
+            //url = new URL("file:/home/tomppa/Projects/open-channel/camel-channel-types/src/main/wsdl/stockquote.wsdl");
+            //url = new URL("file:///" + USER_DIR + FS + "target" + FS + "resources" + FS + "wsdl" + FS +"stockquote.wsdl");
         } catch (MalformedURLException e) {
             System.err.println("Can not initialize the default wsdl from file:/home/tomppa/Projects/open-channel/camel-channel-types/src/main/wsdl/stockquote.wsdl");
             // e.printStackTrace();
