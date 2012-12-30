@@ -2,6 +2,7 @@ package com.github.tbertell.openchannel.channel.adaptation;
 
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,7 @@ import com.github.tbertell.openchannel.channel.model.StockQuoteServiceProvider;
 public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<StockQuoteChannelModel> {
 
 	private static long lastChangedToSecondary = 0;
-	private static int counter = 1;
+	private static AtomicInteger counter = new AtomicInteger(1);
 	private long stickyTime = 10000;
 
 	private static long lastResponseTime = 0;
@@ -42,9 +43,8 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			// model.getResponseTimeLimit() + " sp on "
 			// + model.getServiceProvider() + " numero " + counter);
 			LOGGER.debug("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
-					+ model.getServiceProvider() + " numero " + counter);
+					+ model.getServiceProvider() + " numero " + counter.incrementAndGet());
 
-			counter++;
 			if (rt > model.getResponseTimeLimit().longValue()
 					&& StockQuoteServiceProvider.PRIMARY.equals(model.getServiceProvider())) {
 				newModel.setServiceProvider(StockQuoteServiceProvider.SECONDARY);
