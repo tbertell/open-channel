@@ -3,6 +3,8 @@ package com.github.tbertell.openchannel.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.ws.BindingProvider;
+
 import net.webservicex.StockQuote;
 import net.webservicex.StockQuoteSoap;
 
@@ -11,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StockQuoteWSClient {
-	private String url = "http://www.webservicex.net/stockquote.asmx";
+	private static String url = "http://localhost:8088/mockStockQuoteSoap";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteWSClient.class);
 
@@ -25,12 +27,12 @@ public class StockQuoteWSClient {
 
 		int index = symbol.indexOf("_");
 		String correlationId = "";
-		
+
 		if (index > 0 ) {
 			correlationId = symbol.substring(index + 1);
 			symbol = symbol.substring(0, index);
 		}
-		
+
 		LOGGER.info("Start web service call with symbol: " + symbol + " url " + url);
 		long starttime = System.currentTimeMillis();
 
@@ -54,18 +56,38 @@ public class StockQuoteWSClient {
 		exchange.getOut().setBody("<quote>" + quote + "</quote>");
 
 		if (correlationId != null) {
-			LOGGER.info("End web service call: " + quote + ", response time: " + responseTime + " ms" + " CID " +correlationId);
+			LOGGER.info("End SECONDARY web service call: " + quote + ", response time: " + responseTime + " ms" + " CID " +correlationId);
 		} else {
-			LOGGER.info("End web service call: " + quote + ", response time: " + responseTime + " ms");
+			LOGGER.info("End SECONDARY web service call: " + quote + ", response time: " + responseTime + " ms");
 		}
 
 	}
 
 	public static void main(String... args) {
 		StockQuote ss = new StockQuote();
+
 		StockQuoteSoap port = ss.getStockQuoteSoap();
-		String quotes = port.getQuote("NOK");
-		System.out.println(new StockQuoteWSClient().parseQuote(quotes));
+		BindingProvider bp = (BindingProvider)port;
+
+		Map<String, Object> context = bp.getRequestContext();
+
+		Object oldAddress = context.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
+
+		context.put(
+				BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+				url);
+
+
+
+		StockQuoteWSClient client = new StockQuoteWSClient();
+
+		for (int i = 0; i < 30; i++) {
+			long alku = System.currentTimeMillis();
+			String quotes = port.getQuote("NOK");
+			long loppu = System.currentTimeMillis();
+			System.out.println(client.parseQuote(quotes) + " kesti " +(loppu - alku));
+
+		}
 	}
 
 	private String parseQuote(String response) {

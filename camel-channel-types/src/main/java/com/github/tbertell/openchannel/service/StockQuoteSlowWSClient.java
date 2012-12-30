@@ -59,9 +59,9 @@ public class StockQuoteSlowWSClient {
 		exchange.getOut().setBody("<quote>" + quote + "</quote>");
 
 		if (correlationId != null) {
-			LOGGER.info("End web service call: " + quote + ", respose time: " + responseTime + " ms" + " CID " +correlationId);
+			LOGGER.info("End PRIMARY web service call: " + quote + ", respose time: " + responseTime + " ms" + " CID " +correlationId);
 		} else {
-			LOGGER.info("End web service call: " + quote + ", respose time: " + responseTime + " ms");
+			LOGGER.info("End PRIMARY web service call: " + quote + ", respose time: " + responseTime + " ms");
 		}
 	}
 
