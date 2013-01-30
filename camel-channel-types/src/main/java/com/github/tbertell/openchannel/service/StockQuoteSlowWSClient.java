@@ -25,13 +25,6 @@ public class StockQuoteSlowWSClient {
 	private final String END_ELEMENT = "</Last>";
 
 	public void getQuote(String symbol, Exchange exchange) {
-		int index = symbol.indexOf("_");
-		String correlationId = "";
-		
-		if (index > 0 ) {
-			correlationId = symbol.substring(index + 1);
-			symbol = symbol.substring(0, index);
-		}
 		
 		LOGGER.info("Start web service call with symbol: " + symbol + " url " + url);
 		long starttime = System.currentTimeMillis();
@@ -57,12 +50,8 @@ public class StockQuoteSlowWSClient {
 		exchange.getOut().setHeader("quote", quote);
 		exchange.getOut().setHeader("symbol", symbol);
 		exchange.getOut().setBody("<quote>" + quote + "</quote>");
-
-		if (correlationId != null) {
-			LOGGER.info("End PRIMARY web service call: " + quote + ", respose time: " + responseTime + " ms" + " CID " +correlationId);
-		} else {
-			LOGGER.info("End PRIMARY web service call: " + quote + ", respose time: " + responseTime + " ms");
-		}
+		
+		LOGGER.info("End PRIMARY web service call: " + quote + ", respose time: " + responseTime + " ms");
 	}
 
 	public String getUrl() {

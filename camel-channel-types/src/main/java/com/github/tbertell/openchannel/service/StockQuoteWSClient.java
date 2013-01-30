@@ -25,14 +25,6 @@ public class StockQuoteWSClient {
 
 	public void getQuote(String symbol, Exchange exchange) {
 
-		int index = symbol.indexOf("_");
-		String correlationId = "";
-
-		if (index > 0 ) {
-			correlationId = symbol.substring(index + 1);
-			symbol = symbol.substring(0, index);
-		}
-
 		LOGGER.info("Start web service call with symbol: " + symbol + " url " + url);
 		long starttime = System.currentTimeMillis();
 
@@ -55,12 +47,7 @@ public class StockQuoteWSClient {
 		exchange.getOut().setHeader("symbol", symbol);
 		exchange.getOut().setBody("<quote>" + quote + "</quote>");
 
-		if (correlationId != null) {
-			LOGGER.info("End SECONDARY web service call: " + quote + ", response time: " + responseTime + " ms" + " CID " +correlationId);
-		} else {
-			LOGGER.info("End SECONDARY web service call: " + quote + ", response time: " + responseTime + " ms");
-		}
-
+		LOGGER.info("End SECONDARY web service call: " + quote + ", response time: " + responseTime + " ms");
 	}
 
 	public static void main(String... args) {

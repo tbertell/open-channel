@@ -1,6 +1,6 @@
 OpenChannel framework
 ============
-OpenChannel framework includes functionality to inspect and adapt Camel routes defined with OSGi blueprint.
+OpenChannel framework includes functionality to inspect and adapt Camel routes defined with OSGi blueprints.
 
 camel-channel-types
 Camel routes.
