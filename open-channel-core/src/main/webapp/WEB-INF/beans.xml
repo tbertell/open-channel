@@ -46,7 +46,7 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 
 	<bean id="camelChannelManager" class="com.github.tbertell.openchannel.CamelChannelManager">
 		<constructor-arg index="0" type="java.lang.String"
-			value="/home/tomppa/Java/apache-servicemix-4.4.2/deploy/" />
+			value="/home/tomppa/java/apache-servicemix-4.4.2/deploy/" />
 	</bean>
 	
 	<bean id="mockChannelManager" class="com.github.tbertell.openchannel.MockChannelManager">

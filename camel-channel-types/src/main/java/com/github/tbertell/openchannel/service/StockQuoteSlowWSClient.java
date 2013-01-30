@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StockQuoteSlowWSClient {
+	// http://www.webservicex.net/stockquote.asmx
 	private String url = "http://www.webservicex.net/stockquote.asmx";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteSlowWSClient.class);

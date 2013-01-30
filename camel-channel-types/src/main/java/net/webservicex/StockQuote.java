@@ -39,8 +39,8 @@ public class StockQuote extends Service {
         URL url = null;
         try {
         	URL baseUrl = StockQuote.class.getResource(".");
-            url = new URL(baseUrl, "../../wsdl/stockquote.wsdl");
-            //url = new URL("file:/home/tomppa/Projects/open-channel/camel-channel-types/src/main/wsdl/stockquote.wsdl");
+            //url = new URL(baseUrl, "../../wsdl/stockquote.wsdl");
+            url = new URL("file:/home/tomppa/projects/open-channel/camel-channel-types/src/main/wsdl/stockquote.wsdl");
             //url = new URL("file:///" + USER_DIR + FS + "target" + FS + "resources" + FS + "wsdl" + FS +"stockquote.wsdl");
         } catch (MalformedURLException e) {
             System.err.println("Can not initialize the default wsdl from file:/home/tomppa/Projects/open-channel/camel-channel-types/src/main/wsdl/stockquote.wsdl");

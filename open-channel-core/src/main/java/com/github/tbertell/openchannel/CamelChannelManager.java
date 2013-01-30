@@ -120,7 +120,7 @@ public class CamelChannelManager implements ChannelManager {
 
 			@Override
 			public boolean accept(File dir, String name) {
-				if (name.endsWith("Channel.xml")) {
+				if (name.endsWith("Channel.xml") && !name.contains("Static")) {
 					return true;
 				} else {
 					return false;

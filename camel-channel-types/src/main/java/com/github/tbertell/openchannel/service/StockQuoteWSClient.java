@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StockQuoteWSClient {
-	private static String url = "http://localhost:8088/mockStockQuoteSoap";
+	
+	private String url = "http://www.webservicex.net/stockquote.asmx";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteWSClient.class);
 
@@ -62,7 +63,7 @@ public class StockQuoteWSClient {
 
 		context.put(
 				BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-				url);
+				"url");
 
 
 

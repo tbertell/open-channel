@@ -12,4 +12,5 @@ open-channel-core
 Framework core implementation.
 
 Apache ServiceMix
+Before deploying camel-channel-types install camel-juel bundle in Karaf console with command:
 features:install camel-juel
