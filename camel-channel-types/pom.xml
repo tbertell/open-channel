@@ -55,7 +55,7 @@
 
 		<plugins>
 			<!-- Generate Java classes from WSDL during build -->
-			<!--  
+			
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-codegen-plugin</artifactId>
@@ -68,7 +68,7 @@
 							<sourceRoot>${basedir}/target/generated/src/main/java</sourceRoot>
 							<wsdlOptions>
 								<wsdlOption>
-									<wsdl>${basedir}/src/main/wsdl/stockquote.wsdl</wsdl>
+									<wsdl>${basedir}/src/main/resources/wsdl/stockquote.wsdl</wsdl>
 									<extraargs>
 										<extraarg>-client</extraarg>
 									</extraargs>
@@ -81,10 +81,10 @@
 					</execution>
 				</executions>
 			</plugin>
-			-->
+			
 			<!-- Add generated sources - avoids having to copy generated sources to 
 				build location -->
-				<!--  
+				
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -103,7 +103,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			-->
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

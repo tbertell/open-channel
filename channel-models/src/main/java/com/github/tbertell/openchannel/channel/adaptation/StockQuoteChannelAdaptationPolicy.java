@@ -1,7 +1,6 @@
 package com.github.tbertell.openchannel.channel.adaptation;
 
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -15,10 +14,6 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 	private static long lastChangedToSecondary = 0;
 	private static AtomicInteger counter = new AtomicInteger(1);
 	private long stickyTime = 10000;
-
-	private static long lastResponseTime = 0;
-
-	private final ArrayBlockingQueue<Long> ringList = new ArrayBlockingQueue<Long>(2);
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteChannelAdaptationPolicy.class);
 
@@ -55,7 +50,6 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 			} else {
 				newModel.setServiceProvider(model.getServiceProvider());
 			}
-			lastResponseTime = rt;
 
 		}
 		newModel.setCacheTTL(model.getCacheTTL());

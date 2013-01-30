@@ -18,7 +18,7 @@
     <manifest xmlns="http://karaf.apache.org/xmlns/deployer/spring/v1.0.0">
       Bundle-Version = 1.0.0.<xsl:value-of select="$counter" />
   	</manifest>
-  	<bean id="contextShutdownEventNotifier" class="com.github.tbertell.openchannel.service.ContextShutdownEventNotifier"/>        
+  	<bean id="contextEventNotifier" class="com.github.tbertell.openchannel.service.ContextEventNotifier"/>        
 	<bean id="stockQuoteCache"
 		class="com.github.tbertell.openchannel.service.SimpleStockQuoteCache">
 		<property name="cacheTTL" value="{$cacheTTL}" />

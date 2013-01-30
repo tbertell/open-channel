@@ -27,7 +27,7 @@
 		<property name="url" value="http://www.webservicex.net/stockquote.asmx" />
 		<property name="responseTimeLimit" value="1000" />
 	</bean>
-	<bean id="contextShutdownEventNotifier" class="com.github.tbertell.openchannel.service.ContextShutdownEventNotifier"/>
+	<bean id="contextEventNotifier" class="com.github.tbertell.openchannel.service.ContextEventNotifier"/>
 	<!-- use CF from ActiveMQ blueprint service running in container -->
 	<reference id="connectionFactory" interface="javax.jms.ConnectionFactory" />
 	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">

@@ -10,7 +10,9 @@
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
 
-	<bean id="routeStatusChecker" class="com.github.tbertell.openchannel.service.RouteStatusChecker"/>
+	<bean id="routeStatusChecker" class="com.github.tbertell.openchannel.service.RouteStatusChecker">
+	   <property name="routeId" value="stockQuoteChannel" />
+	</bean>
 	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
 	
 		<route id="stockQuoteStaticChannel">
