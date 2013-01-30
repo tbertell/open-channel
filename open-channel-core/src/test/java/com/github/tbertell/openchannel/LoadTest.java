@@ -115,8 +115,7 @@ public class LoadTest {
 			StockQuoteChannelModel resultJaxb = (StockQuoteChannelModel) u.unmarshal(stream);
 			return resultJaxb;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// noop
 		}
 		return null;
 	}

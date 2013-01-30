@@ -9,6 +9,10 @@ import org.slf4j.LoggerFactory;
 import com.github.tbertell.openchannel.channel.model.StockQuoteChannelModel;
 import com.github.tbertell.openchannel.channel.model.StockQuoteServiceProvider;
 
+/**
+ * 
+ *
+ */
 public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<StockQuoteChannelModel> {
 
 	private static long lastChangedToSecondary = 0;
@@ -18,9 +22,10 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockQuoteChannelAdaptationPolicy.class);
 
 	/**
-	 * There are three different cases: 1. response time is below limit and
-	 * primary service provider is used -> no action, 2. response time is below
-	 * limit and secondary service provider is used -> switch back to primary,
+	 * There are three different cases: 
+	 * 1. response time is below limit and primary service provider is used -> no action, 
+	 * 2. response time is below limit and secondary service provider is used and secondary 
+	 * has been used for 10 seconds -> switch back to primary, 
 	 * 3. response time is above limit and primary service provider is used ->
 	 * switch to secondary.
 	 */
@@ -33,10 +38,6 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 		if (responseTime != null) {
 			Long rt = Long.valueOf(responseTime);
 
-			// check if reconfiguration is needed
-			// System.out.println("rt on " + rt + " limit on " +
-			// model.getResponseTimeLimit() + " sp on "
-			// + model.getServiceProvider() + " numero " + counter);
 			LOGGER.debug("rt on " + rt + " limit on " + model.getResponseTimeLimit() + " sp on "
 					+ model.getServiceProvider() + " numero " + counter.incrementAndGet());
 
@@ -60,7 +61,7 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 	}
 
 	/**
-	 * If secondary service provider has been used for at least 5 seconds change
+	 * If secondary service provider has been used for at least 10 seconds change
 	 * back to primary.
 	 * 
 	 * @param rt
@@ -71,12 +72,6 @@ public class StockQuoteChannelAdaptationPolicy implements AdaptationPolicy<Stock
 				&& (lastChangedToSecondary + stickyTime) < System.currentTimeMillis()) {
 			return true;
 		}
-		return false;
-	}
-
-	private boolean shouldChangeToSecondary(Long responseTime, Long responseTimeLimit,
-			StockQuoteServiceProvider currentServiceProvider) {
-		// TODO: implements
 		return false;
 	}
 

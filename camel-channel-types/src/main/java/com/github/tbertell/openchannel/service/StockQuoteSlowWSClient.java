@@ -3,8 +3,6 @@ package com.github.tbertell.openchannel.service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
 import net.webservicex.StockQuote;
 import net.webservicex.StockQuoteSoap;
@@ -13,6 +11,11 @@ import org.apache.camel.Exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 
+ * Web service client which waits random time before making the call.
+ *
+ */
 public class StockQuoteSlowWSClient {
 	// http://www.webservicex.net/stockquote.asmx
 	private String url = "http://www.webservicex.net/stockquote.asmx";

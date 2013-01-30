@@ -26,6 +26,11 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channel.transform.ModelTransformer;
 import com.github.tbertell.openchannel.channel.transform.ModelTransformerFactory;
 
+/**
+ * 
+ * Manages Camel based channels.
+ *
+ */
 @Component
 public class CamelChannelManager implements ChannelManager {
 

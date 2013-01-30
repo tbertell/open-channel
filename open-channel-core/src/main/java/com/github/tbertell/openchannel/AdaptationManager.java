@@ -9,6 +9,12 @@ import org.springframework.stereotype.Component;
 import com.github.tbertell.openchannel.channel.adaptation.AdaptationPolicy;
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 
+/**
+ * 
+ * Responsible for receiving reconfiguration parameters and
+ * redirecting them to correct handler.
+ *
+ */
 @Component
 public class AdaptationManager {
 
@@ -23,7 +29,6 @@ public class AdaptationManager {
 		try {
 			model = channelManager.getChannel(channelId);
 		} catch (Exception e) {
-			e.printStackTrace();
 			// do nothing
 		}
 		if (model != null) {

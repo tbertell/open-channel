@@ -4,6 +4,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+/**
+ * JAX-RS resource class for stock quote.
+ *
+ */
 @Path("/stockquote")
 public class StockQuoteResource {
 

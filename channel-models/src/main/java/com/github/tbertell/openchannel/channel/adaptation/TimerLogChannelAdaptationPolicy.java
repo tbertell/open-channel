@@ -2,7 +2,6 @@ package com.github.tbertell.openchannel.channel.adaptation;
 
 import java.util.Map;
 
-import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.channel.model.TimerLogChannelModel;
 
 public class TimerLogChannelAdaptationPolicy implements AdaptationPolicy<TimerLogChannelModel> {
@@ -23,7 +22,6 @@ public class TimerLogChannelAdaptationPolicy implements AdaptationPolicy<TimerLo
 		TimerLogChannelModel newModel = new TimerLogChannelModel();
 		newModel.setTimerPeriodInMillis(Long.valueOf(model.getTimerPeriodInMillis()));
 		if (responseTime != null) {
-			Long rt = Long.valueOf(responseTime);
 			newModel.setMessage("TimerLogChannelModel is reconfigured at " + System.currentTimeMillis());
 			newModel.setTimerPeriodInMillis(Long.valueOf(model.getTimerPeriodInMillis()));
 		} else {

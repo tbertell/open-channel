@@ -1,7 +1,6 @@
 package com.github.tbertell.openchannel.channel.transform;
 
 import java.io.StringWriter;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.bind.JAXBContext;
@@ -20,9 +19,13 @@ import org.slf4j.LoggerFactory;
 
 import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 
+/**
+ * 
+ * Xsl implementation of model tranformer.
+ *
+ */
 public class ModelXslTransformer implements ModelTransformer {
 
-	private static final Map<String, Templates> CACHE = null;
 	// counter used for versioning of osgi bundles
 	private static final AtomicInteger COUNTER = new AtomicInteger(0);
 

@@ -65,8 +65,6 @@ public class StockQuoteWSClient {
 				BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				"url");
 
-
-
 		StockQuoteWSClient client = new StockQuoteWSClient();
 
 		for (int i = 0; i < 30; i++) {

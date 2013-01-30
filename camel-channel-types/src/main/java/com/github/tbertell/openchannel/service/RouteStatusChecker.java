@@ -4,6 +4,10 @@ import org.apache.camel.Exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Checks if route is shutting down and waits until it is started.
+ *
+ */
 public class RouteStatusChecker {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RouteStatusChecker.class);

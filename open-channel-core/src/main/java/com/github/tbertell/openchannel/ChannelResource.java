@@ -31,6 +31,11 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
 import com.github.tbertell.openchannel.response.ChannelResponse;
 import com.github.tbertell.openchannel.response.ListChannelsResponse;
 
+/**
+ * 
+ * JAX-RS channel resource.
+ *
+ */
 @Path("/")
 public class ChannelResource {
 

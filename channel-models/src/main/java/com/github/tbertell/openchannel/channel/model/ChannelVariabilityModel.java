@@ -9,14 +9,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * 
+ * Base class for all channel variability models.
+ *
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 @XmlSeeAlso({ TimerLogChannelModel.class, SecondTestChannelModel.class, StockQuoteChannelModel.class })
 public abstract class ChannelVariabilityModel implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6352231488578833070L;
 
 	@XmlElement

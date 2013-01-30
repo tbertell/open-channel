@@ -1,6 +1,7 @@
 package com.github.tbertell.openchannel.authentication;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -10,6 +11,11 @@ import org.apache.cxf.jaxrs.ext.RequestHandler;
 import org.apache.cxf.jaxrs.model.ClassResourceInfo;
 import org.apache.cxf.message.Message;
 
+/**
+ * 
+ * Handles basic HTTP authentication.
+ *
+ */
 public class AuthenticationHandler implements RequestHandler {
 
 	private static final Map<String, String> USERS = new HashMap<String, String>();

@@ -7,6 +7,10 @@ import org.apache.camel.Exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Simple cache for stock quotes.
+ *
+ */
 public class SimpleStockQuoteCache {
 
 	private long cacheTTL = 100000;

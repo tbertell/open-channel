@@ -16,6 +16,11 @@ import org.springframework.stereotype.Component;
 
 import com.github.tbertell.openchannel.AdaptationManager;
 
+/**
+ * 
+ * Basic JMS-listener.
+ *
+ */
 @Component
 public class QueueListener implements MessageListener {
 
