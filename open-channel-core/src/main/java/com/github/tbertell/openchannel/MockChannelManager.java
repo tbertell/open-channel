@@ -32,11 +32,9 @@ public class MockChannelManager implements ChannelManager {
 	}
 
 	@Override
-	public boolean updateChannel(String channelId, ChannelVariabilityModel model) {
+	public void updateChannel(String channelId, ChannelVariabilityModel model) {
 		model.validate();
 		models.put(channelId, model);
-
-		return true;
 	}
 
 	@Override
@@ -55,6 +53,12 @@ public class MockChannelManager implements ChannelManager {
 			list.add(model);
 		}
 		return list;
+	}
+
+	@Override
+	public void deleteChannel(String channelId) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -108,6 +109,19 @@ public class ChannelResource {
 			throw createException(Status.INTERNAL_SERVER_ERROR, "updateChannel failed");
 		}
 
+		return Response.ok().build();
+	}
+	
+	@DELETE
+	@Path("/{channelId}")
+	public Response deleteChannel(@PathParam("channelId") String channelId) {
+
+		try {
+			channelManager.deleteChannel(channelId);
+		} catch (Exception e) {
+			LOGGER.info("channel not found", e);
+			return Response.status(Status.NOT_FOUND).build();
+		}
 		return Response.ok().build();
 	}
 

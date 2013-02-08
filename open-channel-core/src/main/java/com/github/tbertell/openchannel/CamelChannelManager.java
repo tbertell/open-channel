@@ -52,9 +52,7 @@ public class CamelChannelManager implements ChannelManager {
 	 * com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel)
 	 */
 	@Override
-	public boolean updateChannel(String channelId, ChannelVariabilityModel model) {
-
-		boolean success = false;
+	public void updateChannel(String channelId, ChannelVariabilityModel model) {
 
 		model.validate();
 
@@ -82,8 +80,6 @@ public class CamelChannelManager implements ChannelManager {
 				// never here
 			}
 		}
-
-		return success;
 	}
 
 	/*
@@ -120,7 +116,7 @@ public class CamelChannelManager implements ChannelManager {
 	public List<ChannelVariabilityModel> listChannels() {
 
 		File channelDir = new File(CHANNEL_DIR);
-
+		
 		File[] files = channelDir.listFiles(new FilenameFilter() {
 
 			@Override
@@ -142,6 +138,25 @@ public class CamelChannelManager implements ChannelManager {
 			}
 		}
 		return channels;
+	}
+	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.tbertell.openchannel.ChannelManager#deleteChannel()
+	 */
+	@Override
+	public void deleteChannel(String channelId) {
+		
+		File channel = new File(CHANNEL_DIR +channelId + ".xml");
+		
+		if (channel.exists()) {
+			channel.delete();
+		} else {
+			throw new RuntimeException("Channel not found");
+		}
+		
 	}
 
 	private String convertXMLFileToString(String fileName) {

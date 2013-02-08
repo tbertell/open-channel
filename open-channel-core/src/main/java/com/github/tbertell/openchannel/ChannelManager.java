@@ -11,10 +11,12 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
  */
 public interface ChannelManager {
 
-	public boolean updateChannel(String channelId, ChannelVariabilityModel model);
+	public void updateChannel(String channelId, ChannelVariabilityModel model);
 
 	public ChannelVariabilityModel getChannel(String channelId);
 
 	public List<ChannelVariabilityModel> listChannels();
+	
+	public void deleteChannel(String channelId);
 
 }
