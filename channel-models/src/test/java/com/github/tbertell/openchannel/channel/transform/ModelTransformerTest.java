@@ -16,7 +16,7 @@ public class ModelTransformerTest {
 
 	@Test
 	public void shouldTransformTimerLogChannelModelToBlueprintAndBackToModel() throws Exception {
-		ModelTransformer transformer = new ModelXslTransformer();
+		ModelTransformer transformer = new ModelCamelXslTransformer();
 		TimerLogChannelModel sourceModel = new TimerLogChannelModel();
 
 		Assert.assertEquals(sourceModel.getId(), "TimerLogChannel");

@@ -24,12 +24,12 @@ import com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel;
  * Xsl implementation of model tranformer.
  *
  */
-public class ModelXslTransformer implements ModelTransformer {
+public class ModelCamelXslTransformer implements ModelTransformer {
 
 	// counter used for versioning of osgi bundles
 	private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ModelXslTransformer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ModelCamelXslTransformer.class);
 
 	/*
 	 * (non-Javadoc)
@@ -45,7 +45,7 @@ public class ModelXslTransformer implements ModelTransformer {
 		try {
 			// set up XSLT transformation
 			TransformerFactory factory = TransformerFactory.newInstance();
-			Templates templates = factory.newTemplates(new StreamSource((new ModelXslTransformer()).getClass()
+			Templates templates = factory.newTemplates(new StreamSource((new ModelCamelXslTransformer()).getClass()
 					.getResourceAsStream(model.getId() + "Model2Channel.xsl")));
 			Transformer transformer = templates.newTransformer();
 			transformer.setOutputProperty("indent", "yes");
@@ -81,7 +81,7 @@ public class ModelXslTransformer implements ModelTransformer {
 
 		ChannelVariabilityModel model = null;
 		try {
-			templates = stf.newTemplates(new StreamSource((new ModelXslTransformer()).getClass().getResourceAsStream(
+			templates = stf.newTemplates(new StreamSource((new ModelCamelXslTransformer()).getClass().getResourceAsStream(
 					channelId + "2Model.xsl")));
 
 			Transformer transformer = templates.newTransformer();
