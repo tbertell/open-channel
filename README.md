@@ -12,7 +12,7 @@ Models and model transformations.
 
 open-channel-core
 --------------
-Framework core implementation.
+Framework core implementation. Configuration can be found from src/main/web-app/WEB-INF/beans-xml.
 
 open-channel-ui
 --------------
