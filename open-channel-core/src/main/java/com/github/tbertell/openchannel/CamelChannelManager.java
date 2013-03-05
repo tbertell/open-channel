@@ -52,7 +52,7 @@ public class CamelChannelManager implements ChannelManager {
 	 * com.github.tbertell.openchannel.channel.model.ChannelVariabilityModel)
 	 */
 	@Override
-	public void updateChannel(String channelId, ChannelVariabilityModel model) {
+	public void updateChannel(String id, ChannelVariabilityModel model) {
 
 		model.validate();
 
@@ -67,7 +67,7 @@ public class CamelChannelManager implements ChannelManager {
 
 		BufferedWriter out = null;
 		try {
-			out = new BufferedWriter(new FileWriter(CHANNEL_DIR + channelId + ".xml"));
+			out = new BufferedWriter(new FileWriter(CHANNEL_DIR + model.getId() + ".xml"));
 			out.write(channel);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -174,6 +174,12 @@ public class CamelChannelManager implements ChannelManager {
 			LOGGER.debug("convertXMLFileToString failed with exception ", e);
 		}
 		return null;
+	}
+
+	@Override
+	public void createChannel(ChannelVariabilityModel model) {
+		this.updateChannel(model.getId(), model);
+		
 	}
 
 }

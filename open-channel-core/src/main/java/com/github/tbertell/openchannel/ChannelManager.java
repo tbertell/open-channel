@@ -18,5 +18,7 @@ public interface ChannelManager {
 	public List<ChannelVariabilityModel> listChannels();
 	
 	public void deleteChannel(String channelId);
+	
+	public void createChannel(ChannelVariabilityModel model);
 
 }

@@ -61,4 +61,10 @@ public class MockChannelManager implements ChannelManager {
 		
 	}
 
+	@Override
+	public void createChannel(ChannelVariabilityModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

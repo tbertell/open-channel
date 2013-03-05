@@ -2,11 +2,14 @@ package com.github.tbertell.openchannel;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -134,6 +137,31 @@ public class ChannelResource {
 					+ model.getId(), model.getDescription()));
 		}
 		return response;
+	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_XML)
+	@Path("/")
+	public Response createChannel(ChannelVariabilityModel model) {
+
+		try {
+			channelManager.createChannel(model);
+		} catch (IllegalArgumentException iae) {
+			LOGGER.error("non valid channel " + model, iae);
+			throw createException(Status.BAD_REQUEST, "Invalid channel. Reason: " + iae.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("updateChannel failed", e);
+			throw createException(Status.INTERNAL_SERVER_ERROR, "createChannel failed");
+		}
+		URI uri;
+		try {
+			uri = new URI((uriInfo.getBaseUri().toString() + "/" +model.getId()));
+			return Response.created(uri).build();
+		} catch (URISyntaxException e) {
+			LOGGER.error("invalid uri " + model, e);
+			throw createException(Status.BAD_REQUEST, "Invalid uri. Reason: " + e.getMessage());
+		}
 	}
 
 	private String createSchemaLocation(String channelId) {
