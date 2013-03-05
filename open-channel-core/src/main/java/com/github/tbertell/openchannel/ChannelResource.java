@@ -156,7 +156,7 @@ public class ChannelResource {
 		}
 		URI uri;
 		try {
-			uri = new URI((uriInfo.getBaseUri().toString() + "/" +model.getId()));
+			uri = new URI((uriInfo.getBaseUri().toString() +model.getId()));
 			return Response.created(uri).build();
 		} catch (URISyntaxException e) {
 			LOGGER.error("invalid uri " + model, e);
