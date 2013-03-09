@@ -38,7 +38,7 @@ import com.github.tbertell.openchannel.response.ListChannelsResponse;
 /**
  * 
  * JAX-RS channel resource.
- *
+ * 
  */
 @Path("/")
 public class ChannelResource {
@@ -52,6 +52,14 @@ public class ChannelResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChannelResource.class);
 
+	/**
+	 * 
+	 * Finds channel's variability model.
+	 * 
+	 * @param channelId
+	 *            channel identifier
+	 * @return XML representation of channel's variability model
+	 */
 	@GET
 	@Path("/{channelId}")
 	@Produces(MediaType.APPLICATION_XML)
@@ -78,6 +86,12 @@ public class ChannelResource {
 		}
 	}
 
+	/**
+	 * 
+	 * Returns list of all currently executing channels.
+	 * 
+	 * @return list of channels
+	 */
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_XML)
@@ -96,6 +110,16 @@ public class ChannelResource {
 		return Response.ok().entity(entity).build();
 	}
 
+	/**
+	 * 
+	 * Updates channel based on values in variability model.
+	 * 
+	 * @param channelId
+	 *            channel identifier
+	 * @param model
+	 *            channel variability model
+	 * @return
+	 */
 	@PUT
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_XML)
@@ -114,7 +138,15 @@ public class ChannelResource {
 
 		return Response.ok().build();
 	}
-	
+
+	/**
+	 * 
+	 * Removes channel from platform.
+	 * 
+	 * @param channelId
+	 *            channel identifier
+	 * @return
+	 */
 	@DELETE
 	@Path("/{channelId}")
 	public Response deleteChannel(@PathParam("channelId") String channelId) {
@@ -128,17 +160,14 @@ public class ChannelResource {
 		return Response.ok().build();
 	}
 
-	private ListChannelsResponse convertListToListChannelResponse(List<ChannelVariabilityModel> list) {
-
-		ListChannelsResponse response = new ListChannelsResponse();
-
-		for (ChannelVariabilityModel model : list) {
-			response.addChannelResponse(new ChannelResponse(model.getId(), uriInfo.getAbsolutePath().toString()
-					+ model.getId(), model.getDescription()));
-		}
-		return response;
-	}
-	
+	/**
+	 * 
+	 * Creates a new channel based on values in variability model.
+	 * 
+	 * @param model
+	 *            channel variability model
+	 * @return
+	 */
 	@POST
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_XML)
@@ -156,12 +185,23 @@ public class ChannelResource {
 		}
 		URI uri;
 		try {
-			uri = new URI((uriInfo.getBaseUri().toString() +model.getId()));
+			uri = new URI((uriInfo.getBaseUri().toString() + model.getId()));
 			return Response.created(uri).build();
 		} catch (URISyntaxException e) {
 			LOGGER.error("invalid uri " + model, e);
 			throw createException(Status.BAD_REQUEST, "Invalid uri. Reason: " + e.getMessage());
 		}
+	}
+
+	private ListChannelsResponse convertListToListChannelResponse(List<ChannelVariabilityModel> list) {
+
+		ListChannelsResponse response = new ListChannelsResponse();
+
+		for (ChannelVariabilityModel model : list) {
+			response.addChannelResponse(new ChannelResponse(model.getId(), uriInfo.getAbsolutePath().toString()
+					+ model.getId(), model.getDescription()));
+		}
+		return response;
 	}
 
 	private String createSchemaLocation(String channelId) {
